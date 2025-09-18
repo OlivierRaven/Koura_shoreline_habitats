@@ -1,0 +1,26 @@
+﻿project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Kōura and their shoreline habitats"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - text: Analysis
+        menu:
+          - href: analysis/01-import.qmd
+            text: Import
+          - href: analysis/02-clean.qmd
+            text: Clean
+          - href: analysis/03-model.qmd
+            text: Model
+
+format:
+  html:
+    toc: true
+    number-sections: true
+
+execute:
+  freeze: auto

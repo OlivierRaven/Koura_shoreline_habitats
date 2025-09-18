@@ -1,0 +1,388 @@
+---
+title: "01 - Import"
+author: "Olivier V. Raven"
+format: html
+editor: visual
+---
+
+## explination
+This document imports and tidies natural habitat monitoring data, computes CPUE/BCUE summaries and size statistics, derives presence/absence and site-level summaries, joins monitoring and habitat data, classifies habitat types, and writes outputs.
+
+```{r}
+# Packages ---------------------------------------------------------------------
+packages <- c(
+  "tidyverse", "dplyr", "ggplot2", "readxl", "writexl", "readr",
+  "lubridate", "tidyr"
+)
+lapply(packages, function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) install.packages(pkg, dependencies = TRUE)
+  library(pkg, character.only = TRUE)
+})
+
+project_root <- normalizePath("..", winslash = "/", mustWork = FALSE)
+excel_path   <- file.path(project_root, "data", "raw", "Natural_habitat.xlsx")
+out_dir      <- file.path(project_root, "data", "processed")
+if (!file.exists(excel_path)) stop("Excel not found at: ", excel_path)
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+
+
+```
+
+```{r}
+# Import the data sets 
+Site_info          <- read_excel(excel_path)
+Monitoring_data    <- read_excel(excel_path, sheet = "Monitoring_data")
+Weed_data          <- read_excel(excel_path, sheet = "Weed_data")  %>% dplyr::select(-starts_with("..."))
+Fish_data          <- read_excel(excel_path, sheet = "Fish_data") %>% dplyr::select(-starts_with("..."))
+Macroinvertebrates <- read_excel(excel_path, sheet = "Macroinvertebrates")
+
+# Quick checks
+list(
+  Site_info            = dim(Site_info),
+  Monitoring_data      = dim(Monitoring_data),
+  Weed_data            = dim(Weed_data),
+  Fish_data            = dim(Fish_data),
+  Macroinvertebrates   = dim(Macroinvertebrates))
+
+```
+
+```{r}
+# Safe helpers
+safe_min  <- function(x) if (all(is.na(x))) NA_real_ else min(x, na.rm = TRUE)
+safe_max  <- function(x) if (all(is.na(x))) NA_real_ else max(x, na.rm = TRUE)
+safe_mean <- function(x) { m <- mean(x, na.rm = TRUE); if (is.nan(m)) NA_real_ else m }
+
+# Base fish data
+fish <- Fish_data %>%
+  filter(!is.na(Species)) %>%
+  filter(!is.na(Monitoring_ID))
+
+# 1) Deployment (effort) per site × net type
+deploy <- fish %>%
+  filter(!is.na(Net_type), !is.na(Amount_nets)) %>%
+  distinct(Monitoring_ID, Net_type, Amount_nets) %>%
+  group_by(Monitoring_ID, Net_type) %>%
+  summarise(Effort = max(Amount_nets, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Effort = ifelse(is.finite(Effort), Effort, 0))
+
+# 2) Catches per site × net type × species (totals)
+catches <- fish %>%
+  group_by(Monitoring_ID, Net_type, Species) %>%
+  summarise(
+    Total_Individuals = sum(Amount,   na.rm = TRUE),
+    Total_Weight      = sum(Weight_g, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# 3) Ensure zero-catch combinations exist
+catches_full <- deploy %>%
+  left_join(catches, by = c("Monitoring_ID", "Net_type")) %>%
+  tidyr::complete(Monitoring_ID, Net_type, Species,
+                  fill = list(Total_Individuals = 0, Total_Weight = 0)) %>%
+  group_by(Monitoring_ID, Net_type) %>%
+  mutate(Effort = dplyr::first(Effort)) %>%
+  ungroup() %>%
+  mutate(Effort = coalesce(Effort, 0))
+
+# 4) Correct CPUE/BCUE per site × species (effort-weighted across nets)
+CPUE_BCUE <- catches_full %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(
+    Total_Individuals = sum(Total_Individuals, na.rm = TRUE),
+    Total_Weight      = sum(Total_Weight,      na.rm = TRUE),
+    Total_Effort      = sum(Effort,            na.rm = TRUE),
+    CPUE              = ifelse(Total_Effort > 0, Total_Individuals / Total_Effort, NA_real_),
+    BCUE              = ifelse(Total_Effort > 0, Total_Weight      / Total_Effort, NA_real_),
+    .groups = "drop"
+  )
+
+# 5) Size stats per site × species
+size_stats <- fish %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(
+    Mean_Length = safe_mean(Length_mm),
+    Min_Length  = safe_min(Length_mm),
+    Max_Length  = safe_max(Length_mm),
+    Mean_Weight = safe_mean(Weight_g),
+    Min_Weight  = safe_min(Weight_g),
+    Max_Weight  = safe_max(Weight_g),
+    .groups = "drop"
+  )
+
+# 6) Presence/absence (+ Predator_Fish_Presence)
+species_presence <- fish %>%
+  distinct(Monitoring_ID, Species) %>%
+  mutate(Presence = 1L) %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = Presence,
+    values_fill = list(Presence = 0L),
+    names_prefix = "Presence_"
+  )
+
+for (pred in c("Trout","Eel","Catfish")) {
+  nm <- paste0("Presence_", pred)
+  if (!nm %in% names(species_presence)) species_presence[[nm]] <- 0L
+}
+
+species_presence <- species_presence %>%
+  mutate(
+    Predator_Fish_Presence = pmax(
+      coalesce(Presence_Trout,   0L),
+      coalesce(Presence_Eel,     0L),
+      coalesce(Presence_Catfish, 0L)
+    )
+  )
+
+# 7) LONG table with CPUE/BCUE + size stats
+site_species <- CPUE_BCUE %>%
+  left_join(size_stats, by = c("Monitoring_ID","Species"))
+
+# 8) WIDE per site summary
+species_wide <- site_species %>%
+  select(Monitoring_ID, Species,
+         Total_Individuals, Total_Weight, Total_Effort,
+         CPUE, BCUE,
+         Mean_Length, Min_Length, Max_Length,
+         Mean_Weight, Min_Weight, Max_Weight) %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = c(Total_Individuals, Total_Weight, Total_Effort, CPUE, BCUE,
+                    Mean_Length, Min_Length, Max_Length, Mean_Weight, Min_Weight, Max_Weight),
+    names_sep   = "_",
+    values_fill = 0
+  ) %>%
+  left_join(species_presence, by = "Monitoring_ID") %>%
+  mutate(
+    Richness = rowSums(across(starts_with("Total_Individuals_"), ~ . > 0), na.rm = TRUE),
+    Abundance = rowSums(across(starts_with("Total_Individuals_"), ~ .), na.rm = TRUE) -
+      rowSums(across(matches("^Total_Individuals_(Bullies|Common_smelt)$"), ~ .), na.rm = TRUE)
+  )
+
+```
+
+```{r}
+CPUE_BCUE_legacy <- Fish_data %>%
+  filter(!is.na(Species)) %>%
+  group_by(Monitoring_ID, Species, Net_type) %>%
+  dplyr::reframe(
+    Total_Individuals = sum(Amount, na.rm = TRUE),
+    Total_Weight      = sum(Weight_g, na.rm = TRUE),
+    Total_Effort      = dplyr::first(Amount_nets),
+    CPUE              = Total_Individuals / Total_Effort,
+    BCUE              = Total_Weight      / Total_Effort,
+    Mean_Length       = mean(Length_mm, na.rm = TRUE),
+    Min_Length        = ifelse(all(is.na(Length_mm)), NA, min(Length_mm, na.rm = TRUE)),
+    Max_Length        = ifelse(all(is.na(Length_mm)), NA, max(Length_mm, na.rm = TRUE)),
+    Mean_Weight       = mean(Weight_g, na.rm = TRUE),
+    Min_Weight        = ifelse(all(is.na(Weight_g)), NA, min(Weight_g, na.rm = TRUE)),
+    Max_Weight        = ifelse(all(is.na(Weight_g)), NA, max(Weight_g, na.rm = TRUE))
+  )
+
+CPUE_BCUE_weighted <- CPUE_BCUE_legacy %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(
+    Total_Individuals       = sum(Total_Individuals, na.rm = TRUE),
+    Total_Weight            = sum(Total_Weight,      na.rm = TRUE),
+    Weighted_CPUE_numerator = sum(CPUE * Total_Effort,  na.rm = TRUE),
+    Weighted_BCUE_numerator = sum(BCUE * Total_Effort,  na.rm = TRUE),
+    Total_Effort_sum        = sum(Total_Effort,         na.rm = TRUE),
+    Mean_Length             = mean(Mean_Length, na.rm = TRUE),
+    Min_Length              = ifelse(all(is.na(Min_Length)), NA, min(Min_Length, na.rm = TRUE)),
+    Max_Length              = ifelse(all(is.na(Max_Length)), NA, max(Max_Length, na.rm = TRUE)),
+    Mean_Weight             = mean(Mean_Weight, na.rm = TRUE),
+    Min_Weight              = ifelse(all(is.na(Min_Weight)), NA, min(Min_Weight, na.rm = TRUE)),
+    Max_Weight              = ifelse(all(is.na(Max_Weight)), NA, max(Max_Weight, na.rm = TRUE)),
+    .groups = "drop"
+  ) %>%
+  ungroup() %>%
+  mutate(
+    Total_Effort_sum = ifelse(Monitoring_ID %in% c("96_0", "101_0", "117_1", "119_1"), 3, 4),
+    Weighted_CPUE    = Weighted_CPUE_numerator / Total_Effort_sum,
+    Weighted_BCUE    = Weighted_BCUE_numerator / Total_Effort_sum
+  )
+
+species_presence_absence <- Fish_data %>%
+  filter(!is.na(Species)) %>%
+  distinct(Monitoring_ID, Species) %>%
+  mutate(Presence = 1) %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = Presence,
+    values_fill = list(Presence = 0),
+    names_prefix = "Presence_"
+  ) %>%
+  mutate(Predator_Fish_Presence = pmax(Presence_Trout, Presence_Eel, Presence_Catfish))
+
+CPUE_BCUE_weighted_summary <- CPUE_BCUE_weighted %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = c(
+      Total_Individuals, Weighted_CPUE, Weighted_BCUE, Total_Weight,
+      Mean_Length, Mean_Weight, Weighted_CPUE_numerator, Weighted_BCUE_numerator,
+      Total_Effort_sum, Min_Length, Max_Length, Min_Weight, Max_Weight
+    ),
+    names_sep   = "_",
+    values_fill = list(Total_Individuals = 0, Weighted_CPUE = 0, Weighted_BCUE = 0)
+  ) %>%
+  mutate(
+    Richness  = rowSums(dplyr::select(., starts_with("Total_Individuals_")) > 0),
+    Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_with(c("_Bullies", "_Common_smelt"))))
+  )
+
+```
+
+
+```{r}
+#Monitoring_data <- Monitoring_data %>% dplyr::select(-Site_ID)
+
+unit_metadata <- Monitoring_data %>%
+  dplyr::select(Parameter, Unit) %>%
+  distinct()
+
+Monitoring_summary <- Monitoring_data %>%
+  dplyr::select(-Group, -Notes, -Unit) %>%
+  pivot_wider(
+    names_from  = c(Parameter),
+    values_from = Value,
+    values_fill = list(Value = NA)
+  )
+
+Monitoring_summary <- Monitoring_summary %>%
+  mutate(across(c(
+      Bottom_visible, Water_clarity, Depth_10m, Slope, Riparian_vegetation, Vegetation_nearby,
+      Overhanging_trees, Erosion, Sructure, Bedrock, Boulders, Cobble, Gravel,
+      Sand, Mud, Organic_matter, Rock_size, Temperature, DO_mgl, DO_percent,
+      Conductivity, Specific_conductivity, pH, Wood_cover
+    ), ~ as.numeric(.)))
+
+Weed_summary <- Weed_data %>%
+  group_by(Monitoring_ID, Weed_Type, Native_Status) %>%
+  summarise(Total_Cover = sum(Percentage_Cover, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from  = c(Weed_Type, Native_Status),
+    values_from = Total_Cover,
+    values_fill = 0
+  )
+
+Macroinvertebrates_sum <- Macroinvertebrates %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(Total_amount = sum(Amount, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = c(Species), values_from = Total_amount, values_fill = 0)
+
+Macroinvertebrates_sum <- Macroinvertebrates %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(Total_amount = sum(Amount, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = c(Species), values_from = Total_amount, values_fill = 0) %>%
+  mutate(
+    Invertebrates_Richness  = rowSums(dplyr::select(., -Monitoring_ID) > 0),
+    Invertebrates_Abundance = rowSums(dplyr::select(., -Monitoring_ID))
+  )
+
+```
+
+```{r}
+Monitoring_CPUE_data <- Site_info %>%
+  left_join(Monitoring_summary, by = "Monitoring_ID") %>%
+  left_join(Weed_summary %>% dplyr::select(Monitoring_ID,
+                                           Emergent_Native, Emergent_Non_Native,
+                                           Submerged_Native, Submerged_Non_Native, Turf_Native),
+            by = c("Monitoring_ID")) %>%
+  left_join(species_wide, by = "Monitoring_ID") %>%
+  # left_join(species_presence_absence, by = "Monitoring_ID") %>%
+  left_join(Macroinvertebrates_sum, by = "Monitoring_ID")
+
+Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
+  mutate(
+    Presence_rocks = if_else(Cobble > 1 | Boulders > 1, 1, 0),
+    Slope_5m       = 5 / Distance_5m,
+    Site_ID_       = Site_ID - 60,
+    Monitoring_ID_ = paste0(as.numeric(sub("_.*", "", Monitoring_ID)) - 60,
+                            sub("^[^_]*", "", Monitoring_ID)),
+    Monitoring     = sub(".*?_", "", Monitoring_ID),
+    Date           = as.Date(Date_Time),
+    Time           = format(Date_Time, "%H:%M:%S"),
+    Year           = lubridate::year(Date_Time),
+    Month          = lubridate::month(Date_Time, label = TRUE),
+    Day            = lubridate::day(Date_Time),
+    Season         = case_when(
+      Month %in% c("Dec", "Jan", "Feb") ~ "Summer",
+      Month %in% c("Mar", "Apr", "May") ~ "Autumn",
+      Month %in% c("Jun", "Jul", "Aug") ~ "Winter",
+      Month %in% c("Sep", "Oct", "Nov") ~ "Spring",
+      TRUE ~ NA_character_
+    ),
+    Date_Time_Numeric = as.numeric(Date_Time)
+  )
+
+```
+
+```{r}
+habitat_classification <- Monitoring_CPUE_data %>%
+  dplyr::select(Monitoring_ID, DHT, Lake,
+                Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
+                Emergent_Native, Emergent_Non_Native, Submerged_Native, Submerged_Non_Native, Wood_cover) %>%
+  pivot_longer(
+    cols      = c(Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
+                  Emergent_Native, Emergent_Non_Native, Submerged_Native,
+                  Submerged_Non_Native, Wood_cover),
+    names_to  = "Type",
+    values_to = "Percentage"
+  ) %>%
+  group_by(Monitoring_ID) %>%
+  summarise(
+    Rocky_Percentage    = sum(Percentage[Type %in% c("Bedrock", "Boulders", "Cobble")], na.rm = TRUE),
+    Sand_Percentage     = sum(Percentage[Type == "Sand"], na.rm = TRUE),
+    Mud_Percentage      = sum(Percentage[Type %in% c("Mud", "Organic_matter")], na.rm = TRUE),
+    Emergent_Percentage = sum(Percentage[Type %in% c("Emergent_Native")], na.rm = TRUE),
+    Substrate_index = sum(
+      0.08 * Percentage[Type == "Bedrock"] +
+      0.07 * Percentage[Type == "Boulders"] +
+      0.06 * Percentage[Type == "Cobble"] +
+      0.04 * Percentage[Type == "Gravel"] +
+      0.03 * Percentage[Type == "Sand"] +
+      0.02 * Percentage[Type == "Organic_matter"] +
+      0.01 * Percentage[Type == "Mud"],
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Habitat_Type = case_when(
+      Rocky_Percentage    > 25 ~ "Rocky",
+      Emergent_Percentage > 25 ~ "Emergent Macrophyte",
+      Sand_Percentage   >= Mud_Percentage ~ "Sandy",
+      TRUE ~ "Muddy"
+    )
+  ) %>%
+  dplyr::select(Monitoring_ID, Habitat_Type, Substrate_index)
+
+# Optional dominant/secondary substrate indices (retained)
+substrates <- Monitoring_CPUE_data %>%
+  mutate(Mud_OM = Mud + Organic_matter) %>%
+  dplyr::select(Bedrock, Boulders, Cobble, Gravel, Sand, Mud_OM)
+substrate_names <- colnames(substrates)
+max_idx <- apply(substrates, 1, which.max)
+second_max_idx <- apply(substrates, 1, function(x) {
+  x_copy <- x
+  x_copy[which.max(x)] <- -Inf
+  which.max(x_copy)
+})
+
+```
+
+```{r}
+Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
+  left_join(habitat_classification, by = c("Monitoring_ID"))
+
+writexl::write_xlsx(Monitoring_CPUE_data, file.path(out_dir, "Monitoring_CPUE_data.xlsx"))
+write.csv(Monitoring_CPUE_data, file.path(out_dir, "Monitoring_CPUE_data.csv"), row.names = FALSE)
+write.csv(habitat_classification, file.path(out_dir, "habitat_classification.csv"), row.names = FALSE)
+
+list(
+  habitat_classification_head = head(habitat_classification, 5),
+  monitoring_cpue_head        = head(Monitoring_CPUE_data, 5)
+)
+
+```
+

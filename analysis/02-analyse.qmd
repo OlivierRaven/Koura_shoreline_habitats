@@ -1,0 +1,386 @@
+---
+title: "02 - Analyse"
+author: "Olivier V. Raven"
+format: html
+editor: visual
+---
+
+## Purpose
+Document cleaning, filtering, and transformation steps.
+
+```{r}
+packages <- c("multcompView","rstatix","patchwork", "sf", "mgcv","tidyverse", "dplyr", "ggplot2","readxl", "writexl","readr", "here")
+
+# Load packages if not already installed
+lapply(packages, function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE))
+    install.packages(pkg, dependencies = TRUE)
+  library(pkg, character.only = TRUE)})
+
+```
+
+```{r}
+csv_path <- here::here("data", "processed", "Monitoring_CPUE_data.csv")
+Monitoring_CPUE_data <- readr::read_csv(csv_path, show_col_types = FALSE)
+              
+M_C_data <- Monitoring_CPUE_data %>%
+  filter(Monitoring==0)
+
+fig_dir <- file.path(project_root, "figures")
+
+```
+
+# Physical parameters
+
+```{r fig.width=14, fig.height=10, dpi=100}
+# Lake order and colors
+lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
+M_C_data$Lake <- factor(M_C_data$Lake, levels = lake_order)
+
+sediment_colors <- c(
+  "Bedrock" = "black","Boulders" = "gray25","Cobble" = "gray55",
+  "Gravel" = "gray80","Sand" = "gold","Mud" = "saddlebrown","Organic_matter" = "darkgreen"
+)
+weed_colors <- c(
+  "Emergent_Native" = "darkgreen","Emergent_Non_Native" = "green3",
+  "Submerged_Native" = "skyblue","Submerged_Non_Native" = "royalblue4",
+  "Turf_Native" = "#00bfc4","Wood_cover" = "saddlebrown"
+)
+habitat_colors <- c("Rocky" = "gray25", "Sandy" = "gold", "Muddy" = "saddlebrown","Emergent Macrophyte" = "darkgreen")
+habitat_order  <- c("Rocky", "Sandy", "Muddy", "Emergent Macrophyte")
+M_C_data$Habitat_Type <- factor(M_C_data$Habitat_Type, levels = habitat_order)
+
+# Tidy physical layers
+sediment_data <- M_C_data %>%
+  select(Site_ID_, DHT, Habitat_Type, Lake, Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter) %>%
+  pivot_longer(
+    cols = c(Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter),
+    names_to = "Sediment_Type", values_to = "Percentage"
+  ) %>%
+  mutate(
+    Lake = factor(Lake, levels = lake_order),
+    Sediment_Type = factor(Sediment_Type, levels = c("Bedrock","Boulders","Cobble","Gravel","Sand","Mud","Organic_matter"))
+  )
+
+Substrate_index_data <- M_C_data
+
+weed_data <- M_C_data %>%
+  select(Site_ID_, DHT, Habitat_Type, Lake, Emergent_Native, Emergent_Non_Native,
+         Submerged_Native, Submerged_Non_Native, Turf_Native, Wood_cover) %>%
+  pivot_longer(
+    cols = c(Emergent_Native,Emergent_Non_Native,Submerged_Native,Submerged_Non_Native,Turf_Native,Wood_cover),
+    names_to = "Weeds", values_to = "Percentage"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order))
+
+# Statistics for substrate index (Wilcoxon pairwise + compact letters)
+substrate_stats <- Substrate_index_data %>%
+  rstatix::wilcox_test(Substrate_index ~ Lake, p.adjust.method = "BH") %>%
+  select(group1, group2, p.adj) %>%
+  { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
+  enframe(name = "Lake", value = "Letter") %>%
+  mutate(Label = paste0(Lake, " (", Letter, ")"))
+
+# Plots
+Sediment_plot <- ggplot(sediment_data, aes(factor(Site_ID_), Percentage, fill = Sediment_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = sediment_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Sediment Cover (%)", fill = "Sediment Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Substrate_index_plot <- Substrate_index_data %>%
+  mutate(Lake = factor(Lake, levels = substrate_stats$Lake, labels = substrate_stats$Label)) %>%
+  ggplot(aes(factor(Site_ID_), Substrate_index, fill = Habitat_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = habitat_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Substrate_index", fill = "Habitat Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Koura_plot <- M_C_data %>%
+  ggplot(aes(factor(Site_ID_), CPUE_Kōura, fill = Habitat_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = habitat_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Kōura CPUE", fill = "Habitat Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Catfish_plot <- M_C_data %>%
+  ggplot(aes(factor(Site_ID_), CPUE_Catfish, fill = Habitat_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = habitat_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Catfish CPUE", fill = "Habitat Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Weed_plot <- ggplot(weed_data, aes(factor(Site_ID_), Percentage, fill = Weeds)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = weed_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Cover (%)", fill = "Cover Type") +
+  theme_bw()
+
+Physical_plot <- Sediment_plot / Substrate_index_plot / Koura_plot / Catfish_plot / Weed_plot
+Physical_plot
+
+ggsave(file.path(fig_dir, "Physical_plot.png"), Physical_plot, width = 14, height = 10, dpi = 300)
+
+```
+
+# Chemical Parameters
+```{r fig.width=12, fig.height=5, dpi=100}
+Chemical_data <- M_C_data %>%
+  select(Site_ID_, DHT, Habitat_Type, Lake, DO_mgl, DO_percent, Conductivity, Specific_conductivity, pH, Temperature) %>%
+  pivot_longer(
+    cols = c(DO_mgl, DO_percent, Conductivity, Specific_conductivity, pH, Temperature),
+    names_to = "Variable", values_to = "Values"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order))
+
+# Compact letter display per variable (Wilcoxon + BH)
+cld_df <- Chemical_data %>%
+  group_by(Variable) %>%
+  rstatix::wilcox_test(Values ~ Lake, p.adjust.method = "BH") %>%
+  select(Variable, group1, group2, p.adj) %>%
+  group_by(Variable) %>%
+  summarise(Letters = list(multcompView::multcompLetters(setNames(p.adj, paste(group1, group2, sep = "-")))$Letters), .groups = "drop") %>%
+  unnest_wider(Letters) %>%
+  pivot_longer(-Variable, names_to = "Lake", values_to = "Letter") %>%
+  left_join(
+    Chemical_data %>% group_by(Variable, Lake) %>% summarise(y = max(Values, na.rm = TRUE), .groups = "drop"),
+    by = c("Variable","Lake")
+  ) %>%
+  mutate(y = y * 1.05)
+
+Chemical_plot <- ggplot(Chemical_data, aes(Lake, Values, fill = Lake)) +
+  geom_boxplot() +
+  facet_wrap(~ Variable, scales = "free", nrow = 1) +
+  geom_text(data = cld_df, aes(Lake, y, label = Letter), vjust = 0) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+Chemical_plot
+
+ggsave(file.path(fig_dir, "Chemical_plot.png"), Chemical_plot, width = 12, height = 5, dpi = 300)
+
+```
+
+# Biological parameters
+```{r fig.width=12, fig.height=5, dpi=100}
+fish_order       <- c("Presence_Kōura","Presence_Eel","Presence_Kōaro","Presence_Common_smelt","Presence_Bullies","Presence_Catfish","Presence_Morihana","Presence_Mosquitofish","Presence_Trout")
+fish_order_CPUE  <- c("CPUE_Kōura","CPUE_Eel","CPUE_Kōaro","CPUE_Common_smelt","CPUE_Bullies","CPUE_Catfish","CPUE_Morihana","CPUE_Mosquitofish","CPUE_Trout")
+fish_order_BCUE  <- c("BCUE_Kōura","BCUE_Eel","BCUE_Kōaro","BCUE_Common_smelt","BCUE_Bullies","BCUE_Catfish","BCUE_Morihana","BCUE_Mosquitofish","BCUE_Trout")
+
+presence_data <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake, Richness, Abundance,
+         Presence_Kōura, Presence_Eel, Presence_Kōaro, Presence_Common_smelt,
+         Presence_Bullies, Presence_Catfish, Presence_Morihana, Presence_Mosquitofish, Presence_Trout) %>%
+  pivot_longer(
+    cols = c(Presence_Kōura, Presence_Eel, Presence_Kōaro, Presence_Common_smelt, Presence_Bullies, Presence_Catfish, Presence_Morihana, Presence_Mosquitofish, Presence_Trout),
+    names_to = "Fish_Type", values_to = "Presence"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order))
+
+CPUE_data <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         CPUE_Kōura, CPUE_Eel, CPUE_Kōaro, CPUE_Common_smelt, CPUE_Bullies, CPUE_Catfish, CPUE_Morihana, CPUE_Mosquitofish, CPUE_Trout) %>%
+  pivot_longer(
+    cols = c(CPUE_Kōura, CPUE_Eel, CPUE_Kōaro, CPUE_Common_smelt, CPUE_Bullies, CPUE_Catfish, CPUE_Morihana, CPUE_Mosquitofish, CPUE_Trout),
+    names_to = "Fish_Type", values_to = "CPUE"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order_CPUE))
+
+BCUE_data <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Morihana, BCUE_Mosquitofish, BCUE_Trout) %>%
+  pivot_longer(
+    cols = c(BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Morihana, BCUE_Mosquitofish, BCUE_Trout),
+    names_to = "Fish_Type", values_to = "BCUE"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order_BCUE))
+
+BCUE_summary <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Morihana, BCUE_Mosquitofish, BCUE_Trout) %>%
+  pivot_longer(
+    cols = c(BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Morihana, BCUE_Mosquitofish, BCUE_Trout),
+    names_to = "Fish_Type", values_to = "BCUE"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order_BCUE)) %>%
+  group_by(Lake, Habitat_Type, Fish_Type) %>%
+  summarise(mean_BCUE = mean(BCUE, na.rm = TRUE),
+            se_BCUE   = sd(BCUE,   na.rm = TRUE) / sqrt(n()),
+            .groups = "drop")
+
+Total_Weight_summary <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         Total_Weight_Bullies, Total_Weight_Morihana, Total_Weight_Kōura,
+         Total_Weight_Common_smelt, Total_Weight_Eel, Total_Weight_Kōaro,
+         Total_Weight_Trout, Total_Weight_Mosquitofish, Total_Weight_Catfish) %>%
+  pivot_longer(
+    cols = c(Total_Weight_Bullies, Total_Weight_Morihana, Total_Weight_Kōura,
+             Total_Weight_Common_smelt, Total_Weight_Eel, Total_Weight_Kōaro,
+             Total_Weight_Trout, Total_Weight_Mosquitofish, Total_Weight_Catfish),
+    names_to = "Fish_Type", values_to = "Total_Weight"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order)) %>%
+  group_by(Fish_Type) %>%
+  summarise(Total_Weight = sum(Total_Weight, na.rm = TRUE), .groups = "drop")
+
+# Richness & Abundance
+plot_abundance <- ggplot(presence_data, aes(Lake, Abundance, fill = Lake)) +
+  geom_boxplot() +
+  facet_grid(~ Habitat_Type, scales = "free")
+
+plot_richness <- ggplot(presence_data, aes(Lake, Richness, fill = Lake)) +
+  geom_boxplot() +
+  facet_grid(~ Habitat_Type, scales = "free")
+
+plot_abundance / plot_richness
+
+```
+# Koura specific
+```{r fig.width=6, fig.height=6, dpi=100}
+plot_koura_stats <- function(data, y_var, y_label, 
+                             test_type = c("wilcox", "fisher"),
+                             show_x_title = FALSE) {
+  test_type <- match.arg(test_type)
+  lakes <- levels(data$Lake)
+  xlab_text <- if (show_x_title) "Lake" else NULL
+  
+  if (test_type == "wilcox") {
+    stats <- data %>%
+      rstatix::wilcox_test(as.formula(paste0(y_var, " ~ Lake")), p.adjust.method = "BH") %>%
+      { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
+      tibble::enframe("Lake", "Letter")
+    
+    ggplot2::ggplot(data, aes(Lake, .data[[y_var]])) +
+      ggplot2::geom_boxplot(fill = "grey70") +
+      ggplot2::geom_text(data = stats, aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(y = y_label, x = xlab_text)
+    
+  } else {
+    presence_summary <- data %>%
+      dplyr::group_by(Lake) %>%
+      dplyr::summarise(Presence_Rate = mean(.data[[y_var]], na.rm = TRUE), .groups = "drop") %>%
+      dplyr::mutate(Lake = factor(Lake, levels = lakes))
+    
+    lake_pairs <- combn(lakes, 2, simplify = FALSE)
+    fisher_pair_test <- function(pair, df) {
+      sub <- df %>% dplyr::filter(Lake %in% pair)
+      tab <- table(sub[[y_var]], sub$Lake)
+      pval <- fisher.test(tab)$p.value
+      tibble::tibble(group1 = pair[1], group2 = pair[2], p.value = pval)
+    }
+    pairwise_results <- purrr::map_dfr(lake_pairs, fisher_pair_test, df = data) %>%
+      dplyr::mutate(p.adj = p.adjust(p.value, method = "BH"))
+    
+    letters <- multcompView::multcompLetters(
+      setNames(pairwise_results$p.adj, paste(pairwise_results$group1, pairwise_results$group2, sep = "-"))
+    )$Letters
+    
+    stats_col <- tibble::tibble(
+      Lake   = factor(names(letters), levels = lakes),
+      Letter = unname(letters)
+    )
+    
+    ggplot2::ggplot(presence_summary, ggplot2::aes(x = Lake, y = Presence_Rate)) +
+      ggplot2::geom_col(fill = "grey50", col = "black") +
+      ggplot2::geom_text(data = stats_col, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(x = xlab_text, y = y_label) +
+      ggplot2::theme(legend.position = "none")
+  }
+}
+
+KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
+KCPUE_plot <- plot_koura_stats(M_C_data, "CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
+KBCUE_plot <- plot_koura_stats(M_C_data, "BCUE_Kōura",     "Kōura BCUE",     test_type = "wilcox",  show_x_title = TRUE)
+
+Koura_plots <- KPRES_plot / KCPUE_plot / KBCUE_plot
+Koura_plots
+
+ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, width = 6, height = 6, dpi = 300)
+
+```
+```{r fig.width=6, fig.height=6, dpi=100}
+plot_koura_stats <- function(data, y_var, y_label, 
+                             test_type = c("wilcox", "fisher"),
+                             show_x_title = FALSE) {
+  test_type <- match.arg(test_type)
+  lakes <- levels(data$Lake)
+  xlab_text <- if (show_x_title) "Lake" else NULL
+  
+  if (test_type == "wilcox") {
+    data_nz <- data %>% dplyr::filter(.data[[y_var]] > 0)
+    keep_lakes <- data_nz %>%
+      dplyr::group_by(Lake) %>%
+      dplyr::summarise(n = sum(!is.na(.data[[y_var]])), .groups = "drop") %>%
+      dplyr::filter(n > 0) %>% dplyr::pull(Lake) %>% as.character()
+    level_order <- as.character(lakes)[as.character(lakes) %in% keep_lakes]
+    data_nz <- data_nz %>% dplyr::mutate(Lake = factor(Lake, levels = level_order))
+    
+    stats <- data_nz %>%
+      rstatix::wilcox_test(as.formula(paste0(y_var, " ~ Lake")), p.adjust.method = "BH") %>%
+      { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
+      tibble::enframe("Lake", "Letter")
+    
+    ggplot2::ggplot(data_nz, ggplot2::aes(Lake, .data[[y_var]])) +
+      ggplot2::geom_boxplot(fill = "grey70") +
+      ggplot2::geom_text(data = stats, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(y = y_label, x = xlab_text)
+    
+  } else {
+    presence_summary <- data %>%
+      dplyr::group_by(Lake) %>%
+      dplyr::summarise(Presence_Rate = mean(.data[[y_var]], na.rm = TRUE), .groups = "drop") %>%
+      dplyr::mutate(Lake = factor(Lake, levels = lakes))
+    
+    lake_pairs <- combn(lakes, 2, simplify = FALSE)
+    fisher_pair_test <- function(pair, df) {
+      sub <- df %>% dplyr::filter(Lake %in% pair)
+      tab <- table(sub[[y_var]], sub$Lake)
+      pval <- fisher.test(tab)$p.value
+      tibble::tibble(group1 = pair[1], group2 = pair[2], p.value = pval)
+    }
+    pairwise_results <- purrr::map_dfr(lake_pairs, fisher_pair_test, df = data) %>%
+      dplyr::mutate(p.adj = p.adjust(p.value, method = "BH"))
+    
+    letters <- multcompView::multcompLetters(
+      setNames(pairwise_results$p.adj, paste(pairwise_results$group1, pairwise_results$group2, sep = "-"))
+    )$Letters
+    
+    stats_col <- tibble::tibble(
+      Lake   = factor(names(letters), levels = lakes),
+      Letter = unname(letters)
+    )
+    
+    ggplot2::ggplot(presence_summary, ggplot2::aes(x = Lake, y = Presence_Rate)) +
+      ggplot2::geom_col(fill = "grey50", col = "black") +
+      ggplot2::geom_text(data = stats_col, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(x = xlab_text, y = y_label) +
+      ggplot2::theme(legend.position = "none")
+  }
+}
+
+KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
+KCPUE_plot <- plot_koura_stats(M_C_data, "CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
+KBCUE_plot <- plot_koura_stats(M_C_data, "BCUE_Kōura",     "Kōura BCUE",     test_type = "wilcox",  show_x_title = TRUE)
+
+Koura_plots <- KPRES_plot / KCPUE_plot / KBCUE_plot
+Koura_plots
+
+```
+

@@ -1,0 +1,16 @@
+---
+title: "03 - GAM Model"
+author: "Olivier V. Raven"
+format: html
+editor: visual
+---
+
+## Purpose
+Fit models and report diagnostics and performance.
+
+```{r}
+
+
+
+```
+
