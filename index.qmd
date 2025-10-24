@@ -1,0 +1,1302 @@
+---
+title: "Kōura and their shoreline habitats"
+author: "Olivier V. Raven"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+## Overview
+This site accompanies the scientific work on kōura (freshwater crayfish) and shoreline habitats.
+
+- **Code repository:** (add URL)
+- **Data DOI:** (add DOI link)
+- **Paper DOI:** (add DOI link)
+
+# Load packages
+```{r}
+cat("\014"); rm(list = ls())
+
+# Define the list of packages
+packages <- c("patchwork", "gratia", "mgcv", "corrplot","glmmTMB", "performance", "tidyverse", "writexl", "readxl")
+
+# Load packages if not already installed
+quiet_load <- function(pkg) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    suppressWarnings(suppressMessages(install.packages(pkg, dependencies = TRUE)))}
+  suppressPackageStartupMessages(require(pkg, character.only = TRUE, quietly = TRUE))
+  invisible(TRUE)}
+
+invisible(lapply(packages, quiet_load))
+```
+
+# Load data
+```{r}
+getwd()
+exc_file_dir <- "data/raw/Natural_habitat.xlsx"
+raw_data_dir <- "data/raw"
+der_data_dir <- "data/derived"
+fig_dir      <- "figures"
+
+
+# Import the data sets 
+Site_info          <- read_excel(exc_file_dir, sheet = "Site_info")
+Monitoring_data    <- read_excel(exc_file_dir, sheet = "Monitoring_data")
+Weed_data          <- read_excel(exc_file_dir, sheet = "Weed_data")  %>% dplyr::select(-starts_with("..."))
+Fish_data          <- read_excel(exc_file_dir, sheet = "Fish_data") %>% dplyr::select(-starts_with("..."))
+Macroinvertebrates <- read_excel(exc_file_dir, sheet = "Macroinvertebrates")
+```
+# transform the Fish_data
+```{r}
+# Safe helpers
+safe_min  <- function(x) if (all(is.na(x))) NA_real_ else min(x, na.rm = TRUE)
+safe_max  <- function(x) if (all(is.na(x))) NA_real_ else max(x, na.rm = TRUE)
+safe_mean <- function(x) { m <- mean(x, na.rm = TRUE); if (is.nan(m)) NA_real_ else m }
+
+# Base fish data
+fish <- Fish_data %>%
+  filter(!is.na(Species)) %>%
+  filter(!is.na(Monitoring_ID))
+
+# 1) Deployment (effort) per site × net type
+deploy <- fish %>%
+  filter(!is.na(Net_type), !is.na(Amount_nets)) %>%
+  distinct(Monitoring_ID, Net_type, Amount_nets) %>%
+  group_by(Monitoring_ID, Net_type) %>%
+  summarise(Effort = max(Amount_nets, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Effort = ifelse(is.finite(Effort), Effort, 0))
+
+# 2) Catches per site × net type × species (totals)
+catches <- fish %>%
+  group_by(Monitoring_ID, Net_type, Species) %>%
+  summarise(
+    Total_Individuals = sum(Amount,   na.rm = TRUE),
+    Total_Weight      = sum(Weight_g, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# 3) Ensure zero-catch combinations exist
+catches_full <- deploy %>%
+  left_join(catches, by = c("Monitoring_ID", "Net_type")) %>%
+  tidyr::complete(Monitoring_ID, Net_type, Species,
+                  fill = list(Total_Individuals = 0, Total_Weight = 0)) %>%
+  group_by(Monitoring_ID, Net_type) %>%
+  mutate(Effort = dplyr::first(Effort)) %>%
+  ungroup() %>%
+  mutate(Effort = coalesce(Effort, 0))
+
+# 4) Correct CPUE/BCUE per site × species (effort-weighted across nets)
+CPUE_BCUE <- catches_full %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(
+    Total_Individuals = sum(Total_Individuals, na.rm = TRUE),
+    Total_Weight      = sum(Total_Weight,      na.rm = TRUE),
+    Total_Effort      = sum(Effort,            na.rm = TRUE),
+    CPUE              = ifelse(Total_Effort > 0, Total_Individuals / Total_Effort, NA_real_),
+    BCUE              = ifelse(Total_Effort > 0, Total_Weight      / Total_Effort, NA_real_),
+    .groups = "drop"
+  )
+
+# 5) Size stats per site × species
+size_stats <- fish %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(
+    Mean_Length = safe_mean(Length_mm),
+    Min_Length  = safe_min(Length_mm),
+    Max_Length  = safe_max(Length_mm),
+    Mean_Weight = safe_mean(Weight_g),
+    Min_Weight  = safe_min(Weight_g),
+    Max_Weight  = safe_max(Weight_g),
+    .groups = "drop"
+  )
+
+# 6) Presence/absence (+ Predator_Fish_Presence)
+species_presence <- fish %>%
+  distinct(Monitoring_ID, Species) %>%
+  mutate(Presence = 1L) %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = Presence,
+    values_fill = list(Presence = 0L),
+    names_prefix = "Presence_"
+  )
+
+for (pred in c("Trout","Eel","Catfish")) {
+  nm <- paste0("Presence_", pred)
+  if (!nm %in% names(species_presence)) species_presence[[nm]] <- 0L
+}
+
+species_presence <- species_presence %>%
+  mutate(
+    Predator_Fish_Presence = pmax(
+      coalesce(Presence_Trout,   0L),
+      coalesce(Presence_Eel,     0L),
+      coalesce(Presence_Catfish, 0L)
+    )
+  )
+
+# 7) LONG table with CPUE/BCUE + size stats
+site_species <- CPUE_BCUE %>%
+  left_join(size_stats, by = c("Monitoring_ID","Species"))
+
+# 8) WIDE per site summary
+species_wide <- site_species %>%
+  select(Monitoring_ID, Species,
+         Total_Individuals, Total_Weight, Total_Effort,
+         CPUE, BCUE,
+         Mean_Length, Min_Length, Max_Length,
+         Mean_Weight, Min_Weight, Max_Weight) %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = c(Total_Individuals, Total_Weight, Total_Effort, CPUE, BCUE,
+                    Mean_Length, Min_Length, Max_Length, Mean_Weight, Min_Weight, Max_Weight),
+    names_sep   = "_",
+    values_fill = 0
+  ) %>%
+  left_join(species_presence, by = "Monitoring_ID") %>%
+  mutate(
+    Richness = rowSums(across(starts_with("Total_Individuals_"), ~ . > 0), na.rm = TRUE),
+    Abundance = rowSums(across(starts_with("Total_Individuals_"), ~ .), na.rm = TRUE) -
+      rowSums(across(matches("^Total_Individuals_(Bullies|Common_smelt)$"), ~ .), na.rm = TRUE)
+  )
+
+```
+
+# Calculte CPUE & BCUE
+```{r}
+CPUE_BCUE_legacy <- Fish_data %>%
+  filter(!is.na(Species)) %>%
+  group_by(Monitoring_ID, Species, Net_type) %>%
+  dplyr::reframe(
+    Total_Individuals = sum(Amount, na.rm = TRUE),
+    Total_Weight      = sum(Weight_g, na.rm = TRUE),
+    Total_Effort      = dplyr::first(Amount_nets),
+    CPUE              = Total_Individuals / Total_Effort,
+    BCUE              = Total_Weight      / Total_Effort,
+    Mean_Length       = mean(Length_mm, na.rm = TRUE),
+    Min_Length        = ifelse(all(is.na(Length_mm)), NA, min(Length_mm, na.rm = TRUE)),
+    Max_Length        = ifelse(all(is.na(Length_mm)), NA, max(Length_mm, na.rm = TRUE)),
+    Mean_Weight       = mean(Weight_g, na.rm = TRUE),
+    Min_Weight        = ifelse(all(is.na(Weight_g)), NA, min(Weight_g, na.rm = TRUE)),
+    Max_Weight        = ifelse(all(is.na(Weight_g)), NA, max(Weight_g, na.rm = TRUE))
+  )
+
+CPUE_BCUE_weighted <- CPUE_BCUE_legacy %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(
+    Total_Individuals       = sum(Total_Individuals, na.rm = TRUE),
+    Total_Weight            = sum(Total_Weight,      na.rm = TRUE),
+    Weighted_CPUE_numerator = sum(CPUE * Total_Effort,  na.rm = TRUE),
+    Weighted_BCUE_numerator = sum(BCUE * Total_Effort,  na.rm = TRUE),
+    Total_Effort_sum        = sum(Total_Effort,         na.rm = TRUE),
+    Mean_Length             = mean(Mean_Length, na.rm = TRUE),
+    Min_Length              = ifelse(all(is.na(Min_Length)), NA, min(Min_Length, na.rm = TRUE)),
+    Max_Length              = ifelse(all(is.na(Max_Length)), NA, max(Max_Length, na.rm = TRUE)),
+    Mean_Weight             = mean(Mean_Weight, na.rm = TRUE),
+    Min_Weight              = ifelse(all(is.na(Min_Weight)), NA, min(Min_Weight, na.rm = TRUE)),
+    Max_Weight              = ifelse(all(is.na(Max_Weight)), NA, max(Max_Weight, na.rm = TRUE)),
+    .groups = "drop"
+  ) %>%
+  ungroup() %>%
+  mutate(
+    Total_Effort_sum = ifelse(Monitoring_ID %in% c("96_0", "101_0", "117_1", "119_1"), 3, 4),
+    Weighted_CPUE    = Weighted_CPUE_numerator / Total_Effort_sum,
+    Weighted_BCUE    = Weighted_BCUE_numerator / Total_Effort_sum
+  )
+
+species_presence_absence <- Fish_data %>%
+  filter(!is.na(Species)) %>%
+  distinct(Monitoring_ID, Species) %>%
+  mutate(Presence = 1) %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = Presence,
+    values_fill = list(Presence = 0),
+    names_prefix = "Presence_"
+  ) %>%
+  mutate(Predator_Fish_Presence = pmax(Presence_Trout, Presence_Eel, Presence_Catfish))
+
+CPUE_BCUE_weighted_summary <- CPUE_BCUE_weighted %>%
+  pivot_wider(
+    names_from  = Species,
+    values_from = c(
+      Total_Individuals, Weighted_CPUE, Weighted_BCUE, Total_Weight,
+      Mean_Length, Mean_Weight, Weighted_CPUE_numerator, Weighted_BCUE_numerator,
+      Total_Effort_sum, Min_Length, Max_Length, Min_Weight, Max_Weight
+    ),
+    names_sep   = "_",
+    values_fill = list(Total_Individuals = 0, Weighted_CPUE = 0, Weighted_BCUE = 0)
+  ) %>%
+  mutate(
+    Richness  = rowSums(dplyr::select(., starts_with("Total_Individuals_")) > 0),
+    Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_with(c("_Bullies", "_Common_smelt"))))
+  )
+
+```
+
+# Combine the Data frames
+```{r}
+unit_metadata <- Monitoring_data %>%
+  dplyr::select(Parameter, Unit) %>%
+  distinct()
+
+Monitoring_summary <- Monitoring_data %>%
+  dplyr::select(-Group, -Notes, -Unit) %>%
+  pivot_wider(
+    names_from  = c(Parameter),
+    values_from = Value,
+    values_fill = list(Value = NA)
+  )
+
+Monitoring_summary <- Monitoring_summary %>%
+  mutate(across(c(
+      Bottom_visible, Water_clarity, Depth_10m, Slope, Riparian_vegetation, Vegetation_nearby,
+      Overhanging_trees, Erosion, Sructure, Bedrock, Boulders, Cobble, Gravel,
+      Sand, Mud, Organic_matter, Rock_size, Temperature, DO_mgl, DO_percent,
+      Conductivity, Specific_conductivity, pH, Wood_cover
+    ), ~ as.numeric(.)))
+
+Weed_summary <- Weed_data %>%
+  group_by(Monitoring_ID, Weed_Type, Native_Status) %>%
+  summarise(Total_Cover = sum(Percentage_Cover, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(
+    names_from  = c(Weed_Type, Native_Status),
+    values_from = Total_Cover,
+    values_fill = 0
+  )
+
+Macroinvertebrates_sum <- Macroinvertebrates %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(Total_amount = sum(Amount, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = c(Species), values_from = Total_amount, values_fill = 0)
+
+Macroinvertebrates_sum <- Macroinvertebrates %>%
+  group_by(Monitoring_ID, Species) %>%
+  summarise(Total_amount = sum(Amount, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = c(Species), values_from = Total_amount, values_fill = 0) %>%
+  mutate(
+    Invertebrates_Richness  = rowSums(dplyr::select(., -Monitoring_ID) > 0),
+    Invertebrates_Abundance = rowSums(dplyr::select(., -Monitoring_ID))
+  )
+
+Monitoring_CPUE_data <- Site_info %>%
+  left_join(Monitoring_summary, by = "Monitoring_ID") %>%
+  left_join(Weed_summary %>% dplyr::select(Monitoring_ID,
+                                           Emergent_Native, Emergent_Non_Native,
+                                           Submerged_Native, Submerged_Non_Native, Turf_Native),
+            by = c("Monitoring_ID")) %>%
+  left_join(species_wide, by = "Monitoring_ID") %>%
+  # left_join(species_presence_absence, by = "Monitoring_ID") %>%
+  left_join(Macroinvertebrates_sum, by = "Monitoring_ID")
+
+Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
+  mutate(
+    Presence_rocks = if_else(Cobble > 1 | Boulders > 1, 1, 0),
+    Slope_5m       = 5 / Distance_5m,
+    Site_ID_       = Site_ID.x - 60,
+    Monitoring_ID_ = paste0(as.numeric(sub("_.*", "", Monitoring_ID)) - 60,
+                            sub("^[^_]*", "", Monitoring_ID)),
+    Monitoring     = sub(".*?_", "", Monitoring_ID),
+    Date           = as.Date(Date_Time),
+    Time           = format(Date_Time, "%H:%M:%S"),
+    Year           = lubridate::year(Date_Time),
+    Month          = lubridate::month(Date_Time, label = TRUE),
+    Day            = lubridate::day(Date_Time),
+    Season         = case_when(
+      Month %in% c("Dec", "Jan", "Feb") ~ "Summer",
+      Month %in% c("Mar", "Apr", "May") ~ "Autumn",
+      Month %in% c("Jun", "Jul", "Aug") ~ "Winter",
+      Month %in% c("Sep", "Oct", "Nov") ~ "Spring",
+      TRUE ~ NA_character_
+    ),
+    Date_Time_Numeric = as.numeric(Date_Time)
+  )
+
+habitat_classification <- Monitoring_CPUE_data %>%
+  dplyr::select(Monitoring_ID, DHT, Lake,
+                Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
+                Emergent_Native, Emergent_Non_Native, Submerged_Native, Submerged_Non_Native, Wood_cover) %>%
+  pivot_longer(
+    cols      = c(Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
+                  Emergent_Native, Emergent_Non_Native, Submerged_Native,
+                  Submerged_Non_Native, Wood_cover),
+    names_to  = "Type",
+    values_to = "Percentage"
+  ) %>%
+  group_by(Monitoring_ID) %>%
+  summarise(
+    Rocky_Percentage    = sum(Percentage[Type %in% c("Bedrock", "Boulders", "Cobble")], na.rm = TRUE),
+    Sand_Percentage     = sum(Percentage[Type == "Sand"], na.rm = TRUE),
+    Mud_Percentage      = sum(Percentage[Type %in% c("Mud", "Organic_matter")], na.rm = TRUE),
+    Emergent_Percentage = sum(Percentage[Type %in% c("Emergent_Native")], na.rm = TRUE),
+    Substrate_index = sum(
+      0.08 * Percentage[Type == "Bedrock"] +
+      0.07 * Percentage[Type == "Boulders"] +
+      0.06 * Percentage[Type == "Cobble"] +
+      0.04 * Percentage[Type == "Gravel"] +
+      0.03 * Percentage[Type == "Sand"] +
+      0.02 * Percentage[Type == "Organic_matter"] +
+      0.01 * Percentage[Type == "Mud"],
+      na.rm = TRUE
+    ),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Habitat_Type = case_when(
+      Rocky_Percentage    > 25 ~ "Rocky",
+      Emergent_Percentage > 25 ~ "Emergent Macrophyte",
+      Sand_Percentage   >= Mud_Percentage ~ "Sandy",
+      TRUE ~ "Muddy"
+    )
+  ) %>%
+  dplyr::select(Monitoring_ID, Habitat_Type, Substrate_index)
+
+Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
+  left_join(habitat_classification, by = c("Monitoring_ID"))
+
+writexl::write_xlsx(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.xlsx"))
+write.csv(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.csv"), row.names = FALSE)
+write.csv(habitat_classification, file.path(der_data_dir, "habitat_classification.csv"), row.names = FALSE)
+
+list(habitat_classification_head = head(habitat_classification, 5),monitoring_cpue_head        = head(Monitoring_CPUE_data, 5))
+
+```
+
+# Analyse the data
+```{r}
+M_C_data <- Monitoring_CPUE_data %>%
+  filter(Monitoring==0)
+
+# Lake order and colors
+lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
+M_C_data$Lake <- factor(M_C_data$Lake, levels = lake_order)
+```
+
+# Physical parameters
+```{r fig.width=14, fig.height=10, dpi=100}
+
+
+sediment_colors <- c(
+  "Bedrock" = "black","Boulders" = "gray25","Cobble" = "gray55",
+  "Gravel" = "gray80","Sand" = "gold","Mud" = "saddlebrown","Organic_matter" = "darkgreen"
+)
+weed_colors <- c(
+  "Emergent_Native" = "darkgreen","Emergent_Non_Native" = "green3",
+  "Submerged_Native" = "skyblue","Submerged_Non_Native" = "royalblue4",
+  "Turf_Native" = "#00bfc4","Wood_cover" = "saddlebrown"
+)
+habitat_colors <- c("Rocky" = "gray25", "Sandy" = "gold", "Muddy" = "saddlebrown","Emergent Macrophyte" = "darkgreen")
+habitat_order  <- c("Rocky", "Sandy", "Muddy", "Emergent Macrophyte")
+M_C_data$Habitat_Type <- factor(M_C_data$Habitat_Type, levels = habitat_order)
+
+# Tidy physical layers
+sediment_data <- M_C_data %>%
+  select(Site_ID_, DHT, Habitat_Type, Lake, Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter) %>%
+  pivot_longer(
+    cols = c(Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter),
+    names_to = "Sediment_Type", values_to = "Percentage"
+  ) %>%
+  mutate(
+    Lake = factor(Lake, levels = lake_order),
+    Sediment_Type = factor(Sediment_Type, levels = c("Bedrock","Boulders","Cobble","Gravel","Sand","Mud","Organic_matter"))
+  )
+
+Substrate_index_data <- M_C_data
+
+weed_data <- M_C_data %>%
+  select(Site_ID_, DHT, Habitat_Type, Lake, Emergent_Native, Emergent_Non_Native,
+         Submerged_Native, Submerged_Non_Native, Turf_Native, Wood_cover) %>%
+  pivot_longer(
+    cols = c(Emergent_Native,Emergent_Non_Native,Submerged_Native,Submerged_Non_Native,Turf_Native,Wood_cover),
+    names_to = "Weeds", values_to = "Percentage"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order))
+
+# Statistics for substrate index (Wilcoxon pairwise + compact letters)
+substrate_stats <- Substrate_index_data %>%
+  rstatix::wilcox_test(Substrate_index ~ Lake, p.adjust.method = "BH") %>%
+  select(group1, group2, p.adj) %>%
+  { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
+  enframe(name = "Lake", value = "Letter") %>%
+  mutate(Label = paste0(Lake, " (", Letter, ")"))
+
+# Plots
+Sediment_plot <- ggplot(sediment_data, aes(factor(Site_ID_), Percentage, fill = Sediment_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = sediment_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Sediment Cover (%)", fill = "Sediment Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Substrate_index_plot <- Substrate_index_data %>%
+  mutate(Lake = factor(Lake, levels = substrate_stats$Lake, labels = substrate_stats$Label)) %>%
+  ggplot(aes(factor(Site_ID_), Substrate_index, fill = Habitat_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = habitat_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Substrate_index", fill = "Habitat Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Koura_plot <- M_C_data %>%
+  ggplot(aes(factor(Site_ID_), CPUE_Kōura, fill = Habitat_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = habitat_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Kōura CPUE", fill = "Habitat Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Catfish_plot <- M_C_data %>%
+  ggplot(aes(factor(Site_ID_), CPUE_Catfish, fill = Habitat_Type)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = habitat_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Catfish CPUE", fill = "Habitat Type") +
+  theme_bw() +
+  theme(axis.title.x = element_blank())
+
+Weed_plot <- ggplot(weed_data, aes(factor(Site_ID_), Percentage, fill = Weeds)) +
+  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
+  scale_fill_manual(values = weed_colors) +
+  facet_grid(~ Lake, scales = "free_x") +
+  labs(x = "Site", y = "Cover (%)", fill = "Cover Type") +
+  theme_bw()
+
+Physical_plot <- Sediment_plot / Substrate_index_plot / Koura_plot / Catfish_plot / Weed_plot
+Physical_plot
+
+ggsave(file.path(fig_dir, "Physical_plot.png"), Physical_plot, width = 14, height = 10, dpi = 300)
+
+```
+# Chemical Parameters
+```{r fig.width=12, fig.height=5, dpi=100}
+Chemical_data <- M_C_data %>%
+  select(Site_ID_, DHT, Habitat_Type, Lake, DO_mgl, DO_percent, Conductivity, Specific_conductivity, pH, Temperature) %>%
+  pivot_longer(
+    cols = c(DO_mgl, DO_percent, Conductivity, Specific_conductivity, pH, Temperature),
+    names_to = "Variable", values_to = "Values"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order))
+
+# Compact letter display per variable (Wilcoxon + BH)
+cld_df <- Chemical_data %>%
+  group_by(Variable) %>%
+  rstatix::wilcox_test(Values ~ Lake, p.adjust.method = "BH") %>%
+  select(Variable, group1, group2, p.adj) %>%
+  group_by(Variable) %>%
+  summarise(Letters = list(multcompView::multcompLetters(setNames(p.adj, paste(group1, group2, sep = "-")))$Letters), .groups = "drop") %>%
+  unnest_wider(Letters) %>%
+  pivot_longer(-Variable, names_to = "Lake", values_to = "Letter") %>%
+  left_join(
+    Chemical_data %>% group_by(Variable, Lake) %>% summarise(y = max(Values, na.rm = TRUE), .groups = "drop"),
+    by = c("Variable","Lake")
+  ) %>%
+  mutate(y = y * 1.05)
+
+Chemical_plot <- ggplot(Chemical_data, aes(Lake, Values, fill = Lake)) +
+  geom_boxplot() +
+  facet_wrap(~ Variable, scales = "free", nrow = 1) +
+  geom_text(data = cld_df, aes(Lake, y, label = Letter), vjust = 0) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+Chemical_plot
+
+ggsave(file.path(fig_dir, "Chemical_plot.png"), Chemical_plot, width = 12, height = 5, dpi = 300)
+
+```
+
+# Biological parameters
+```{r fig.width=12, fig.height=5, dpi=100}
+fish_order       <- c("Presence_Kōura","Presence_Eel","Presence_Kōaro","Presence_Common_smelt","Presence_Bullies","Presence_Catfish","Presence_Goldfish","Presence_Mosquitofish","Presence_Trout")
+fish_order_CPUE  <- c("CPUE_Kōura","CPUE_Eel","CPUE_Kōaro","CPUE_Common_smelt","CPUE_Bullies","CPUE_Catfish","CPUE_Goldfish","CPUE_Mosquitofish","CPUE_Trout")
+fish_order_BCUE  <- c("BCUE_Kōura","BCUE_Eel","BCUE_Kōaro","BCUE_Common_smelt","BCUE_Bullies","BCUE_Catfish","BCUE_Goldfish","BCUE_Mosquitofish","BCUE_Trout")
+
+presence_data <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake, Richness, Abundance,
+         Presence_Kōura, Presence_Eel, Presence_Kōaro, Presence_Common_smelt,
+         Presence_Bullies, Presence_Catfish, Presence_Goldfish, Presence_Mosquitofish, Presence_Trout) %>%
+  pivot_longer(
+    cols = c(Presence_Kōura, Presence_Eel, Presence_Kōaro, Presence_Common_smelt, Presence_Bullies, Presence_Catfish, Presence_Goldfish, Presence_Mosquitofish, Presence_Trout),
+    names_to = "Fish_Type", values_to = "Presence"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order))
+
+CPUE_data <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         CPUE_Kōura, CPUE_Eel, CPUE_Kōaro, CPUE_Common_smelt, CPUE_Bullies, CPUE_Catfish, CPUE_Goldfish, CPUE_Mosquitofish, CPUE_Trout) %>%
+  pivot_longer(
+    cols = c(CPUE_Kōura, CPUE_Eel, CPUE_Kōaro, CPUE_Common_smelt, CPUE_Bullies, CPUE_Catfish, CPUE_Goldfish, CPUE_Mosquitofish, CPUE_Trout),
+    names_to = "Fish_Type", values_to = "CPUE"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order_CPUE))
+
+BCUE_data <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Goldfish, BCUE_Mosquitofish, BCUE_Trout) %>%
+  pivot_longer(
+    cols = c(BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Goldfish, BCUE_Mosquitofish, BCUE_Trout),
+    names_to = "Fish_Type", values_to = "BCUE"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order_BCUE))
+
+BCUE_summary <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Goldfish, BCUE_Mosquitofish, BCUE_Trout) %>%
+  pivot_longer(
+    cols = c(BCUE_Kōura, BCUE_Eel, BCUE_Kōaro, BCUE_Common_smelt, BCUE_Bullies, BCUE_Catfish, BCUE_Goldfish, BCUE_Mosquitofish, BCUE_Trout),
+    names_to = "Fish_Type", values_to = "BCUE"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order),
+         Fish_Type = factor(Fish_Type, levels = fish_order_BCUE)) %>%
+  group_by(Lake, Habitat_Type, Fish_Type) %>%
+  summarise(mean_BCUE = mean(BCUE, na.rm = TRUE),
+            se_BCUE   = sd(BCUE,   na.rm = TRUE) / sqrt(n()),
+            .groups = "drop")
+
+Total_Weight_summary <- M_C_data %>%
+  select(Monitoring_ID, DHT, Habitat_Type, Lake,
+         Total_Weight_Bullies, Total_Weight_Goldfish, Total_Weight_Kōura,
+         Total_Weight_Common_smelt, Total_Weight_Eel, Total_Weight_Kōaro,
+         Total_Weight_Trout, Total_Weight_Mosquitofish, Total_Weight_Catfish) %>%
+  pivot_longer(
+    cols = c(Total_Weight_Bullies, Total_Weight_Goldfish, Total_Weight_Kōura,
+             Total_Weight_Common_smelt, Total_Weight_Eel, Total_Weight_Kōaro,
+             Total_Weight_Trout, Total_Weight_Mosquitofish, Total_Weight_Catfish),
+    names_to = "Fish_Type", values_to = "Total_Weight"
+  ) %>%
+  mutate(Lake = factor(Lake, levels = lake_order)) %>%
+  group_by(Fish_Type) %>%
+  summarise(Total_Weight = sum(Total_Weight, na.rm = TRUE), .groups = "drop")
+
+# Richness & Abundance
+plot_abundance <- ggplot(presence_data, aes(Lake, Abundance, fill = Lake)) +
+  geom_boxplot() +
+  facet_grid(~ Habitat_Type, scales = "free")
+
+plot_richness <- ggplot(presence_data, aes(Lake, Richness, fill = Lake)) +
+  geom_boxplot() +
+  facet_grid(~ Habitat_Type, scales = "free")
+
+plot_abundance / plot_richness
+
+```
+
+# Koura specific plot 
+```{r fig.width=6, fig.height=6, dpi=100}
+plot_koura_stats <- function(data, y_var, y_label, 
+                             test_type = c("wilcox", "fisher"),
+                             show_x_title = FALSE) {
+  test_type <- match.arg(test_type)
+  lakes <- levels(data$Lake)
+  xlab_text <- if (show_x_title) "Lake" else NULL
+  
+  if (test_type == "wilcox") {
+    stats <- data %>%
+      rstatix::wilcox_test(as.formula(paste0(y_var, " ~ Lake")), p.adjust.method = "BH") %>%
+      { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
+      tibble::enframe("Lake", "Letter")
+    
+    ggplot2::ggplot(data, aes(Lake, .data[[y_var]])) +
+      ggplot2::geom_boxplot(fill = "grey70") +
+      ggplot2::geom_text(data = stats, aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(y = y_label, x = xlab_text)
+    
+  } else {
+    presence_summary <- data %>%
+      dplyr::group_by(Lake) %>%
+      dplyr::summarise(Presence_Rate = mean(.data[[y_var]], na.rm = TRUE), .groups = "drop") %>%
+      dplyr::mutate(Lake = factor(Lake, levels = lakes))
+    
+    lake_pairs <- combn(lakes, 2, simplify = FALSE)
+    fisher_pair_test <- function(pair, df) {
+      sub <- df %>% dplyr::filter(Lake %in% pair)
+      tab <- table(sub[[y_var]], sub$Lake)
+      pval <- fisher.test(tab)$p.value
+      tibble::tibble(group1 = pair[1], group2 = pair[2], p.value = pval)
+    }
+    pairwise_results <- purrr::map_dfr(lake_pairs, fisher_pair_test, df = data) %>%
+      dplyr::mutate(p.adj = p.adjust(p.value, method = "BH"))
+    
+    letters <- multcompView::multcompLetters(
+      setNames(pairwise_results$p.adj, paste(pairwise_results$group1, pairwise_results$group2, sep = "-"))
+    )$Letters
+    
+    stats_col <- tibble::tibble(
+      Lake   = factor(names(letters), levels = lakes),
+      Letter = unname(letters)
+    )
+    
+    ggplot2::ggplot(presence_summary, ggplot2::aes(x = Lake, y = Presence_Rate)) +
+      ggplot2::geom_col(fill = "grey50", col = "black") +
+      ggplot2::geom_text(data = stats_col, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(x = xlab_text, y = y_label) +
+      ggplot2::theme(legend.position = "none")
+  }
+}
+
+KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
+KCPUE_plot <- plot_koura_stats(M_C_data, "CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
+KBCUE_plot <- plot_koura_stats(M_C_data, "BCUE_Kōura",     "Kōura BCUE",     test_type = "wilcox",  show_x_title = TRUE)
+
+Koura_plots <- KPRES_plot / KCPUE_plot / KBCUE_plot
+Koura_plots
+
+ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, width = 6, height = 6, dpi = 300)
+
+```
+
+# Koura plot without 0 sites
+```{r fig.width=6, fig.height=6, dpi=100}
+plot_koura_stats <- function(data, y_var, y_label, 
+                             test_type = c("wilcox", "fisher"),
+                             show_x_title = FALSE) {
+  test_type <- match.arg(test_type)
+  lakes <- levels(data$Lake)
+  xlab_text <- if (show_x_title) "Lake" else NULL
+  
+  if (test_type == "wilcox") {
+    data_nz <- data %>% dplyr::filter(.data[[y_var]] > 0)
+    keep_lakes <- data_nz %>%
+      dplyr::group_by(Lake) %>%
+      dplyr::summarise(n = sum(!is.na(.data[[y_var]])), .groups = "drop") %>%
+      dplyr::filter(n > 0) %>% dplyr::pull(Lake) %>% as.character()
+    level_order <- as.character(lakes)[as.character(lakes) %in% keep_lakes]
+    data_nz <- data_nz %>% dplyr::mutate(Lake = factor(Lake, levels = level_order))
+    
+    stats <- data_nz %>%
+      rstatix::wilcox_test(as.formula(paste0(y_var, " ~ Lake")), p.adjust.method = "BH") %>%
+      { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
+      tibble::enframe("Lake", "Letter")
+    
+    ggplot2::ggplot(data_nz, ggplot2::aes(Lake, .data[[y_var]])) +
+      ggplot2::geom_boxplot(fill = "grey70") +
+      ggplot2::geom_text(data = stats, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(y = y_label, x = xlab_text)
+    
+  } else {
+    presence_summary <- data %>%
+      dplyr::group_by(Lake) %>%
+      dplyr::summarise(Presence_Rate = mean(.data[[y_var]], na.rm = TRUE), .groups = "drop") %>%
+      dplyr::mutate(Lake = factor(Lake, levels = lakes))
+    
+    lake_pairs <- combn(lakes, 2, simplify = FALSE)
+    fisher_pair_test <- function(pair, df) {
+      sub <- df %>% dplyr::filter(Lake %in% pair)
+      tab <- table(sub[[y_var]], sub$Lake)
+      pval <- fisher.test(tab)$p.value
+      tibble::tibble(group1 = pair[1], group2 = pair[2], p.value = pval)
+    }
+    pairwise_results <- purrr::map_dfr(lake_pairs, fisher_pair_test, df = data) %>%
+      dplyr::mutate(p.adj = p.adjust(p.value, method = "BH"))
+    
+    letters <- multcompView::multcompLetters(
+      setNames(pairwise_results$p.adj, paste(pairwise_results$group1, pairwise_results$group2, sep = "-"))
+    )$Letters
+    
+    stats_col <- tibble::tibble(
+      Lake   = factor(names(letters), levels = lakes),
+      Letter = unname(letters)
+    )
+    
+    ggplot2::ggplot(presence_summary, ggplot2::aes(x = Lake, y = Presence_Rate)) +
+      ggplot2::geom_col(fill = "grey50", col = "black") +
+      ggplot2::geom_text(data = stats_col, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
+      ggplot2::labs(x = xlab_text, y = y_label) +
+      ggplot2::theme(legend.position = "none")
+  }
+}
+
+KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
+KCPUE_plot <- plot_koura_stats(M_C_data, "CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
+KBCUE_plot <- plot_koura_stats(M_C_data, "BCUE_Kōura",     "Kōura BCUE",     test_type = "wilcox",  show_x_title = TRUE)
+
+Koura_plots <- KPRES_plot / KCPUE_plot / KBCUE_plot
+Koura_plots
+
+```
+
+# GAM model
+```{r}
+# Filter to ignor all sites that have been sampled double.
+Modeling_data <- Monitoring_CPUE_data %>%
+  filter(Monitoring==0)
+
+# Built Functions --------------------------------------------------------------
+# remove high VIF for Bionomial data
+remove_high_vif_glmBI <- function(data, response, predictors, threshold = 5) {
+  # Load brglm2 for bias-reduced logistic regression
+  if (!requireNamespace("brglm2", quietly = TRUE)) {
+    install.packages("brglm2")}
+  library(brglm2)
+  removed <- character()
+  # Step 1: Remove near-zero variance predictors
+  nzv <- caret::nearZeroVar(data[, predictors, drop = FALSE])
+  if (length(nzv) > 0) {
+    cat("Removing near-zero variance predictors:", predictors[nzv], "\n")
+    removed <- c(removed, predictors[nzv])
+    predictors <- predictors[-nzv]}
+  # Step 2: Iteratively remove high-VIF predictors
+  repeat {formula <- as.formula(paste(response, "~", paste(predictors, collapse = " + ")))
+    # Use bias-reduced logistic regression to avoid separation issues
+    model <- try(glm(formula, data = data, family = binomial(link = "logit"),method = "brglmFit"), silent = TRUE)
+    if (inherits(model, "try-error")) break
+    vif_data <- performance::check_collinearity(model)
+    vif_data <- vif_data[!grepl("\\|", vif_data$Term), ] # Remove random effects if any
+    print(vif_data) # Debugging: show VIFs each iteration
+    if (all(vif_data$VIF < threshold)) break
+    to_remove <- vif_data$Term[which.max(vif_data$VIF)]
+    cat("Removing:", to_remove, "\n")
+    predictors <- setdiff(predictors, to_remove)
+    removed <- c(removed, to_remove)
+    if (length(predictors) == 0) stop("All predictors removed.")}
+  cat("Removed variables:\n", paste(removed, collapse = ", "), "\n")
+  return(model)}
+
+# remove high VIF in glmmTMB function with Tweedie
+remove_high_vif_glmmTMB <- function(data, response, predictors, threshold = 5) {
+  removed <- character()
+  repeat {
+    formula <- as.formula(paste(response, "~", paste(predictors, collapse = " + "))) # , "+ (1 | LID)"
+    model <- try(glmmTMB(formula, data = data, family = tweedie()), silent = TRUE)
+    if (inherits(model, "try-error")) break
+    vif_data <- performance::check_collinearity(model)
+    vif_data <- vif_data[!grepl("\\|", vif_data$Term), ]
+    if (all(vif_data$VIF < threshold)) break
+    to_remove <- vif_data$Term[which.max(vif_data$VIF)]
+    cat("Removing:", to_remove, "\n")
+    predictors <- setdiff(predictors, to_remove)
+    removed <- c(removed, to_remove)
+    if (length(predictors) == 0) stop("All predictors removed.")}
+  cat("Removed variables:\n", paste(removed, collapse = ", "), "\n")
+  return(model)
+}
+
+# automatic remove the variable with highest p value include LID via build_smooth()
+stepwise_gam_vars_with_LID <- function(response, vars, data, family, method = "ML", p_cutoff = 0.1) {
+  remaining_vars <- vars
+  m <- NULL
+  repeat {
+    rhs_terms <- vapply(remaining_vars, \(v) build_smooth(v, include_re_for_LID = TRUE), character(1))
+    current_formula <- as.formula(paste(response, "~", paste(rhs_terms, collapse = " + ")))
+    m <- gam(current_formula, data = data, family = family, method = method, select = TRUE)
+    summ <- summary(m)
+    
+    # parametric p
+    if (!is.null(summ$p.table) && nrow(summ$p.table) > 0) {
+      pcol <- intersect(c("Pr(>|t|)", "Pr(>|z|)"), colnames(summ$p.table))
+      param_p <- summ$p.table[, pcol[1]]
+      names(param_p) <- rownames(summ$p.table)
+      param_p <- param_p[names(param_p) != "(Intercept)"]
+    } else param_p <- numeric(0)
+    
+    # smooth p
+    smooth_p <- if (!is.null(summ$s.table)) {
+      p <- summ$s.table[, "p-value"]; names(p) <- rownames(summ$s.table); p
+    } else numeric(0)
+    
+    all_p <- c(param_p, smooth_p)
+    all_p_filtered <- all_p[all_p > p_cutoff]
+    if (length(all_p_filtered) == 0) {
+      message("All terms have p <= ", p_cutoff, ". Stopping.")
+      break
+    }
+    term_to_remove <- names(which.max(all_p_filtered))
+    max_pval <- max(all_p_filtered)
+    message("Removing term: ", term_to_remove, " with p-value = ", max_pval)
+    
+    # map smooth label back to variable name
+    var_to_remove <- if (grepl("^s\\(", term_to_remove)) sub("^s\\(([^,]+).*\\)$", "\\1", term_to_remove) else term_to_remove
+    
+    if (var_to_remove %in% remaining_vars) {
+      remaining_vars <- setdiff(remaining_vars, var_to_remove)
+    } else {
+      message("Warning: variable '", var_to_remove, "' not found in remaining_vars!")
+      break
+    }
+    if (length(remaining_vars) == 0) {
+      message("No variables left, stopping.")
+      break
+    }
+  }
+  m
+}
+
+```
+
+# Kōura occupancy (presence/absence)
+```{r}
+## 1) Prep: select vars and coerce types
+vars <- c(
+  "Presence_Kōura","LID",
+  "Slope_5m","Riparian_vegetation","Overhanging_trees","Wood_cover","Substrate_index",
+  "Temperature","pH","DO_mgl","DO_percent","Specific_conductivity",
+  "Emergent_Native","Submerged_Non_Native","Turf_Native","Submerged_Native","Emergent_Non_Native",
+  "Presence_Common_smelt","Presence_Goldfish","Presence_Eel","Presence_Catfish")
+
+PData <- Modeling_data |>
+  dplyr::select(all_of(vars)) |>
+  mutate(LID = factor(LID),
+         across(c(Presence_Kōura, Presence_Common_smelt, Presence_Goldfish,
+                  Presence_Eel, Presence_Catfish), ~ as.numeric(.)))
+
+## 2) VIF pruning with your function — EXCLUDE LID here
+response   <- "Presence_Kōura"
+pred_fixed <- setdiff(names(PData), c(response, "LID"))  # only fixed effects into VIF
+vif_model  <- remove_high_vif_glmBI(PData, response, pred_fixed, threshold = 5)
+kept_fixed <- setdiff(names(coef(vif_model)), "(Intercept)")
+
+## 3) Smooth builder that respects variable type (your stepwise uses this)
+custom_k <- list(Slope_5m=10, Riparian_vegetation=7, Overhanging_trees=5, Wood_cover=10,
+                 Substrate_index=10, Temperature=10, pH=10, DO_mgl=10, Emergent_Native=5, Submerged_Non_Native=9, Turf_Native=6)
+
+is_cont <- function(x) is.numeric(x) && dplyr::n_distinct(x, na.rm = TRUE) >= 5
+build_smooth <- function(var, include_re_for_LID = FALSE) {
+  if (identical(var, "LID") && include_re_for_LID) return("s(LID, bs='re')")
+  x <- PData[[var]]
+  if (is_cont(x)) {
+    k <- if (!is.null(custom_k[[var]])) paste0(", k=", custom_k[[var]]) else ""
+    return(paste0("s(", var, ", bs='ts'", k, ")"))
+  }
+  var  # binary/low-level → parametric
+}
+
+## 4) Full models (± lake RE) using the same fixed set
+rhs_fixed <- paste(vapply(kept_fixed, build_smooth, character(1)), collapse = " + ")
+form_noLID   <- as.formula(paste0(response, " ~ ", rhs_fixed))
+form_withLID <- as.formula(paste0(response, " ~ ", rhs_fixed, " + s(LID, bs='re')"))
+
+mp_full    <- gam(form_noLID,   data = PData, family = binomial(link = "logit"), method = "ML", select = TRUE)
+mp_full_re <- gam(form_withLID, data = PData, family = binomial(link = "logit"), method = "ML", select = TRUE)
+
+summary(mp_full)
+summary(mp_full_re)
+AIC(mp_full, mp_full_re)
+anova(mp_full, mp_full_re, test = "Chisq")
+
+## 5) Reduced models via stepwise at two cut-offs
+vars_for_stepwise <- c(kept_fixed, "LID")
+
+mp.05 <- stepwise_gam_vars_with_LID(
+  response = response, vars = vars_for_stepwise,
+  data = PData, family = binomial(link = "logit"),
+  method = "ML", p_cutoff = 0.05)
+
+mp.10 <- stepwise_gam_vars_with_LID(
+  response = response, vars = vars_for_stepwise,
+  data = PData, family = binomial(link = "logit"),
+  method = "ML", p_cutoff = 0.10)
+
+
+## 6) Compare models
+summary(mp_full)
+summary(mp_full_re)
+summary(mp.05)
+summary(mp.10)
+anova(mp_full, mp_full_re, test = "Chisq")
+anova(mp.05, mp_full, test = "Chisq")
+anova(mp.05, mp_full_re, test = "Chisq")
+anova(mp.10, mp_full, test = "Chisq")
+anova(mp.10, mp_full_re, test = "Chisq")
+anova(mp.05, mp.10, test = "Chisq")
+AIC(mp_full, mp_full_re, mp.05, mp.10)
+
+
+## 7) Final refit in REML for reporting (best model only)
+bestp_model <- formula(mp.10)  
+mp_final  <- gam(bestp_model, data = PData, family = binomial(link = "logit"), method = "REML", select = TRUE)
+summary(mp_final)
+gam.check(mp_final)
+concurvity(mp_final)
+influence.gam(mp_final)
+
+# Predicted vs observed
+plot(predict(mp_final, type = "response"), mp_final$y,xlab = "Predicted presence", ylab = "Observed presence")
+abline(0, 1, col = "red")
+
+# helper
+logit2prob <- function(x) exp(x) / (1 + exp(x))
+
+make_fish_plot <- function(fish_var, label, model, PData){
+  # base grid with other predictors fixed, vary LID
+  newdat <- expand.grid(
+    LID                 = levels(PData$LID),
+    Riparian_vegetation = mean(PData$Riparian_vegetation, na.rm = TRUE),
+    Substrate_index     = mean(PData$Substrate_index,     na.rm = TRUE),
+    Temperature         = mean(PData$Temperature,         na.rm = TRUE),
+    Presence_Goldfish   = 0,
+    Presence_Eel        = 0,
+    Presence_Catfish    = 0
+  )
+  
+  # duplicate rows: absent (0) and present (1) for this fish
+  newdat0 <- newdat
+  newdat1 <- newdat
+  newdat0[[fish_var]] <- 0
+  newdat1[[fish_var]] <- 1
+  newdat <- rbind(newdat0, newdat1)
+  
+  # predict excluding RE
+  pr <- predict(model, newdata = newdat, type = "link",
+                se.fit = TRUE, exclude = "s(LID)")
+  
+  logit2prob <- function(x) exp(x) / (1 + exp(x))
+  newdat$prob <- logit2prob(pr$fit)
+  newdat$lwr  <- logit2prob(pr$fit - 1.96*pr$se.fit)
+  newdat$upr  <- logit2prob(pr$fit + 1.96*pr$se.fit)
+  
+  # summarise across lakes (mean over LID)
+  plot_df <- newdat |>
+    dplyr::group_by(.data[[fish_var]]) |>
+    dplyr::summarise(prob = mean(prob),
+                     lwr  = mean(lwr),
+                     upr  = mean(upr),
+                     .groups = "drop")
+  
+  ggplot(plot_df,
+         aes(x = factor(.data[[fish_var]], labels = c("0","1")),
+             y = prob)) +
+    geom_col(width = 0.5, fill = "grey70") +
+    geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
+    ylim(0,1) +
+    labs(x = label, y = "Predicted kōura presence") 
+}
+
+# Now call it:
+p_mori <- make_fish_plot("Presence_Goldfish", "Presence Goldfish", mp_final, PData) +labs(y = NULL)
+p_eel  <- make_fish_plot("Presence_Eel", "Presence Eel", mp_final, PData)
+p_cat  <- make_fish_plot("Presence_Catfish", "Presence Catfish", mp_final, PData) +labs(y = NULL)
+
+p1 <- draw(mp_final)
+p2 <- p_mori/ p_eel/ p_cat
+
+finalp_plot <- p1 | p2
+finalp_plot <- finalp_plot + plot_layout(widths = c(2, 1))
+finalp_plot
+
+ggsave("Figures/precence_GAM.png", finalp_plot, width = 8, height = 5, dpi = 300)
+
+
+
+
+# Build new data frame 
+newdata_param <- expand.grid(
+  Presence_Goldfish = c(0, 1),
+  Presence_Eel = c(0, 1),
+  Presence_Catfish = c(0, 1),
+  LID = levels(PData$LID),
+  Riparian_vegetation = mean(PData$Riparian_vegetation, na.rm = TRUE),
+  Substrate_index = mean(PData$Substrate_index, na.rm = TRUE),
+  Temperature = mean(PData$Temperature, na.rm = TRUE))
+
+# Predict on link (logit) scale
+pred <- predict(mp_final, newdata = newdata_param, type = "link", se.fit = TRUE)
+
+# Convert log-odds to probabilities
+logit2prob <- function(x) exp(x) / (1 + exp(x))
+newdata_param$predicted_prob <- logit2prob(pred$fit)
+newdata_param$lwr <- logit2prob(pred$fit - 1.96 * pred$se.fit)
+newdata_param$upr <- logit2prob(pred$fit + 1.96 * pred$se.fit)
+
+# Plots
+p1 <- draw(mp_final)
+p2 <- ggplot(newdata_param, aes(x = interaction(Presence_Goldfish, Presence_Eel, Presence_Catfish), y = predicted_prob)) +
+  geom_col(width = 0.5, fill = "grey70") +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
+  labs(x = "Presence Goldfish and Eel", y = "Predicted Kōura Presence") 
+
+
+
+# Get predicted probabilities
+pred_probs <- predict(mp_final, type = "response")
+
+# Equal-frequency binning (10 bins)
+n_bins <- 10
+calib_plot_data <- tibble(
+  pred = pred_probs,
+  obs = mp_final$y) %>%
+  mutate(bin = ntile(pred, n_bins)) %>%  # create equal-frequency bins
+  group_by(bin) %>%
+  summarise(
+    mean_pred = mean(pred),
+    obs_rate = mean(obs),
+    n = n(),
+    .groups = "drop")
+
+# Calibration plot
+Calibration_plotp <- ggplot(calib_plot_data, aes(mean_pred, obs_rate)) +
+  geom_point(size = 3) +
+  geom_line() +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  labs(x = "Mean predicted probability",
+       y = "Observed proportion") 
+Calibration_plotp
+
+ggsave("Figures/Precence_Predictions.png", Calibration_plotp, width = 5, height = 4, dpi = 300)
+
+```
+# CPUE kōura (abundances)
+```{r}
+## 1) Prep: select vars and coerce types
+vars <- c("CPUE_Kōura","LID",
+  "Slope_5m","Riparian_vegetation","Overhanging_trees","Wood_cover","Substrate_index",
+  "Temperature","pH","DO_mgl","DO_percent","Specific_conductivity",
+  "Emergent_Native","Submerged_Non_Native","Turf_Native","Submerged_Native","Emergent_Non_Native",
+  "Presence_Common_smelt","Presence_Goldfish","Presence_Eel","Presence_Catfish")
+
+CData <- Modeling_data |>
+  dplyr::select(all_of(vars)) |>
+  mutate(LID = factor(LID),
+         across(c(Presence_Common_smelt, Presence_Goldfish,
+                  Presence_Eel, Presence_Catfish), ~ as.numeric(.)))
+
+## 2) VIF pruning with your function — EXCLUDE LID here
+response   <- "CPUE_Kōura"
+pred_fixed <- setdiff(names(CData), c(response, "LID"))  # only fixed effects into VIF
+vif_model  <- remove_high_vif_glmmTMB(CData, response, pred_fixed, threshold = 5)
+kept_fixed <- names(fixef(vif_model)$cond)
+kept_fixed <- setdiff(kept_fixed, "(Intercept)")
+
+## 3) Smooth builder that respects variable type (your stepwise uses this)
+custom_k <- list(Slope_5m=10, Riparian_vegetation=7, Overhanging_trees=5, Wood_cover=10,
+                 Substrate_index=10, Temperature=10, pH=10, DO_mgl=10, Emergent_Native=9, 
+                 Submerged_Native = 4, Submerged_Non_Native=9, Turf_Native=6)
+
+is_cont <- function(x) is.numeric(x) && dplyr::n_distinct(x, na.rm = TRUE) >= 5
+build_smooth <- function(var, include_re_for_LID = FALSE) {
+  if (identical(var, "LID") && include_re_for_LID) return("s(LID, bs='re')")
+  x <- CData[[var]]
+  if (is_cont(x)) {
+    k <- if (!is.null(custom_k[[var]])) paste0(", k=", custom_k[[var]]) else ""
+    return(paste0("s(", var, ", bs='ts'", k, ")"))
+  }
+  var  # binary/low-level → parametric
+}
+
+## 4) Full models (± lake RE) using the same fixed set
+rhs_fixed <- paste(vapply(kept_fixed, build_smooth, character(1)), collapse = " + ")
+form_noLID   <- as.formula(paste0(response, " ~ ", rhs_fixed))
+form_withLID <- as.formula(paste0(response, " ~ ", rhs_fixed, " + s(LID, bs='re')"))
+
+mc_full    <- gam(form_noLID,   data = CData, family = tw(link = "log"), method = "ML", select = TRUE)
+mc_full_re <- gam(form_withLID, data = CData, family = tw(link = "log"), method = "ML", select = TRUE)
+
+## 5) Reduced models via stepwise at two cut-offs
+vars_for_stepwise <- c(kept_fixed, "LID")
+
+mc.05 <- stepwise_gam_vars_with_LID(
+  response = response, vars = vars_for_stepwise,
+  data = CData, family = tw(link = "log"),
+  method = "ML", p_cutoff = 0.05)
+
+
+## 6) Compare models
+summary(mc_full)
+summary(mc_full_re)
+summary(mc.05)
+anova(mc_full, mc_full_re, test = "Chisq")
+anova(mc.05, mc_full, test = "Chisq")
+anova(mc.05, mc_full_re, test = "Chisq")
+AIC(mc_full, mc_full_re, mc.05)
+
+
+## 7) Final refit in REML for reporting (best model only)
+bestc_model <- formula(mc.05)  
+mc_final  <- gam(bestc_model, data = CData, family = tw(link = "log"), method = "REML", select = TRUE)
+summary(mc_final)
+gam.check(mc_final)
+concurvity(mc_final)
+influence.gam(mc_final)
+
+
+## 8) Make it visual into plots
+new_datac <- expand.grid(
+  Presence_Common_smelt = c(0, 1),
+  Temperature = mean(CData$Temperature, na.rm = TRUE),
+  pH = mean(CData$pH, na.rm = TRUE),
+  Emergent_Native = mean(CData$Emergent_Native, na.rm = TRUE),
+  Substrate_index = mean(CData$Substrate_index, na.rm = TRUE))
+
+# Predict with SE for CI
+pred <- predict(mc_final, newdata = new_datac, type = "link", se.fit = TRUE)
+new_datac$predicted_CPUE <- exp(pred$fit)
+new_datac$lwr <- exp(pred$fit - 1.96 * pred$se.fit)
+new_datac$upr <- exp(pred$fit + 1.96 * pred$se.fit)
+
+p1 <- draw(mc_final)
+
+p2 <- ggplot(new_datac, aes(factor(Presence_Common_smelt), predicted_CPUE)) +
+  geom_col(width = 0.5, fill = "grey70") +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
+  labs(x = "Presence Common Smelt",y = "Predicted kōura CPUE") 
+
+final_plotc <- p1 | p2
+final_plotc <- final_plotc + plot_layout(widths = c(2, 1))
+final_plotc
+
+ggsave("Figures/CPUE_GAM.png", final_plotc, width = 8, height = 5, dpi = 300)
+
+# Predicted and observed
+pred <- predict(mc_final, type = "response")
+obs <- mc_final$y
+R2 <- cor(pred, obs)^2
+RMSE <- sqrt(mean((pred - obs)^2))
+
+df_pred_obs <- data.frame(ID = 1:length(obs), Predicted = pred, Observed = obs)
+
+# Plot
+library(ggrepel)
+Predictions_plotc = ggplot(df_pred_obs, aes(x = Predicted, y = Observed)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
+  #geom_text_repel(aes(label = ID), size = 3, max.overlaps = 5) +  
+  annotate("text", x = max(df_pred_obs$Predicted) * 0.7, y = max(df_pred_obs$Observed) * 0.8,
+           label = paste0("Adj. R² = ", round(R2, 2), "\nRMSE = ", round(RMSE, 2)),
+           hjust = 0, size = 4, colour = "black") +
+  labs(x = "Predicted CPUE", y = "Observed CPUE")
+
+Predictions_plotc
+
+ggsave("Figures/CPUE_Predictions.png", Predictions_plotc, width = 5, height = 4, dpi = 300)
+
+
+```
+# BCUE kōura (abundances)
+```{r}
+## 1) Prep: select vars and coerce types
+vars <- c("BCUE_Kōura","LID",
+          "Slope_5m","Riparian_vegetation","Overhanging_trees","Wood_cover","Substrate_index",
+          "Temperature","pH","DO_mgl","DO_percent","Specific_conductivity",
+          "Emergent_Native","Submerged_Non_Native","Turf_Native","Submerged_Native","Emergent_Non_Native",
+          "Presence_Common_smelt","Presence_Goldfish","Presence_Eel","Presence_Catfish")
+
+BData <- Modeling_data |>
+  dplyr::select(all_of(vars)) |>
+  mutate(LID = factor(LID),
+         across(c(Presence_Common_smelt, Presence_Goldfish,
+                  Presence_Eel, Presence_Catfish), ~ as.numeric(.)))
+
+## 2) VIF pruning with your function — EXCLUDE LID here
+response   <- "BCUE_Kōura"
+pred_fixed <- setdiff(names(BData), c(response, "LID"))  # only fixed effects into VIF
+vif_model  <- remove_high_vif_glmmTMB(BData, response, pred_fixed, threshold = 5)
+kept_fixed <- names(fixef(vif_model)$cond)
+kept_fixed <- setdiff(kept_fixed, "(Intercept)")
+
+## 3) Smooth builder that respects variable type (your stepwise uses this)
+custom_k <- list(Slope_5m=10, Riparian_vegetation=7, Overhanging_trees=5, Wood_cover=10,
+                 Substrate_index=10, Temperature=10, pH=10, DO_mgl=10, Emergent_Native=9, 
+                 Submerged_Native = 4, Submerged_Non_Native=9, Turf_Native=6)
+
+is_cont <- function(x) is.numeric(x) && dplyr::n_distinct(x, na.rm = TRUE) >= 5
+build_smooth <- function(var, include_re_for_LID = FALSE) {
+  if (identical(var, "LID") && include_re_for_LID) return("s(LID, bs='re')")
+  x <- BData[[var]]
+  if (is_cont(x)) {
+    k <- if (!is.null(custom_k[[var]])) paste0(", k=", custom_k[[var]]) else ""
+    return(paste0("s(", var, ", bs='ts'", k, ")"))
+  }
+  var  # binary/low-level → parametric
+}
+
+## 4) Full models (± lake RE) using the same fixed set
+rhs_fixed <- paste(vapply(kept_fixed, build_smooth, character(1)), collapse = " + ")
+form_noLID   <- as.formula(paste0(response, " ~ ", rhs_fixed))
+form_withLID <- as.formula(paste0(response, " ~ ", rhs_fixed, " + s(LID, bs='re')"))
+
+mb_full    <- gam(form_noLID,   data = BData, family = tw(link = "log"), method = "ML", select = TRUE)
+mb_full_re <- gam(form_withLID, data = BData, family = tw(link = "log"), method = "ML", select = TRUE)
+
+## 5) Reduced models via stepwise at two cut-offs
+vars_for_stepwise <- c(kept_fixed, "LID")
+
+mb.05 <- stepwise_gam_vars_with_LID(
+  response = response, vars = vars_for_stepwise,
+  data = BData, family = tw(link = "log"),
+  method = "ML", p_cutoff = 0.05)
+
+
+## 6) Compare models
+summary(mb_full)
+summary(mb_full_re)
+summary(mb.05)
+anova(mb_full, mb_full_re, test = "Chisq")
+anova(mb.05, mb_full, test = "Chisq")
+anova(mb.05, mb_full_re, test = "Chisq")
+AIC(mb_full, mb_full_re, mb.05)
+
+
+## 7) Final refit in REML for reporting (best model only)
+bestb_model <- formula(mb.05)  
+mb_final  <- gam(bestb_model, data = BData, family = tw(link = "log"), method = "REML", select = TRUE)
+summary(mb_final)
+gam.check(mb_final)
+concurvity(mb_final)
+influence.gam(mb_final)
+
+
+## 8) Make it visual into plots
+newdata <- expand.grid(
+  Presence_Goldfish = c(0, 1),
+  Presence_Eel = c(0, 1),
+  Overhanging_trees = mean(BData$Overhanging_trees, na.rm = TRUE),
+  pH = mean(BData$pH, na.rm = TRUE))
+
+# Predict on link (logit) scale
+pred <- predict(mb_final, newdata = newdata, type = "link", se.fit = TRUE)
+
+# Convert log-odds to probabilities
+logit2prob <- function(x) exp(x) / (1 + exp(x))
+newdata$predicted_prob <- logit2prob(pred$fit)
+newdata$lwr <- logit2prob(pred$fit - 1.96 * pred$se.fit)
+newdata$upr <- logit2prob(pred$fit + 1.96 * pred$se.fit)
+
+# Plots
+p1 <- draw(mb_final, ncol = 1)
+p2 <- ggplot(newdata, aes(x = interaction(Presence_Goldfish, Presence_Eel), y = predicted_prob)) +
+  geom_col(width = 0.5, fill = "grey70") +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
+  labs(x = "Presence Goldfish and Eel", y = "Predicted kōura BCUE") 
+
+final_plot <- p1 | p2
+final_plot <- final_plot + plot_layout(widths = c(1.5, 2))
+final_plot
+
+ggsave("Figures/BCUE_GAM.png", final_plot, width = 8, height = 5, dpi = 300)
+
+# Predicted and observed
+pred <- predict(mb_final, type = "response")
+obs <- mb_final$y
+R2 <- cor(pred, obs)^2
+RMSE <- sqrt(mean((pred - obs)^2))
+
+df_pred_obs <- data.frame(ID = 1:length(obs), Predicted = pred, Observed = obs)
+
+# Plot
+library(ggrepel)
+Predictions_plot=ggplot(df_pred_obs, aes(x = Predicted, y = Observed)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
+  #geom_text_repel(aes(label = ID), size = 3, max.overlaps = 5) +  
+  annotate("text", x = max(df_pred_obs$Predicted) * 0.7, y = max(df_pred_obs$Observed) * 0.8,
+           label = paste0("Adj. R² = ", round(R2, 2), "\nRMSE = ", round(RMSE, 2)),
+           hjust = 0, size = 4, colour = "black") +
+  labs(x = "Predicted BCUE", y = "Observed BCUE")
+
+Predictions_plot
+
+ggsave("Figures/BCUE_Predictions.png", Predictions_plot, width = 5, height = 4, dpi = 300)
+
+```
+
+
