@@ -47,6 +47,7 @@ Weed_data          <- read_excel(exc_file_dir, sheet = "Weed_data")  %>% dplyr::
 Fish_data          <- read_excel(exc_file_dir, sheet = "Fish_data") %>% dplyr::select(-starts_with("..."))
 Macroinvertebrates <- read_excel(exc_file_dir, sheet = "Macroinvertebrates")
 ```
+
 # transform the Fish_data
 ```{r}
 # Safe helpers
@@ -213,8 +214,7 @@ species_presence_absence <- Fish_data %>%
     names_from  = Species,
     values_from = Presence,
     values_fill = list(Presence = 0),
-    names_prefix = "Presence_"
-  ) %>%
+    names_prefix = "Presence_") %>%
   mutate(Predator_Fish_Presence = pmax(Presence_Trout, Presence_Eel, Presence_Catfish))
 
 CPUE_BCUE_weighted_summary <- CPUE_BCUE_weighted %>%
@@ -835,7 +835,7 @@ stepwise_gam_vars_with_LID <- function(response, vars, data, family, method = "M
 ```
 
 # Kōura occupancy (presence/absence)
-```{r}
+```{r fig.width=14, fig.height=6, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 ## 1) Prep: select vars and coerce types
 vars <- c(
   "Presence_Kōura","LID",
@@ -980,14 +980,6 @@ p_cat  <- make_fish_plot("Presence_Catfish", "Presence Catfish", mp_final, PData
 p1 <- draw(mp_final)
 p2 <- p_mori/ p_eel/ p_cat
 
-finalp_plot <- p1 | p2
-finalp_plot <- finalp_plot + plot_layout(widths = c(2, 1))
-finalp_plot
-
-ggsave("Figures/precence_GAM.png", finalp_plot, width = 8, height = 5, dpi = 300)
-
-
-
 
 # Build new data frame 
 newdata_param <- expand.grid(
@@ -1040,13 +1032,23 @@ Calibration_plotp <- ggplot(calib_plot_data, aes(mean_pred, obs_rate)) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
   labs(x = "Mean predicted probability",
        y = "Observed proportion") 
+
 Calibration_plotp
 
-ggsave("Figures/Precence_Predictions.png", Calibration_plotp, width = 5, height = 4, dpi = 300)
+
+# Stack the fish-effect plots first
+p2 <- p_mori / p_eel / p_cat + plot_layout(tag_level = "new")
+
+# Combine all three horizontally and tag A–C
+final_plot_1 <- p1 | p2 | Calibration_plotp 
+
+final_plot_1
+
+ggsave(file.path(fig_dir, "Precence_Predictions.png"), final_plot_1, width = 14, height = 6, dpi = 300)
 
 ```
 # CPUE kōura (abundances)
-```{r}
+```{r fig.width=14, fig.height=6, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 ## 1) Prep: select vars and coerce types
 vars <- c("CPUE_Kōura","LID",
   "Slope_5m","Riparian_vegetation","Overhanging_trees","Wood_cover","Substrate_index",
@@ -1140,11 +1142,6 @@ p2 <- ggplot(new_datac, aes(factor(Presence_Common_smelt), predicted_CPUE)) +
   geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
   labs(x = "Presence Common Smelt",y = "Predicted kōura CPUE") 
 
-final_plotc <- p1 | p2
-final_plotc <- final_plotc + plot_layout(widths = c(2, 1))
-final_plotc
-
-ggsave("Figures/CPUE_GAM.png", final_plotc, width = 8, height = 5, dpi = 300)
 
 # Predicted and observed
 pred <- predict(mc_final, type = "response")
@@ -1167,12 +1164,15 @@ Predictions_plotc = ggplot(df_pred_obs, aes(x = Predicted, y = Observed)) +
 
 Predictions_plotc
 
-ggsave("Figures/CPUE_Predictions.png", Predictions_plotc, width = 5, height = 4, dpi = 300)
+final_plotc <- p1 | p2 | Predictions_plotc 
+final_plotc
+
+ggsave(file.path(fig_dir, "CPUE_Predictions.png"), final_plotc, width = 14, height = 6, dpi = 300)
 
 
 ```
 # BCUE kōura (abundances)
-```{r}
+```{r fig.width=14, fig.height=6, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 ## 1) Prep: select vars and coerce types
 vars <- c("BCUE_Kōura","LID",
           "Slope_5m","Riparian_vegetation","Overhanging_trees","Wood_cover","Substrate_index",
@@ -1268,12 +1268,6 @@ p2 <- ggplot(newdata, aes(x = interaction(Presence_Goldfish, Presence_Eel), y = 
   geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
   labs(x = "Presence Goldfish and Eel", y = "Predicted kōura BCUE") 
 
-final_plot <- p1 | p2
-final_plot <- final_plot + plot_layout(widths = c(1.5, 2))
-final_plot
-
-ggsave("Figures/BCUE_GAM.png", final_plot, width = 8, height = 5, dpi = 300)
-
 # Predicted and observed
 pred <- predict(mb_final, type = "response")
 obs <- mb_final$y
@@ -1284,7 +1278,7 @@ df_pred_obs <- data.frame(ID = 1:length(obs), Predicted = pred, Observed = obs)
 
 # Plot
 library(ggrepel)
-Predictions_plot=ggplot(df_pred_obs, aes(x = Predicted, y = Observed)) +
+Predictions_plotb=ggplot(df_pred_obs, aes(x = Predicted, y = Observed)) +
   geom_point(alpha = 0.6) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
   #geom_text_repel(aes(label = ID), size = 3, max.overlaps = 5) +  
@@ -1293,9 +1287,12 @@ Predictions_plot=ggplot(df_pred_obs, aes(x = Predicted, y = Observed)) +
            hjust = 0, size = 4, colour = "black") +
   labs(x = "Predicted BCUE", y = "Observed BCUE")
 
-Predictions_plot
+Predictions_plotb
 
-ggsave("Figures/BCUE_Predictions.png", Predictions_plot, width = 5, height = 4, dpi = 300)
+final_plotb <- p1 | p2 | Predictions_plotb 
+final_plotb
+
+ggsave(file.path(fig_dir, "BCUE_Predictions.png"), final_plotb, width = 14, height = 6, dpi = 300)
 
 ```
 
