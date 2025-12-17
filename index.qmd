@@ -20,7 +20,7 @@ This site accompanies the scientific work on kōura (freshwater crayfish) and sh
 cat("\014"); rm(list = ls())
 
 # Define the list of packages
-packages <- c("patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
+packages <- c("brglm2","patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
 
 # Load packages if not already installed
 quiet_load <- function(pkg) {
@@ -30,6 +30,7 @@ quiet_load <- function(pkg) {
   invisible(TRUE)}
 
 invisible(lapply(packages, quiet_load))
+
 ```
 
 # Load data
@@ -57,7 +58,7 @@ Macroinvertebrates <- Macroinvertebrates |> dplyr::filter(!stringr::str_ends(Mon
 
 ```
 
-# Calculte CPUE & BCUE
+# Calculte CPUE & BPUE
 ```{r fig.width=8, fig.height=5, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 # use size of koura to fill missing weights.
 lw_model <- lm(log10(Weight_g) ~ log10(Length_mm),
@@ -109,7 +110,7 @@ ggsave(file.path(fig_dir, "lengt_weight_plot.png"),lengt_weight_plot,width = 8, 
 
 
 
-CPUE_BCUE_legacy <- Fish_data %>%
+CPUE_BPUE_legacy <- Fish_data %>%
   filter(!is.na(Species)) %>%
   group_by(Monitoring_ID, Species, Net_type) %>%
   dplyr::reframe(
@@ -117,7 +118,7 @@ CPUE_BCUE_legacy <- Fish_data %>%
     Total_Weight      = sum(Predicted_weight, na.rm = TRUE),
     Total_Effort      = dplyr::first(Amount_nets),
     CPUE              = Total_Individuals / Total_Effort,
-    BCUE              = Total_Weight      / Total_Effort,
+    BPUE              = Total_Weight      / Total_Effort,
     Mean_Length       = mean(Length_mm, na.rm = TRUE),
     Min_Length        = ifelse(all(is.na(Length_mm)), NA, min(Length_mm, na.rm = TRUE)),
     Max_Length        = ifelse(all(is.na(Length_mm)), NA, max(Length_mm, na.rm = TRUE)),
@@ -125,13 +126,13 @@ CPUE_BCUE_legacy <- Fish_data %>%
     Min_Weight        = ifelse(all(is.na(Predicted_weight)), NA, min(Predicted_weight, na.rm = TRUE)),
     Max_Weight        = ifelse(all(is.na(Predicted_weight)), NA, max(Predicted_weight, na.rm = TRUE)))
 
-CPUE_BCUE_weighted <- CPUE_BCUE_legacy %>%
+CPUE_BPUE_weighted <- CPUE_BPUE_legacy %>%
   group_by(Monitoring_ID, Species) %>%
   summarise(
     Total_Individuals       = sum(Total_Individuals, na.rm = TRUE),
     Total_Weight            = sum(Total_Weight,      na.rm = TRUE),
     Weighted_CPUE_numerator = sum(CPUE * Total_Effort,  na.rm = TRUE),
-    Weighted_BCUE_numerator = sum(BCUE * Total_Effort,  na.rm = TRUE),
+    Weighted_BPUE_numerator = sum(BPUE * Total_Effort,  na.rm = TRUE),
     Total_Effort_sum        = sum(Total_Effort,         na.rm = TRUE),
     Mean_Length             = mean(Mean_Length, na.rm = TRUE),
     Min_Length              = ifelse(all(is.na(Min_Length)), NA, min(Min_Length, na.rm = TRUE)),
@@ -143,7 +144,7 @@ CPUE_BCUE_weighted <- CPUE_BCUE_legacy %>%
   ungroup() %>%
   mutate(Total_Effort_sum = ifelse(Monitoring_ID %in% c("96_0", "101_0", "117_1", "119_1"), 3, 4),
     Weighted_CPUE    = Weighted_CPUE_numerator / Total_Effort_sum,
-    Weighted_BCUE    = Weighted_BCUE_numerator / Total_Effort_sum)
+    Weighted_BPUE    = Weighted_BPUE_numerator / Total_Effort_sum)
 
 species_presence_absence <- Fish_data %>%
   filter(!is.na(Species)) %>%
@@ -152,12 +153,12 @@ species_presence_absence <- Fish_data %>%
   pivot_wider(names_from  = Species, values_from = Presence,  values_fill = list(Presence = 0), names_prefix = "Presence_") %>%
   mutate(Predator_Fish_Presence = pmax(Presence_Trout, Presence_Eel, Presence_Catfish))
 
-CPUE_BCUE_weighted_summary <- CPUE_BCUE_weighted %>%
+CPUE_BPUE_weighted_summary <- CPUE_BPUE_weighted %>%
   pivot_wider(names_from  = Species,
-    values_from = c(Total_Individuals, Weighted_CPUE, Weighted_BCUE, Total_Weight,
-      Mean_Length, Mean_Weight, Weighted_CPUE_numerator, Weighted_BCUE_numerator,
+    values_from = c(Total_Individuals, Weighted_CPUE, Weighted_BPUE, Total_Weight,
+      Mean_Length, Mean_Weight, Weighted_CPUE_numerator, Weighted_BPUE_numerator,
       Total_Effort_sum, Min_Length, Max_Length, Min_Weight, Max_Weight), names_sep   = "_",
-    values_fill = list(Total_Individuals = 0, Weighted_CPUE = 0, Weighted_BCUE = 0)) %>%
+    values_fill = list(Total_Individuals = 0, Weighted_CPUE = 0, Weighted_BPUE = 0)) %>%
   mutate(Richness  = rowSums(dplyr::select(., starts_with("Total_Individuals_")) > 0),
     Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_with(c("_Bullies", "_Common_smelt")))))
 
@@ -207,7 +208,7 @@ Monitoring_CPUE_data <- Site_info %>%
                                            Emergent_Native, Emergent_Non_Native,
                                            Submerged_Native, Submerged_Non_Native, Turf_Native),
             by = c("Monitoring_ID")) %>%
-  left_join(CPUE_BCUE_weighted_summary, by = "Monitoring_ID") %>%
+  left_join(CPUE_BPUE_weighted_summary, by = "Monitoring_ID") %>%
   left_join(species_presence_absence, by = "Monitoring_ID") %>%
   left_join(Macroinvertebrates_sum, by = "Monitoring_ID")
 
@@ -273,225 +274,140 @@ list(habitat_classification_head = head(habitat_classification, 5),monitoring_cp
 
 ```
 
-# Physical parameters
-```{r fig.width=14, fig.height=10, dpi=100}
-# Filter to ignor all sites that have been sampled double.
-M_C_data <- Monitoring_CPUE_data 
 
-# Lake order and colors
+# Plot all variables 
+```{r fig.width=10, fig.height=10, dpi=100}
+# set orders
+M_C_data <- Monitoring_CPUE_data 
 lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
 M_C_data$Lake <- factor(M_C_data$Lake, levels = lake_order)
+fish_order <- c("Presence_Kōura","Presence_Eel","Presence_Kōaro","Presence_Common_smelt","Presence_Bullies","Presence_Catfish","Presence_Goldfish","Presence_Mosquitofish","Presence_Trout")
+fish_order_CPUE  <- c("Weighted_CPUE_Kōura","Weighted_CPUE_Eel","Weighted_CPUE_Kōaro","Weighted_CPUE_Common_smelt","Weighted_CPUE_Bullies","Weighted_CPUE_Catfish","Weighted_CPUE_Goldfish","Weighted_CPUE_Mosquitofish","Weighted_CPUE_Trout")
+fish_order_BPUE  <- c("Weighted_BPUE_Kōura","Weighted_BPUE_Eel","Weighted_BPUE_Kōaro","Weighted_BPUE_Common_smelt","Weighted_BPUE_Bullies","Weighted_BPUE_Catfish","Weighted_BPUE_Goldfish","Weighted_BPUE_Mosquitofish","Weighted_BPUE_Trout")
 
-sediment_colors <- c(
-  "Bedrock" = "black","Boulders" = "gray25","Cobble" = "gray55",
-  "Gravel" = "gray80","Sand" = "gold","Mud" = "saddlebrown","Organic_matter" = "darkgreen"
-)
-weed_colors <- c(
-  "Emergent_Native" = "darkgreen","Emergent_Non_Native" = "green3",
-  "Submerged_Native" = "skyblue","Submerged_Non_Native" = "royalblue4",
-  "Turf_Native" = "#00bfc4","Wood_cover" = "saddlebrown"
-)
-habitat_colors <- c("Rocky" = "gray25", "Sandy" = "gold", "Muddy" = "saddlebrown","Emergent Macrophyte" = "darkgreen")
-habitat_order  <- c("Rocky", "Sandy", "Muddy", "Emergent Macrophyte")
-M_C_data$Habitat_Type <- factor(M_C_data$Habitat_Type, levels = habitat_order)
 
-# Tidy physical layers
-sediment_data <- M_C_data %>%
-  select(Site_ID_, DHT, Habitat_Type, Lake, Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter) %>%
+
+# 1. Environmental data (boxplots)
+Env_data <- M_C_data %>%
+  mutate(
+    Emergent_vegetation  = Emergent_Native + Emergent_Non_Native,
+    Submerged_vegetation = Submerged_Native + Submerged_Non_Native) %>%
+  select(
+    Lake, Slope_5m, Riparian_vegetation, Overhanging_trees, Wood_cover,
+    Substrate_index, Temperature, DO_mgl, pH, Specific_conductivity,
+    Emergent_vegetation, Submerged_vegetation) %>%
   pivot_longer(
-    cols = c(Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter),
-    names_to = "Sediment_Type", values_to = "Percentage"
+    cols = -Lake,
+    names_to = "Variable",
+    values_to = "Value") %>%
+  mutate(
+    Lake     = factor(Lake, levels = lake_order),
+    Var_type = "Env")
+
+# 2. Fish presence (bars)
+presence_data <- M_C_data %>%
+  select(
+    Monitoring_ID, Lake,
+    Presence_Common_smelt, Presence_Goldfish,
+    Presence_Eel, Presence_Catfish, Presence_Kōaro, Presence_Trout, Presence_Bullies, Presence_Mosquitofish) %>%
+  pivot_longer(
+    cols = c(Presence_Common_smelt, Presence_Goldfish,
+             Presence_Eel, Presence_Catfish, Presence_Kōaro, Presence_Trout, Presence_Bullies, Presence_Mosquitofish),
+    names_to  = "Fish_Type",
+    values_to = "Presence") %>%
+  mutate(
+    Lake     = factor(Lake, levels = lake_order),
+    Fish_Type = factor(Fish_Type, levels = fish_order))
+
+Fish_presence_summary <- presence_data %>%
+  group_by(Lake, Fish_Type) %>%
+  summarise(Presence_prop = mean(Presence, na.rm = TRUE), .groups = "drop") %>%
+  mutate(
+    Variable = as.character(Fish_Type),
+    Value    = Presence_prop,
+    Var_type = "Fish") %>%
+  select(Lake, Variable, Value, Var_type)
+
+# 3. Combine into one dataset
+EnvBio_data <- bind_rows(
+  Env_data %>% select(Lake, Variable, Value, Var_type),
+  Fish_presence_summary) %>%
+  mutate(
+    Variable = factor(
+      Variable,
+      levels = c(
+        "Substrate_index","Slope_5m","Riparian_vegetation","Overhanging_trees", "Wood_cover", "Emergent_vegetation", "Submerged_vegetation", "Temperature", "DO_mgl", "pH", "Specific_conductivity", as.character(fish_order))))
+
+# 4. Single plot with conditional geoms
+EnvBio_plot <- ggplot(EnvBio_data, aes(Lake, Value)) +
+  # boxplots only for environmental vars
+  geom_boxplot( data = subset(EnvBio_data, Var_type == "Env")) +
+  geom_col(data = subset(EnvBio_data, Var_type == "Fish"),fill = "grey40") +
+  facet_wrap(~ Variable, scales = "free_y", ncol= 3) 
+
+EnvBio_plot
+
+ggsave(
+  file.path(fig_dir, "EnvBio_plot.png"),
+  EnvBio_plot,
+  width = 10,
+  height = 10,
+  dpi = 300)
+
+
+# make into table 
+Env_summary_table <- Env_data %>%
+  group_by(Lake, Variable) %>%
+  summarise(
+    Mean = mean(Value, na.rm = TRUE),
+    SEM  = sd(Value, na.rm = TRUE) / sqrt(sum(!is.na(Value))),
+    .groups = "drop"
+  ) %>%
+  mutate(Var_type = "Env") %>%
+  select(Lake, Variable, Var_type, Mean, SEM)
+
+# 4b. Fish presence: mean (proportion) and SEM per lake
+Fish_summary_table <- presence_data %>%
+  group_by(Lake, Fish_Type) %>%
+  summarise(
+    Mean = mean(Presence, na.rm = TRUE),               # same as Presence_prop
+    SEM  = sd(Presence, na.rm = TRUE) / sqrt(sum(!is.na(Presence))),
+    .groups = "drop"
   ) %>%
   mutate(
-    Lake = factor(Lake, levels = lake_order),
-    Sediment_Type = factor(Sediment_Type, levels = c("Bedrock","Boulders","Cobble","Gravel","Sand","Mud","Organic_matter"))
-  )
-
-Substrate_index_data <- M_C_data
-
-weed_data <- M_C_data %>%
-  select(Site_ID_, DHT, Habitat_Type, Lake, Emergent_Native, Emergent_Non_Native,
-         Submerged_Native, Submerged_Non_Native, Turf_Native, Wood_cover) %>%
-  pivot_longer(
-    cols = c(Emergent_Native,Emergent_Non_Native,Submerged_Native,Submerged_Non_Native,Turf_Native,Wood_cover),
-    names_to = "Weeds", values_to = "Percentage"
+    Variable = as.character(Fish_Type),
+    Var_type = "Fish"
   ) %>%
-  mutate(Lake = factor(Lake, levels = lake_order))
+  select(Lake, Variable, Var_type, Mean, SEM)
 
-# Statistics for substrate index (Wilcoxon pairwise + compact letters)
-substrate_stats <- Substrate_index_data %>%
-  rstatix::wilcox_test(Substrate_index ~ Lake, p.adjust.method = "BH") %>%
-  select(group1, group2, p.adj) %>%
-  { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
-  enframe(name = "Lake", value = "Letter") %>%
-  mutate(Label = paste0(Lake, " (", Letter, ")"))
+# 4c. Combined summary table (Env + Fish)
+EnvBio_summary_table <- bind_rows(
+  Env_summary_table,
+  Fish_summary_table) %>%
+  mutate(Variable = factor(Variable, levels = levels(EnvBio_data$Variable))) %>%
+  arrange(Variable, Lake)
 
-# Plots
-Sediment_plot <- ggplot(sediment_data, aes(factor(Site_ID_), Percentage, fill = Sediment_Type)) +
-  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
-  scale_fill_manual(values = sediment_colors) +
-  facet_grid(~ Lake, scales = "free_x") +
-  labs(x = "Site", y = "Sediment Cover (%)", fill = "Sediment Type") +
-  theme_bw() +
-  theme(axis.title.x = element_blank())
-
-Substrate_index_plot <- Substrate_index_data %>%
-  mutate(Lake = factor(Lake, levels = substrate_stats$Lake, labels = substrate_stats$Label)) %>%
-  ggplot(aes(factor(Site_ID_), Substrate_index, fill = Habitat_Type)) +
-  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
-  scale_fill_manual(values = habitat_colors) +
-  facet_grid(~ Lake, scales = "free_x") +
-  labs(x = "Site", y = "Substrate_index", fill = "Habitat Type") +
-  theme_bw() +
-  theme(axis.title.x = element_blank())
-
-Koura_plot <- M_C_data %>%
-  ggplot(aes(factor(Site_ID_), Weighted_CPUE_Kōura, fill = Habitat_Type)) +
-  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
-  scale_fill_manual(values = habitat_colors) +
-  facet_grid(~ Lake, scales = "free_x") +
-  labs(x = "Site", y = "Kōura CPUE", fill = "Habitat Type") +
-  theme_bw() +
-  theme(axis.title.x = element_blank())
-
-Catfish_plot <- M_C_data %>%
-  ggplot(aes(factor(Site_ID_), Weighted_CPUE_Catfish, fill = Habitat_Type)) +
-  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
-  scale_fill_manual(values = habitat_colors) +
-  facet_grid(~ Lake, scales = "free_x") +
-  labs(x = "Site", y = "Catfish CPUE", fill = "Habitat Type") +
-  theme_bw() +
-  theme(axis.title.x = element_blank())
-
-Weed_plot <- ggplot(weed_data, aes(factor(Site_ID_), Percentage, fill = Weeds)) +
-  geom_bar(stat = "identity", position = "stack", color = "white", linewidth = 0.2) +
-  scale_fill_manual(values = weed_colors) +
-  facet_grid(~ Lake, scales = "free_x") +
-  labs(x = "Site", y = "Cover (%)", fill = "Cover Type") +
-  theme_bw()
-
-Physical_plot <- Sediment_plot / Substrate_index_plot / Koura_plot / Catfish_plot / Weed_plot
-Physical_plot
-
-ggsave(file.path(fig_dir, "Physical_plot.png"), Physical_plot, width = 14, height = 10, dpi = 300)
-
-```
-# Chemical Parameters
-```{r fig.width=12, fig.height=5, dpi=100}
-Chemical_data <- M_C_data %>%
-  select(Site_ID_, DHT, Habitat_Type, Lake, DO_mgl, DO_percent, Conductivity, Specific_conductivity, pH, Temperature) %>%
-  pivot_longer(
-    cols = c(DO_mgl, DO_percent, Conductivity, Specific_conductivity, pH, Temperature),
-    names_to = "Variable", values_to = "Values"
+EnvBio_summary_wide <- EnvBio_summary_table %>%
+  select(Lake, Variable, Mean, SEM) %>%
+  tidyr::pivot_wider(
+    names_from  = Variable,
+    values_from = c(Mean, SEM),
+    names_glue  = "{Variable}_{.value}"
   ) %>%
-  mutate(Lake = factor(Lake, levels = lake_order))
+  arrange(Lake)
 
-# Compact letter display per variable (Wilcoxon + BH)
-cld_df <- Chemical_data %>%
-  group_by(Variable) %>%
-  rstatix::wilcox_test(Values ~ Lake, p.adjust.method = "BH") %>%
-  select(Variable, group1, group2, p.adj) %>%
-  group_by(Variable) %>%
-  summarise(Letters = list(multcompView::multcompLetters(setNames(p.adj, paste(group1, group2, sep = "-")))$Letters), .groups = "drop") %>%
-  unnest_wider(Letters) %>%
-  pivot_longer(-Variable, names_to = "Lake", values_to = "Letter") %>%
-  left_join(
-    Chemical_data %>% group_by(Variable, Lake) %>% summarise(y = max(Values, na.rm = TRUE), .groups = "drop"),
-    by = c("Variable","Lake")
-  ) %>%
-  mutate(y = y * 1.05)
+EnvBio_summary_wide
 
-Chemical_plot <- ggplot(Chemical_data, aes(Lake, Values, fill = Lake)) +
-  geom_boxplot() +
-  facet_wrap(~ Variable, scales = "free", nrow = 1) +
-  geom_text(data = cld_df, aes(Lake, y, label = Letter), vjust = 0) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
-Chemical_plot
 
-ggsave(file.path(fig_dir, "Chemical_plot.png"), Chemical_plot, width = 12, height = 5, dpi = 300)
+
+
+
+
+
 
 ```
 
-# Biological parameters
-```{r fig.width=12, fig.height=5, dpi=100}
-fish_order       <- c("Presence_Kōura","Presence_Eel","Presence_Kōaro","Presence_Common_smelt","Presence_Bullies","Presence_Catfish","Presence_Goldfish","Presence_Mosquitofish","Presence_Trout")
-fish_order_CPUE  <- c("Weighted_CPUE_Kōura","Weighted_CPUE_Eel","Weighted_CPUE_Kōaro","Weighted_CPUE_Common_smelt","Weighted_CPUE_Bullies","Weighted_CPUE_Catfish","Weighted_CPUE_Goldfish","Weighted_CPUE_Mosquitofish","Weighted_CPUE_Trout")
-fish_order_BCUE  <- c("Weighted_BCUE_Kōura","Weighted_BCUE_Eel","Weighted_BCUE_Kōaro","Weighted_BCUE_Common_smelt","Weighted_BCUE_Bullies","Weighted_BCUE_Catfish","Weighted_BCUE_Goldfish","Weighted_BCUE_Mosquitofish","Weighted_BCUE_Trout")
-
-presence_data <- M_C_data %>%
-  select(Monitoring_ID, DHT, Habitat_Type, Lake, Richness, Abundance,
-         Presence_Kōura, Presence_Eel, Presence_Kōaro, Presence_Common_smelt,
-         Presence_Bullies, Presence_Catfish, Presence_Goldfish, Presence_Mosquitofish, Presence_Trout) %>%
-  pivot_longer(
-    cols = c(Presence_Kōura, Presence_Eel, Presence_Kōaro, Presence_Common_smelt, Presence_Bullies, Presence_Catfish, Presence_Goldfish, Presence_Mosquitofish, Presence_Trout),
-    names_to = "Fish_Type", values_to = "Presence"
-  ) %>%
-  mutate(Lake = factor(Lake, levels = lake_order),
-         Fish_Type = factor(Fish_Type, levels = fish_order))
-
-CPUE_data <- M_C_data %>%
-  select(Monitoring_ID, DHT, Habitat_Type, Lake,
-         Weighted_CPUE_Kōura, Weighted_CPUE_Eel, Weighted_CPUE_Kōaro, Weighted_CPUE_Common_smelt, Weighted_CPUE_Bullies, Weighted_CPUE_Catfish, Weighted_CPUE_Goldfish, Weighted_CPUE_Mosquitofish, Weighted_CPUE_Trout) %>%
-  pivot_longer(
-    cols = c(Weighted_CPUE_Kōura, Weighted_CPUE_Eel, Weighted_CPUE_Kōaro, Weighted_CPUE_Common_smelt, Weighted_CPUE_Bullies, Weighted_CPUE_Catfish, Weighted_CPUE_Goldfish, Weighted_CPUE_Mosquitofish, Weighted_CPUE_Trout),
-    names_to = "Fish_Type", values_to = "CPUE"
-  ) %>%
-  mutate(Lake = factor(Lake, levels = lake_order),
-         Fish_Type = factor(Fish_Type, levels = fish_order_CPUE))
-
-BCUE_data <- M_C_data %>%
-  select(Monitoring_ID, DHT, Habitat_Type, Lake,
-         Weighted_BCUE_Kōura, Weighted_BCUE_Eel, Weighted_BCUE_Kōaro, Weighted_BCUE_Common_smelt, Weighted_BCUE_Bullies, Weighted_BCUE_Catfish, Weighted_BCUE_Goldfish, Weighted_BCUE_Mosquitofish, Weighted_BCUE_Trout) %>%
-  pivot_longer(
-    cols = c(Weighted_BCUE_Kōura, Weighted_BCUE_Eel, Weighted_BCUE_Kōaro, Weighted_BCUE_Common_smelt, Weighted_BCUE_Bullies, Weighted_BCUE_Catfish, Weighted_BCUE_Goldfish, Weighted_BCUE_Mosquitofish, Weighted_BCUE_Trout),
-    names_to = "Fish_Type", values_to = "BCUE"
-  ) %>%
-  mutate(Lake = factor(Lake, levels = lake_order),
-         Fish_Type = factor(Fish_Type, levels = fish_order_BCUE))
-
-BCUE_summary <- M_C_data %>%
-  select(Monitoring_ID, DHT, Habitat_Type, Lake,
-         Weighted_BCUE_Kōura, Weighted_BCUE_Eel, Weighted_BCUE_Kōaro, Weighted_BCUE_Common_smelt, Weighted_BCUE_Bullies, Weighted_BCUE_Catfish, Weighted_BCUE_Goldfish, Weighted_BCUE_Mosquitofish, Weighted_BCUE_Trout) %>%
-  pivot_longer(
-    cols = c(Weighted_BCUE_Kōura, Weighted_BCUE_Eel, Weighted_BCUE_Kōaro, Weighted_BCUE_Common_smelt, Weighted_BCUE_Bullies, Weighted_BCUE_Catfish, Weighted_BCUE_Goldfish, Weighted_BCUE_Mosquitofish, Weighted_BCUE_Trout),
-    names_to = "Fish_Type", values_to = "BCUE"
-  ) %>%
-  mutate(Lake = factor(Lake, levels = lake_order),
-         Fish_Type = factor(Fish_Type, levels = fish_order_BCUE)) %>%
-  group_by(Lake, Habitat_Type, Fish_Type) %>%
-  summarise(mean_BCUE = mean(BCUE, na.rm = TRUE),
-            se_BCUE   = sd(BCUE,   na.rm = TRUE) / sqrt(n()),
-            .groups = "drop")
-
-Total_Weight_summary <- M_C_data %>%
-  select(Monitoring_ID, DHT, Habitat_Type, Lake,
-         Total_Weight_Bullies, Total_Weight_Goldfish, Total_Weight_Kōura,
-         Total_Weight_Common_smelt, Total_Weight_Eel, Total_Weight_Kōaro,
-         Total_Weight_Trout, Total_Weight_Mosquitofish, Total_Weight_Catfish) %>%
-  pivot_longer(
-    cols = c(Total_Weight_Bullies, Total_Weight_Goldfish, Total_Weight_Kōura,
-             Total_Weight_Common_smelt, Total_Weight_Eel, Total_Weight_Kōaro,
-             Total_Weight_Trout, Total_Weight_Mosquitofish, Total_Weight_Catfish),
-    names_to = "Fish_Type", values_to = "Total_Weight"
-  ) %>%
-  mutate(Lake = factor(Lake, levels = lake_order)) %>%
-  group_by(Fish_Type) %>%
-  summarise(Total_Weight = sum(Total_Weight, na.rm = TRUE), .groups = "drop")
-
-# Richness & Abundance
-plot_abundance <- ggplot(presence_data, aes(Lake, Abundance, fill = Lake)) +
-  geom_boxplot() +
-  facet_grid(~ Habitat_Type, scales = "free")
-
-plot_richness <- ggplot(presence_data, aes(Lake, Richness, fill = Lake)) +
-  geom_boxplot() +
-  facet_grid(~ Habitat_Type, scales = "free")
-
-plot_abundance / plot_richness
-
-```
 
 # Koura specific plot 
 ```{r fig.width=6, fig.height=6, dpi=100}
@@ -550,9 +466,9 @@ plot_koura_stats <- function(data, y_var, y_label,
 
 KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
 KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
-KBCUE_plot <- plot_koura_stats(M_C_data, "Weighted_BCUE_Kōura",     "Kōura BCUE",     test_type = "wilcox",  show_x_title = TRUE)
+KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura",     "Kōura BPUE",     test_type = "wilcox",  show_x_title = TRUE)
 
-Koura_plots <- KPRES_plot / KCPUE_plot / KBCUE_plot
+Koura_plots <- KPRES_plot / KCPUE_plot / KBPUE_plot
 Koura_plots
 
 ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, width = 6, height = 6, dpi = 300)
@@ -624,9 +540,9 @@ plot_koura_stats <- function(data, y_var, y_label,
 
 KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
 KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
-KBCUE_plot <- plot_koura_stats(M_C_data, "Weighted_BCUE_Kōura",     "Kōura BCUE",     test_type = "wilcox",  show_x_title = TRUE)
+KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura",     "Kōura BPUE",     test_type = "wilcox",  show_x_title = TRUE)
 
-Koura_plots_0 <- KPRES_plot / KCPUE_plot / KBCUE_plot
+Koura_plots_0 <- KPRES_plot / KCPUE_plot / KBPUE_plot
 Koura_plots_0
 
 ggsave(file.path(fig_dir, "Koura_plots_0.png"), Koura_plots_0, width = 6, height = 6, dpi = 300)
@@ -639,7 +555,7 @@ ggsave(file.path(fig_dir, "Koura_plots_0.png"), Koura_plots_0, width = 6, height
 # GAM Modeling setup & helpers
 Modeling_data <- Monitoring_CPUE_data 
 
-alpha_sig    <- 0.05      # significance threshold for showing fish plots
+alpha_sig    <- 0.1      # significance threshold for showing fish plots
 p_cutoff_ml  <- 0.05      # stepwise ML drop threshold
 vif_thresh   <- 5
 INCLUDE_RE   <- TRUE      # use LID as random effect
@@ -663,7 +579,8 @@ fish_vars <- c(
   "Presence_Goldfish",
   "Presence_Eel",
   "Presence_Catfish",
-  "Presence_Common_smelt"
+  "Presence_Common_smelt",
+  "Presence_Kōaro"
 )
 
 vars_common <- c(
@@ -703,66 +620,221 @@ exclude_if_RE <- function(mod){
 # ---------- VIF helpers ----------
 
 # VIF pruning (binomial) using brglm2 to reduce separation issues
-remove_high_vif_glmBI <- function(data, response, predictors, threshold = 5, protect_vars = character(0)) {
+remove_high_vif_glmBI <- function(
+  data,
+  response,
+  predictors,
+  threshold    = vif_thresh,
+  protect_vars = character(0),
+  verbose      = TRUE
+) {
+  # 1) Remove near-zero variance predictors
   nzv <- caret::nearZeroVar(data[, predictors, drop = FALSE])
-  if (length(nzv)) predictors <- predictors[-nzv]
+  if (length(nzv)) {
+    if (verbose) {
+      message("Removing near-zero variance predictors: ",
+              paste(predictors[nzv], collapse = ", "))
+    }
+    predictors <- predictors[-nzv]
+  }
 
-  rpt <- list(removed = character(), start = predictors)
+  rpt <- list(
+    removed = character(),
+    start   = predictors
+  )
+
+  last_vif <- NULL
+
   repeat {
-    if (!length(predictors)) stop("All predictors removed during VIF pruning.")
-    fml <- as.formula(paste(response, "~", paste(predictors, collapse = " + ")))
-    model <- try(
-      glm(fml, data = data, family = binomial(link = "logit"), method = "brglmFit"),
-      silent = TRUE
-    )
-    if (inherits(model, "try-error")) break
-    vif_data <- performance::check_collinearity(model)
-    vif_data <- vif_data[!grepl("\\|", vif_data$Term), ]
-    if (!nrow(vif_data) || all(vif_data$VIF < threshold)) break
+    if (!length(predictors)) {
+      stop("All predictors removed during VIF pruning.")
+    }
 
+    # Build formula for current set of predictors
+    fml <- as.formula(paste(response, "~", paste(predictors, collapse = " + ")))
+
+    # Fit standard lm 
+    model <- try(
+  lm(fml, data = data),
+  silent = TRUE
+)
+
+    if (inherits(model, "try-error")) {
+      if (verbose) {
+        message("Model failed to fit during VIF pruning. Stopping.\n",
+                "Error was: ", attr(model, "condition")$message)
+      }
+      break
+    }
+
+    # Compute VIF
+    vif_data <- performance::check_collinearity(model)
+    vif_data <- vif_data[!grepl("\\|", vif_data$Term), , drop = FALSE]
+
+    last_vif <- vif_data
+
+    # If no rows or all VIFs below threshold, we're done
+    if (!nrow(vif_data) || all(vif_data$VIF < threshold)) {
+      if (verbose) {
+        message("All remaining predictors have VIF < ", threshold, ".")
+      }
+      break
+    }
+
+    # Order by VIF descending and pick the first non-protected variable
     ord <- order(vif_data$VIF, decreasing = TRUE)
     to_remove <- NA_character_
+
     for (i in ord) {
       cand <- vif_data$Term[i]
-      if (!(cand %in% protect_vars)) { to_remove <- cand; break }
+      if (!(cand %in% protect_vars)) {
+        to_remove <- cand
+        break
+      }
     }
-    if (is.na(to_remove)) break
-    predictors <- setdiff(predictors, to_remove)
-    rpt$removed <- c(rpt$removed, to_remove)
+
+    # If all high-VIF variables are protected, stop
+    if (is.na(to_remove)) {
+      if (verbose) {
+        message("All high-VIF variables are in protect_vars; stopping pruning.")
+      }
+      break
+    }
+
+    if (verbose) {
+      this_vif <- vif_data$VIF[vif_data$Term == to_remove]
+      message("Removing '", to_remove,
+              "' with VIF = ", signif(this_vif, 4))
+    }
+
+    predictors   <- setdiff(predictors, to_remove)
+    rpt$removed  <- c(rpt$removed, to_remove)
   }
-  list(predictors = predictors, report = rpt)
+
+  # Store the final VIF table in the report
+  rpt$final_vif <- last_vif
+
+  if (verbose && !is.null(last_vif)) {
+    message("\nFinal VIF table for kept predictors:")
+    print(last_vif)
+  }
+
+  list(
+    predictors = predictors,
+    report     = rpt
+  )
 }
 
-# VIF pruning (Gamma/Tweedie proxy) via glmmTMB (for non-binomial analyses)
-remove_high_vif_glmmTMB <- function(data, response, predictors, threshold = 5, protect_vars = character(0)) {
+# VIF pruning for non-binomial positive models (e.g. Gamma)
+# Uses linear models for VIF, which is the standard and distribution-free.
+remove_high_vif_glmmTMB <- function(
+  data,
+  response,
+  predictors,
+  threshold    = vif_thresh,
+  protect_vars = character(0),
+  verbose      = TRUE
+) {
+  # 1) Remove near-zero variance predictors
   nzv <- caret::nearZeroVar(data[, predictors, drop = FALSE])
-  if (length(nzv)) predictors <- predictors[-nzv]
+  if (length(nzv)) {
+    if (verbose) {
+      message("Removing near-zero variance predictors: ",
+              paste(predictors[nzv], collapse = ", "))
+    }
+    predictors <- predictors[-nzv]
+  }
 
-  rpt <- list(removed = character(), start = predictors)
+  rpt <- list(
+    removed = character(),
+    start   = predictors
+  )
+
+  last_vif <- NULL
+
   repeat {
-    if (!length(predictors)) stop("All predictors removed during VIF pruning.")
+    if (!length(predictors)) {
+      stop("All predictors removed during VIF pruning.")
+    }
+
+    # Build formula for current set of predictors
     fml <- as.formula(paste(response, "~", paste(predictors, collapse = " + ")))
+
+    # Fit a basic linear model purely for VIF calculation
     model <- try(
-      glmmTMB::glmmTMB(fml, data = data, family = glmmTMB::Gamma(link = "log")),
+      lm(fml, data = data),
       silent = TRUE
     )
-    if (inherits(model, "try-error")) break
-    vif_data <- performance::check_collinearity(model)
-    vif_data <- vif_data[!grepl("\\|", vif_data$Term), ]
-    if (!nrow(vif_data) || all(vif_data$VIF < threshold)) break
 
+    if (inherits(model, "try-error")) {
+      if (verbose) {
+        err_msg <- tryCatch(attr(model, "condition")$message,
+                            error = function(e) "Unknown error")
+        message("lm() failed during VIF pruning. Stopping.\n",
+                "lm() error was: ", err_msg)
+      }
+      break
+    }
+
+    # Compute VIFs
+    vif_data <- performance::check_collinearity(model)
+    vif_data <- vif_data[!grepl("\\|", vif_data$Term), , drop = FALSE]
+
+    last_vif <- vif_data
+
+    # If no rows or all VIFs below threshold, we are done
+    if (!nrow(vif_data) || all(vif_data$VIF < threshold)) {
+      if (verbose) {
+        message("All remaining predictors have VIF < ", threshold, ".")
+      }
+      break
+    }
+
+    # Order by VIF descending and pick the first non-protected variable
     ord <- order(vif_data$VIF, decreasing = TRUE)
     to_remove <- NA_character_
+
     for (i in ord) {
       cand <- vif_data$Term[i]
-      if (!(cand %in% protect_vars)) { to_remove <- cand; break }
+      if (!(cand %in% protect_vars)) {
+        to_remove <- cand
+        break
+      }
     }
-    if (is.na(to_remove)) break
-    predictors <- setdiff(predictors, to_remove)
+
+    # If all high-VIF variables are protected, stop
+    if (is.na(to_remove)) {
+      if (verbose) {
+        message("All high-VIF variables are in protect_vars; stopping pruning.")
+      }
+      break
+    }
+
+    if (verbose) {
+      this_vif <- vif_data$VIF[vif_data$Term == to_remove]
+      message("Removing '", to_remove,
+              "' with VIF = ", signif(this_vif, 4))
+    }
+
+    predictors  <- setdiff(predictors, to_remove)
     rpt$removed <- c(rpt$removed, to_remove)
   }
-  list(predictors = predictors, report = rpt)
+
+  # Store final VIF table
+  rpt$final_vif <- last_vif
+
+  if (verbose && !is.null(last_vif)) {
+    message("\nFinal VIF table for kept predictors (VIF from lm):")
+    print(last_vif)
+  }
+
+  list(
+    predictors = predictors,
+    report     = rpt
+  )
 }
+
+
 
 # ---------- P-value and plotting helpers ----------
 
@@ -1126,7 +1198,7 @@ parametric_panel <- function(model, data, alpha = 0.1, exclude = character(0),
 ```
 
 # OCCUPANCY: Presence/Absence (binomial analysis)
-```{r fig.width=14, fig.height=8, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+```{r fig.width=14, fig.height=10, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 
 PData <- prepare_block(Modeling_data, "Presence_Kōura", vars_common)
 
@@ -1142,6 +1214,10 @@ vif_occ <- remove_high_vif_glmBI(
   threshold   = vif_thresh,
   protect_vars = character(0))
 kept_fixed_occ <- vif_occ$predictors
+
+vif_occ$report$start
+vif_occ$report$removed
+vif_occ$report$final_vif
 
 # 4) Build FULL (ML) formula: fixed effects + LID random effect (if INCLUDE_RE)
 vars_step_occ <- c(kept_fixed_occ, if (INCLUDE_RE) id)
@@ -1260,7 +1336,7 @@ p_occ_smooths <- gratia::draw(final_occ)
 p_occ_param <- parametric_panel(
   final_occ,
   PData,
-  alpha       = alpha_sig,
+  alpha       = .1,
   exclude     = c("LID"),
   family      = "binomial",
   fish_covars = fish_vars)
@@ -1336,8 +1412,7 @@ for (fold in 1:k_occ) {
     m,
     newdata = test,
     type    = "response",
-    exclude = exclude_if_RE(m)
-  )
+    exclude = exclude_if_RE(m))
 }
 
 # Build the calibration plot
@@ -1348,8 +1423,7 @@ calib_data_occ <- tibble(pred = pred_cv_occ, obs = PData$Presence_Kōura) %>%
     mean_pred = mean(pred, na.rm = TRUE),
     obs_rate  = mean(obs,  na.rm = TRUE),
     n         = dplyr::n(),
-    .groups   = "drop"
-  )
+    .groups   = "drop")
 
 Calibration_plot_occ <- ggplot(calib_data_occ, aes(mean_pred, obs_rate)) +
   geom_point(size = 3) +
@@ -1358,24 +1432,28 @@ Calibration_plot_occ <- ggplot(calib_data_occ, aes(mean_pred, obs_rate)) +
   labs(x = "Mean predicted probability", y = "Observed proportion")
 
 final_plot_occupancy <- patchwork::wrap_plots(
-  list(
-    as_plot(p_occ_smooths),
+  list(  as_plot(p_occ_smooths),
     as_plot(p_occ_param),
     as_plot(p_pres_roc),
-    as_plot(Calibration_plot_occ)
-  ),
-  ncol = 2,  nrow = 2
-)
+    as_plot(Calibration_plot_occ)),
+  ncol = 2,  nrow = 2)
 
 final_plot_occupancy
 
-ggsave(
-  file.path(fig_dir, "Occupancy_panels.png"),
-  final_plot_occupancy,
-  width  = 14,
-  height = 8,
-  dpi    = 300
-)
+ggsave(file.path(fig_dir, "Occupancy_panels.png"),final_plot_occupancy, width  = 14,height = 10,dpi    = 300)
+
+
+# make the smooth plots
+sm <- smooth_estimates(final_occ)
+smooth_names <- unique(sm$.smooth)
+smooth_names
+smooth_4_names <- smooth_names[1:4]
+plots_4 <- lapply(smooth_4_names, function(s) {  draw(final_occ, select = s, scales = "fixed")})
+
+final_p_occ_smooths <- patchwork::wrap_plots( plots_4,ncol = 2, nrow = 2)
+final_p_occ_smooths
+
+
 ```
 
 # CPUE: HURDLE
@@ -1581,6 +1659,11 @@ vif_cpue_pos <- remove_high_vif_glmmTMB(
 )
 kept_fixed_cpue_pos <- vif_cpue_pos$predictors
 
+vif_cpue_pos$report$start
+vif_cpue_pos$report$removed
+vif_cpue_pos$report$final_vif
+
+
 vars_step_cpue_pos <- c(kept_fixed_cpue_pos, if (INCLUDE_RE) id)
 
 rhs_cpue_pos <- paste(
@@ -1744,62 +1827,62 @@ ggsave(
 
 ```
 
-# BCUE: HURDLE
+# BPUE: HURDLE
 ```{r fig.width=10, fig.height=5, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
-BData <- prepare_block(Modeling_data, "Weighted_BCUE_Kōura", vars_common) %>%
-  dplyr::mutate(BCUE_pos = as.integer(Weighted_BCUE_Kōura > 0))
+BData <- prepare_block(Modeling_data, "Weighted_BPUE_Kōura", vars_common) %>%
+  dplyr::mutate(BPUE_pos = as.integer(Weighted_BPUE_Kōura > 0))
 
 id <- "LID"
 
 # ---------- Presence component (binomial)
 
-pred_fixed_bcue_pres <- setdiff(
+pred_fixed_BPUE_pres <- setdiff(
   names(BData),
-  c("BCUE_pos", id, "Weighted_BCUE_Kōura", "Weighted_BCUE_Koura", "Weighted_BCUE")
+  c("BPUE_pos", id, "Weighted_BPUE_Kōura", "Weighted_BPUE_Koura", "Weighted_BPUE")
 )
 
-vif_bcue_pres <- remove_high_vif_glmBI(
+vif_BPUE_pres <- remove_high_vif_glmBI(
   BData,
-  "BCUE_pos",
-  pred_fixed_bcue_pres,
+  "BPUE_pos",
+  pred_fixed_BPUE_pres,
   threshold    = vif_thresh,
   protect_vars = character(0)
 )
-kept_fixed_bcue_pres <- vif_bcue_pres$predictors
+kept_fixed_BPUE_pres <- vif_BPUE_pres$predictors
 
-vars_step_bcue_pres <- c(kept_fixed_bcue_pres, if (INCLUDE_RE) id)
+vars_step_BPUE_pres <- c(kept_fixed_BPUE_pres, if (INCLUDE_RE) id)
 
-rhs_bcue_pres <- paste(
+rhs_BPUE_pres <- paste(
   vapply(
-    vars_step_bcue_pres,
+    vars_step_BPUE_pres,
     function(v) build_smooth_gam(v, BData, custom_k, include_re_for_LID = INCLUDE_RE),
     character(1)
   ),
   collapse = " + "
 )
 
-full_ml_bcue_pres <- mgcv::gam(
-  as.formula(paste("BCUE_pos ~", rhs_bcue_pres)),
+full_ml_BPUE_pres <- mgcv::gam(
+  as.formula(paste("BPUE_pos ~", rhs_BPUE_pres)),
   data   = BData,
   family = binomial(link = "logit"),
   method = "ML",
   select = TRUE
 )
 
-remaining_bcue_pres <- vars_step_bcue_pres
+remaining_BPUE_pres <- vars_step_BPUE_pres
 protected_step_vars_b <- if (INCLUDE_RE) id else character(0)
 
 repeat {
   rhs_now <- paste(
     vapply(
-      remaining_bcue_pres,
+      remaining_BPUE_pres,
       function(v) build_smooth_gam(v, BData, custom_k, include_re_for_LID = INCLUDE_RE),
       character(1)
     ),
     collapse = " + "
   )
   m_now <- mgcv::gam(
-    as.formula(paste("BCUE_pos ~", rhs_now)),
+    as.formula(paste("BPUE_pos ~", rhs_now)),
     data   = BData,
     family = binomial(link = "logit"),
     method = "ML",
@@ -1819,7 +1902,7 @@ repeat {
     ps   <- c(ps, pvec)
   }
   drop_candidates <- ps[ps > p_cutoff_ml]
-  if (!length(drop_candidates)) { red_ml_bcue_pres <- m_now; break }
+  if (!length(drop_candidates)) { red_ml_BPUE_pres <- m_now; break }
 
   ordered <- names(sort(drop_candidates, decreasing = TRUE))
   ordered_vars <- vapply(
@@ -1831,26 +1914,26 @@ repeat {
 
   # protect LID
   ordered_vars <- setdiff(ordered_vars, protected_step_vars_b)
-  if (!length(ordered_vars)) { red_ml_bcue_pres <- m_now; break }
+  if (!length(ordered_vars)) { red_ml_BPUE_pres <- m_now; break }
 
   remove_v <- ordered_vars[1]
-  remaining_bcue_pres <- setdiff(remaining_bcue_pres, remove_v)
-  if (!length(remaining_bcue_pres)) { red_ml_bcue_pres <- m_now; break }
+  remaining_BPUE_pres <- setdiff(remaining_BPUE_pres, remove_v)
+  if (!length(remaining_BPUE_pres)) { red_ml_BPUE_pres <- m_now; break }
 }
 
 # ML comparison: FULL vs REDUCED 
-summary(full_ml_bcue_pres)
-summary(red_ml_bcue_pres)
-print(AIC(full_ml_bcue_pres, red_ml_bcue_pres))
-suppressWarnings(print(anova(full_ml_bcue_pres, red_ml_bcue_pres, test = "Chisq")))
+summary(full_ml_BPUE_pres)
+summary(red_ml_BPUE_pres)
+print(AIC(full_ml_BPUE_pres, red_ml_BPUE_pres))
+suppressWarnings(print(anova(full_ml_BPUE_pres, red_ml_BPUE_pres, test = "Chisq")))
 
-# Clean test of LID random effect for BCUE presence
+# Clean test of LID random effect for BPUE presence
 if (INCLUDE_RE) {
-  m_withLID_b <- red_ml_bcue_pres
-  tl_b <- attr(terms(red_ml_bcue_pres), "term.labels")
+  m_withLID_b <- red_ml_BPUE_pres
+  tl_b <- attr(terms(red_ml_BPUE_pres), "term.labels")
   tl_b_noLID <- tl_b[!grepl("LID", tl_b)]
   rhs_b_noLID <- if (length(tl_b_noLID)) paste(tl_b_noLID, collapse = " + ") else "1"
-  f_b_noLID <- as.formula(paste("BCUE_pos ~", rhs_b_noLID))
+  f_b_noLID <- as.formula(paste("BPUE_pos ~", rhs_b_noLID))
 
   m_noLID_b <- mgcv::gam(
     f_b_noLID,
@@ -1864,21 +1947,21 @@ if (INCLUDE_RE) {
 }
 
 # Final REML
-final_bcue_pres <- mgcv::gam(
-  formula(red_ml_bcue_pres),
+final_BPUE_pres <- mgcv::gam(
+  formula(red_ml_BPUE_pres),
   data   = BData,
   family = binomial(link = "logit"),
   method = "REML",
   select = TRUE
 )
-summary(final_bcue_pres)
-mgcv::concurvity(final_bcue_pres)
-gam.check(final_bcue_pres)
+summary(final_BPUE_pres)
+mgcv::concurvity(final_BPUE_pres)
+gam.check(final_BPUE_pres)
 
-# Plots (BCUE presence)
-p_bcue_pres_smooths <- gratia::draw(final_bcue_pres)
-p_bcue_pres_param <- parametric_panel(
-  final_bcue_pres,
+# Plots (BPUE presence)
+p_BPUE_pres_smooths <- gratia::draw(final_BPUE_pres)
+p_BPUE_pres_param <- parametric_panel(
+  final_BPUE_pres,
   BData,
   alpha       = alpha_sig,
   exclude     = c("LID"),
@@ -1887,18 +1970,18 @@ p_bcue_pres_param <- parametric_panel(
 )
 
 pred_pres_b <- predict(
-  final_bcue_pres,
+  final_BPUE_pres,
   type    = "response",
-  exclude = exclude_if_RE(final_bcue_pres)
+  exclude = exclude_if_RE(final_BPUE_pres)
 )
-obs_pres_b  <- BData$BCUE_pos
+obs_pres_b  <- BData$BPUE_pos
 roc_obj_b   <- pROC::roc(obs_pres_b, pred_pres_b)
 auc_val_b   <- as.numeric(pROC::auc(roc_obj_b))
 roc_df_b    <- data.frame(
   tpr = roc_obj_b$sensitivities,
   fpr = 1 - roc_obj_b$specificities
 )
-p_bcue_pres_roc <- ggplot(roc_df_b, aes(fpr, tpr)) +
+p_BPUE_pres_roc <- ggplot(roc_df_b, aes(fpr, tpr)) +
   geom_path() +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
   annotate(
@@ -1909,18 +1992,18 @@ p_bcue_pres_roc <- ggplot(roc_df_b, aes(fpr, tpr)) +
   ) +
   labs(x = "False positive rate", y = "True positive rate")
 
-BCUE_panel_presence <- patchwork::wrap_plots(
+BPUE_panel_presence <- patchwork::wrap_plots(
   list(
-    as_plot(p_bcue_pres_smooths),
-    as_plot(p_bcue_pres_param),
-    as_plot(p_bcue_pres_roc)
+    as_plot(p_BPUE_pres_smooths),
+    as_plot(p_BPUE_pres_param),
+    as_plot(p_BPUE_pres_roc)
   ),
   ncol = 3
 )
-BCUE_panel_presence
+BPUE_panel_presence
 ggsave(
-  file.path(fig_dir, "BCUE_panel_presence.png"),
-  BCUE_panel_presence,
+  file.path(fig_dir, "BPUE_panel_presence.png"),
+  BPUE_panel_presence,
   width  = 10,
   height = 5,
   dpi    = 300
@@ -1928,52 +2011,56 @@ ggsave(
 
 # ---------- Positives component (Gamma, log link)
 
-Bpos <- dplyr::filter(BData, BCUE_pos == 1L)
+Bpos <- dplyr::filter(BData, BPUE_pos == 1L)
 
-pred_fixed_bcue_pos <- setdiff(names(Bpos), c("Weighted_BCUE_Kōura", id))
+pred_fixed_BPUE_pos <- setdiff(names(Bpos), c("Weighted_BPUE_Kōura", id))
 
-vif_bcue_pos <- remove_high_vif_glmmTMB(
+vif_BPUE_pos <- remove_high_vif_glmmTMB(
   Bpos,
-  "Weighted_BCUE_Kōura",
-  pred_fixed_bcue_pos,
+  "Weighted_BPUE_Kōura",
+  pred_fixed_BPUE_pos,
   threshold    = vif_thresh,
   protect_vars = character(0)
 )
-kept_fixed_bcue_pos <- vif_bcue_pos$predictors
+kept_fixed_BPUE_pos <- vif_BPUE_pos$predictors
 
-vars_step_bcue_pos <- c(kept_fixed_bcue_pos, if (INCLUDE_RE) id)
+vif_BPUE_pos$report$start
+vif_BPUE_pos$report$removed
+vif_BPUE_pos$report$final_vif
 
-rhs_bcue_pos <- paste(
+vars_step_BPUE_pos <- c(kept_fixed_BPUE_pos, if (INCLUDE_RE) id)
+
+rhs_BPUE_pos <- paste(
   vapply(
-    vars_step_bcue_pos,
+    vars_step_BPUE_pos,
     function(v) build_smooth_gam(v, Bpos, custom_k, include_re_for_LID = INCLUDE_RE),
     character(1)
   ),
   collapse = " + "
 )
 
-full_ml_bcue_pos <- mgcv::gam(
-  as.formula(paste("Weighted_BCUE_Kōura ~", rhs_bcue_pos)),
+full_ml_BPUE_pos <- mgcv::gam(
+  as.formula(paste("Weighted_BPUE_Kōura ~", rhs_BPUE_pos)),
   data   = Bpos,
   family = Gamma(link = "log"),
   method = "ML",
   select = TRUE
 )
 
-remaining_bcue_pos <- vars_step_bcue_pos
+remaining_BPUE_pos <- vars_step_BPUE_pos
 protected_step_vars_bpos <- if (INCLUDE_RE) id else character(0)
 
 repeat {
   rhs_now <- paste(
     vapply(
-      remaining_bcue_pos,
+      remaining_BPUE_pos,
       function(v) build_smooth_gam(v, Bpos, custom_k, include_re_for_LID = INCLUDE_RE),
       character(1)
     ),
     collapse = " + "
   )
   m_now <- mgcv::gam(
-    as.formula(paste("Weighted_BCUE_Kōura ~", rhs_now)),
+    as.formula(paste("Weighted_BPUE_Kōura ~", rhs_now)),
     data   = Bpos,
     family = Gamma(link = "log"),
     method = "ML",
@@ -1993,7 +2080,7 @@ repeat {
     ps   <- c(ps, pvec)
   }
   drop_candidates <- ps[ps > p_cutoff_ml]
-  if (!length(drop_candidates)) { red_ml_bcue_pos <- m_now; break }
+  if (!length(drop_candidates)) { red_ml_BPUE_pos <- m_now; break }
 
   ordered <- names(sort(drop_candidates, decreasing = TRUE))
   ordered_vars <- vapply(
@@ -2003,28 +2090,28 @@ repeat {
     character(1)
   )
 
-  # protect LID in positive BCUE model
+  # protect LID in positive BPUE model
   ordered_vars <- setdiff(ordered_vars, protected_step_vars_bpos)
-  if (!length(ordered_vars)) { red_ml_bcue_pos <- m_now; break }
+  if (!length(ordered_vars)) { red_ml_BPUE_pos <- m_now; break }
 
   remove_v <- ordered_vars[1]
-  remaining_bcue_pos <- setdiff(remaining_bcue_pos, remove_v)
-  if (!length(remaining_bcue_pos)) { red_ml_bcue_pos <- m_now; break }
+  remaining_BPUE_pos <- setdiff(remaining_BPUE_pos, remove_v)
+  if (!length(remaining_BPUE_pos)) { red_ml_BPUE_pos <- m_now; break }
 }
 
 # ML comparison: FULL vs REDUCED
-summary(full_ml_bcue_pos)
-summary(red_ml_bcue_pos)
-print(AIC(full_ml_bcue_pos, red_ml_bcue_pos))
-suppressWarnings(print(anova(full_ml_bcue_pos, red_ml_bcue_pos, test = "Chisq")))
+summary(full_ml_BPUE_pos)
+summary(red_ml_BPUE_pos)
+print(AIC(full_ml_BPUE_pos, red_ml_BPUE_pos))
+suppressWarnings(print(anova(full_ml_BPUE_pos, red_ml_BPUE_pos, test = "Chisq")))
 
-# Clean test of LID random effect for positive BCUE
-LID_test_bcue <- if (INCLUDE_RE) {
-  m_withLID_bpos <- red_ml_bcue_pos
-  tl_bpos <- attr(terms(red_ml_bcue_pos), "term.labels")
+# Clean test of LID random effect for positive BPUE
+LID_test_BPUE <- if (INCLUDE_RE) {
+  m_withLID_bpos <- red_ml_BPUE_pos
+  tl_bpos <- attr(terms(red_ml_BPUE_pos), "term.labels")
   tl_bpos_noLID <- tl_bpos[!grepl("LID", tl_bpos)]
   rhs_bpos_noLID <- if (length(tl_bpos_noLID)) paste(tl_bpos_noLID, collapse = " + ") else "1"
-  f_bpos_noLID <- as.formula(paste("Weighted_BCUE_Kōura ~", rhs_bpos_noLID))
+  f_bpos_noLID <- as.formula(paste("Weighted_BPUE_Kōura ~", rhs_bpos_noLID))
 
   m_noLID_bpos <- mgcv::gam(
     f_bpos_noLID,
@@ -2038,21 +2125,21 @@ LID_test_bcue <- if (INCLUDE_RE) {
 }
 
 # Final REML
-final_bcue_pos <- mgcv::gam(
-  formula(red_ml_bcue_pos),
+final_BPUE_pos <- mgcv::gam(
+  formula(red_ml_BPUE_pos),
   data   = Bpos,
   family = Gamma(link = "log"),
   method = "REML",
   select = TRUE
 )
-summary(final_bcue_pos)
-mgcv::concurvity(final_bcue_pos)
-gam.check(final_bcue_pos)
+summary(final_BPUE_pos)
+mgcv::concurvity(final_BPUE_pos)
+gam.check(final_BPUE_pos)
 
-# Plots (positive BCUE)
-p_bcue_pos_smooths <- gratia::draw(final_bcue_pos)
-p_bcue_pos_param <- parametric_panel(
-  final_bcue_pos,
+# Plots (positive BPUE)
+p_BPUE_pos_smooths <- gratia::draw(final_BPUE_pos)
+p_BPUE_pos_param <- parametric_panel(
+  final_BPUE_pos,
   Bpos,
   alpha       = alpha_sig,
   exclude     = c("LID"),
@@ -2061,16 +2148,16 @@ p_bcue_pos_param <- parametric_panel(
 )
 
 pred_pos_b <- predict(
-  final_bcue_pos,
+  final_BPUE_pos,
   type    = "response",
-  exclude = exclude_if_RE(final_bcue_pos)
+  exclude = exclude_if_RE(final_BPUE_pos)
 )
-obs_pos_b  <- final_bcue_pos$y
+obs_pos_b  <- final_BPUE_pos$y
 R2_b   <- cor(pred_pos_b, obs_pos_b)^2
 RMSE_b <- sqrt(mean((pred_pos_b - obs_pos_b)^2))
 df_scat_b <- data.frame(Predicted = pred_pos_b, Observed = obs_pos_b)
 
-p_bcue_pos_scatter <- ggplot(df_scat_b, aes(Predicted, Observed)) +
+p_BPUE_pos_scatter <- ggplot(df_scat_b, aes(Predicted, Observed)) +
   geom_point(alpha = 0.6) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
   annotate(
@@ -2079,22 +2166,22 @@ p_bcue_pos_scatter <- ggplot(df_scat_b, aes(Predicted, Observed)) +
     y = max(df_scat_b$Observed,  na.rm = TRUE) * 0.8,
     label = paste0("R² = ", round(R2_b, 2), "\nRMSE = ", round(RMSE_b, 2))
   ) +
-  labs(x = "Predicted BCUE", y = "Observed BCUE")
+  labs(x = "Predicted BPUE", y = "Observed BPUE")
 
-BCUE_panel_positives <- patchwork::wrap_plots(
+BPUE_panel_positives <- patchwork::wrap_plots(
   list(
-    as_plot(p_bcue_pos_smooths),
-    #as_plot(p_bcue_pos_param),
-    as_plot(p_bcue_pos_scatter)
+    as_plot(p_BPUE_pos_smooths),
+    #as_plot(p_BPUE_pos_param),
+    as_plot(p_BPUE_pos_scatter)
   ),
   ncol = 2
 ) 
 
-BCUE_panel_positives
+BPUE_panel_positives
 
 ggsave(
-  file.path(fig_dir, "BCUE_panel_positives.png"),
-  BCUE_panel_positives,
+  file.path(fig_dir, "BPUE_panel_positives.png"),
+  BPUE_panel_positives,
   width  = 10,
   height = 5,
   dpi    = 300
@@ -2102,14 +2189,15 @@ ggsave(
 ```
 
 # Models output
-```{r}
+```{r fig.width=10, fig.height=5, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 # OCC ML
 summary(full_ml_occ)
 summary(red_ml_occ)
 AIC(full_ml_occ, red_ml_occ)
 suppressWarnings(print(anova(full_ml_occ, red_ml_occ, test = "Chisq")))
-
+performance::check_collinearity(red_ml_occ)
 LID_test_occ
+
 
 # OCC Final REML
 final_occ <- mgcv::gam(formula(red_ml_occ), data = PData, family = binomial(link="logit"), method = "REML", select = TRUE)
@@ -2124,7 +2212,7 @@ summary(full_ml_cpue_pos)
 summary(red_ml_cpue_pos)
 print(AIC(full_ml_cpue_pos, red_ml_cpue_pos))
 suppressWarnings(print(anova(full_ml_cpue_pos, red_ml_cpue_pos, test = "Chisq")))
-
+performance::check_collinearity(red_ml_cpue_pos)
 LID_test_cpue 
 
 # CPUE Final REML
@@ -2136,20 +2224,45 @@ gam.check(final_cpue_pos)
 
 
 
-# BCUE pos
-summary(full_ml_bcue_pos)
-summary(red_ml_bcue_pos)
-print(AIC(full_ml_bcue_pos, red_ml_bcue_pos))
-suppressWarnings(print(anova(full_ml_bcue_pos, red_ml_bcue_pos, test = "Chisq")))
+# BPUE pos
+summary(full_ml_BPUE_pos)
+summary(red_ml_BPUE_pos)
+print(AIC(full_ml_BPUE_pos, red_ml_BPUE_pos))
+suppressWarnings(print(anova(full_ml_BPUE_pos, red_ml_BPUE_pos, test = "Chisq")))
+performance::check_collinearity(red_ml_BPUE_pos)
+LID_test_BPUE
 
-LID_test_bcue
+# BPUE Final REML
+final_BPUE_pos <- mgcv::gam(formula(red_ml_BPUE_pos), data = Bpos, family = Gamma(link="log"), method = "REML", select = TRUE)
+summary(final_BPUE_pos)
+mgcv::concurvity(final_BPUE_pos)
+gam.check(final_BPUE_pos)
 
-# BCUE Final REML
-final_bcue_pos <- mgcv::gam(formula(red_ml_bcue_pos), data = Bpos, family = Gamma(link="log"), method = "REML", select = TRUE)
-summary(final_bcue_pos)
-mgcv::concurvity(final_bcue_pos)
-gam.check(final_bcue_pos)
+
+# plots for paper
+# OCC
+p_occ_smooths
+p_pres_roc
+Calibration_plot_occ
+
+
+# CPUE # BPUE
+p_cpue_pos_smooths
+p_cpue_pos_scatter
+
+p_BPUE_pos_smooths
+p_BPUE_pos_scatter
+
+
+ggsave(file.path(fig_dir, "p_occ_smooths.png"),       p_occ_smooths, width  = 10, height = 5, dpi    = 300)
+ggsave(file.path(fig_dir, "p_pres_roc.png"),          p_pres_roc, width  = 10, height = 5, dpi    = 300)
+ggsave(file.path(fig_dir, "Calibration_plot_occ.png"),Calibration_plot_occ, width  = 10, height = 5, dpi    = 300)
+
+ggsave(file.path(fig_dir, "p_cpue_pos_smooths.png"),  p_cpue_pos_smooths, width  = 10, height = 5, dpi    = 300)
+ggsave(file.path(fig_dir, "p_cpue_pos_scatter.png"),  p_cpue_pos_scatter, width  = 10, height = 5, dpi    = 300)
+
+ggsave(file.path(fig_dir, "p_BPUE_pos_smooths.png"),  p_BPUE_pos_smooths, width  = 10, height = 5, dpi    = 300)
+ggsave(file.path(fig_dir, "p_BPUE_pos_scatter.png"),  p_BPUE_pos_scatter, width  = 10, height = 5, dpi    = 300)
 
 
 ```
-
