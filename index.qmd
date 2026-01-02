@@ -8,12 +8,12 @@ format:
 ---
 
 ## Overview
-This site accompanies the scientific work on kōura (freshwater crayfish) and shoreline habitats.
+This site accompanies the scientific work on: 'Understanding habitat preferences of freshwater crayfish in New Zealand lakes'
 
 - **Code repository:** (add URL)
 - **Data DOI:** (add DOI link)
 - **Paper DOI:** (add DOI link)
-- **title:** Kōura  and their shoreline habitats: Understanding natural lake habitat preferences of freshwater crayfish (Paranephrops planifrons) in New Zealand lakes
+- **title:** Understanding habitat preferences of freshwater crayfish in New Zealand lakes
 
 # Load packages
 ```{r}
@@ -274,85 +274,67 @@ list(habitat_classification_head = head(habitat_classification, 5),monitoring_cp
 
 ```
 
-
 # Plot all variables 
 ```{r fig.width=10, fig.height=10, dpi=100}
 # set orders
-M_C_data <- Monitoring_CPUE_data 
+M_C_data <- Monitoring_CPUE_data
 lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
 M_C_data$Lake <- factor(M_C_data$Lake, levels = lake_order)
-fish_order <- c("Presence_Kōura","Presence_Eel","Presence_Kōaro","Presence_Common_smelt","Presence_Bullies","Presence_Catfish","Presence_Goldfish","Presence_Mosquitofish","Presence_Trout")
-fish_order_CPUE  <- c("Weighted_CPUE_Kōura","Weighted_CPUE_Eel","Weighted_CPUE_Kōaro","Weighted_CPUE_Common_smelt","Weighted_CPUE_Bullies","Weighted_CPUE_Catfish","Weighted_CPUE_Goldfish","Weighted_CPUE_Mosquitofish","Weighted_CPUE_Trout")
-fish_order_BPUE  <- c("Weighted_BPUE_Kōura","Weighted_BPUE_Eel","Weighted_BPUE_Kōaro","Weighted_BPUE_Common_smelt","Weighted_BPUE_Bullies","Weighted_BPUE_Catfish","Weighted_BPUE_Goldfish","Weighted_BPUE_Mosquitofish","Weighted_BPUE_Trout")
 
+# nice facet names
+var_lab <- c(
+  Substrate_index       = "Substrate index",
+  Slope_5m              = "Slope to 5 m depth",
+  Riparian_vegetation   = "Riparian vegetation (%)",
+  Overhanging_trees     = "Overhanging trees (%)",
+  Wood_cover            = "Wood cover (%)",
+  Emergent_vegetation   = "Emergent vegetation (%)",
+  Submerged_vegetation  = "Submerged vegetation (%)",
+  Temperature           = "Surface temperature (°C)",
+  DO_mgl                = "Dissolved oxygen (mg l-1)",
+  Specific_conductivity = "Specific conductivity (uS cm-1)",
+  pH                    = "pH",
+  Presence_Catfish      = "Brown bullhead catfish presence (proportion of sites)",
+  Presence_Eel          = "Eel presence (proportion of sites)",
+  Presence_Goldfish     = "Goldfish presence (proportion of sites)",
+  Presence_Common_smelt = "Common smelt presence (proportion of sites)")
+  
+ 
 
-
-# 1. Environmental data (boxplots)
+# env (boxplots)
 Env_data <- M_C_data %>%
   mutate(
     Emergent_vegetation  = Emergent_Native + Emergent_Non_Native,
     Submerged_vegetation = Submerged_Native + Submerged_Non_Native) %>%
   select(
-    Lake, Slope_5m, Riparian_vegetation, Overhanging_trees, Wood_cover,
-    Substrate_index, Temperature, DO_mgl, pH, Specific_conductivity,
-    Emergent_vegetation, Submerged_vegetation) %>%
-  pivot_longer(
-    cols = -Lake,
-    names_to = "Variable",
-    values_to = "Value") %>%
-  mutate(
-    Lake     = factor(Lake, levels = lake_order),
-    Var_type = "Env")
+    Lake, Substrate_index, Slope_5m, Riparian_vegetation, Overhanging_trees, Wood_cover,
+    Temperature, DO_mgl, pH, Specific_conductivity, Emergent_vegetation, Submerged_vegetation) %>%
+  pivot_longer(-Lake, names_to = "Variable", values_to = "Value") %>%
+  mutate(Var_type = "Env")
 
-# 2. Fish presence (bars)
-presence_data <- M_C_data %>%
-  select(
-    Monitoring_ID, Lake,
-    Presence_Common_smelt, Presence_Goldfish,
-    Presence_Eel, Presence_Catfish, Presence_Kōaro, Presence_Trout, Presence_Bullies, Presence_Mosquitofish) %>%
-  pivot_longer(
-    cols = c(Presence_Common_smelt, Presence_Goldfish,
-             Presence_Eel, Presence_Catfish, Presence_Kōaro, Presence_Trout, Presence_Bullies, Presence_Mosquitofish),
-    names_to  = "Fish_Type",
-    values_to = "Presence") %>%
-  mutate(
-    Lake     = factor(Lake, levels = lake_order),
-    Fish_Type = factor(Fish_Type, levels = fish_order))
+# fish (bars)
+Fish_data <- M_C_data %>%
+  select(Lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish, Presence_Goldfish) %>%
+  pivot_longer(-Lake, names_to = "Variable", values_to = "Presence") %>%
+  group_by(Lake, Variable) %>%
+  summarise(Value = mean(Presence, na.rm = TRUE), .groups = "drop") %>%
+  mutate(Var_type = "Fish")
 
-Fish_presence_summary <- presence_data %>%
-  group_by(Lake, Fish_Type) %>%
-  summarise(Presence_prop = mean(Presence, na.rm = TRUE), .groups = "drop") %>%
-  mutate(
-    Variable = as.character(Fish_Type),
-    Value    = Presence_prop,
-    Var_type = "Fish") %>%
-  select(Lake, Variable, Value, Var_type)
-
-# 3. Combine into one dataset
 EnvBio_data <- bind_rows(
   Env_data %>% select(Lake, Variable, Value, Var_type),
-  Fish_presence_summary) %>%
+  Fish_data) %>%
   mutate(
-    Variable = factor(
-      Variable,
-      levels = c(
-        "Substrate_index","Slope_5m","Riparian_vegetation","Overhanging_trees", "Wood_cover", "Emergent_vegetation", "Submerged_vegetation", "Temperature", "DO_mgl", "pH", "Specific_conductivity", as.character(fish_order))))
+    Lake = factor(Lake, levels = lake_order),
+    Variable = factor(Variable, levels = names(var_lab)))
 
-# 4. Single plot with conditional geoms
 EnvBio_plot <- ggplot(EnvBio_data, aes(Lake, Value)) +
-  # boxplots only for environmental vars
-  geom_boxplot( data = subset(EnvBio_data, Var_type == "Env")) +
-  geom_col(data = subset(EnvBio_data, Var_type == "Fish"),fill = "grey40") +
-  facet_wrap(~ Variable, scales = "free_y", ncol= 3) 
+  geom_boxplot(data = subset(EnvBio_data, Var_type == "Env")) +
+  geom_col(data = subset(EnvBio_data, Var_type == "Fish"), fill = "grey40") +
+  facet_wrap(~ Variable, scales = "free_y", ncol = 3, labeller = as_labeller(var_lab))
 
 EnvBio_plot
 
-ggsave(
-  file.path(fig_dir, "EnvBio_plot.png"),
-  EnvBio_plot,
-  width = 10,
-  height = 10,
-  dpi = 300)
+ggsave(file.path(fig_dir, "EnvBio_plot.png"),EnvBio_plot,width = 10, height = 10,dpi = 300)
 
 
 # make into table 
@@ -400,16 +382,16 @@ EnvBio_summary_wide
 
 
 
-
-
+names(M_C_data)
+ggplot(M_C_data, aes(Specific_conductivity,Presence_Kōura,  col=Lake))+
+  geom_point()
 
 
 
 
 ```
 
-
-# Koura specific plot 
+# Kōura presence, CPUE, and BPUE plot 
 ```{r fig.width=6, fig.height=6, dpi=100}
 plot_koura_stats <- function(data, y_var, y_label, 
                              test_type = c("wilcox", "fisher"),
@@ -472,81 +454,6 @@ Koura_plots <- KPRES_plot / KCPUE_plot / KBPUE_plot
 Koura_plots
 
 ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, width = 6, height = 6, dpi = 300)
-
-```
-
-# Koura plot without 0 sites
-```{r fig.width=6, fig.height=6, dpi=100}
-plot_koura_stats <- function(data, y_var, y_label, 
-                             test_type = c("wilcox", "fisher"),
-                             show_x_title = FALSE) {
-  test_type <- match.arg(test_type)
-  lakes <- levels(data$Lake)
-  xlab_text <- if (show_x_title) "Lake" else NULL
-  
-  if (test_type == "wilcox") {
-    data_nz <- data %>% dplyr::filter(.data[[y_var]] > 0)
-    keep_lakes <- data_nz %>%
-      dplyr::group_by(Lake) %>%
-      dplyr::summarise(n = sum(!is.na(.data[[y_var]])), .groups = "drop") %>%
-      dplyr::filter(n > 0) %>% dplyr::pull(Lake) %>% as.character()
-    level_order <- as.character(lakes)[as.character(lakes) %in% keep_lakes]
-    data_nz <- data_nz %>% dplyr::mutate(Lake = factor(Lake, levels = level_order))
-    
-    stats <- data_nz %>%
-      rstatix::wilcox_test(as.formula(paste0(y_var, " ~ Lake")), p.adjust.method = "BH") %>%
-      { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
-      tibble::enframe("Lake", "Letter")
-    
-    ggplot2::ggplot(data_nz, ggplot2::aes(Lake, .data[[y_var]])) +
-      ggplot2::geom_boxplot(fill = "grey70") +
-      ggplot2::geom_text(data = stats, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
-      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
-      ggplot2::labs(y = y_label, x = xlab_text)
-    
-  } else {
-    presence_summary <- data %>%
-      dplyr::group_by(Lake) %>%
-      dplyr::summarise(Presence_Rate = mean(.data[[y_var]], na.rm = TRUE), .groups = "drop") %>%
-      dplyr::mutate(Lake = factor(Lake, levels = lakes))
-    
-    lake_pairs <- combn(lakes, 2, simplify = FALSE)
-    fisher_pair_test <- function(pair, df) {
-      sub <- df %>% dplyr::filter(Lake %in% pair)
-      tab <- table(sub[[y_var]], sub$Lake)
-      pval <- fisher.test(tab)$p.value
-      tibble::tibble(group1 = pair[1], group2 = pair[2], p.value = pval)
-    }
-    pairwise_results <- purrr::map_dfr(lake_pairs, fisher_pair_test, df = data) %>%
-      dplyr::mutate(p.adj = p.adjust(p.value, method = "BH"))
-    
-    letters <- multcompView::multcompLetters(
-      setNames(pairwise_results$p.adj, paste(pairwise_results$group1, pairwise_results$group2, sep = "-"))
-    )$Letters
-    
-    stats_col <- tibble::tibble(
-      Lake   = factor(names(letters), levels = lakes),
-      Letter = unname(letters)
-    )
-    
-    ggplot2::ggplot(presence_summary, ggplot2::aes(x = Lake, y = Presence_Rate)) +
-      ggplot2::geom_col(fill = "grey50", col = "black") +
-      ggplot2::geom_text(data = stats_col, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
-      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
-      ggplot2::labs(x = xlab_text, y = y_label) +
-      ggplot2::theme(legend.position = "none")
-  }
-}
-
-KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
-KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
-KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura",     "Kōura BPUE",     test_type = "wilcox",  show_x_title = TRUE)
-
-Koura_plots_0 <- KPRES_plot / KCPUE_plot / KBPUE_plot
-Koura_plots_0
-
-ggsave(file.path(fig_dir, "Koura_plots_0.png"), Koura_plots_0, width = 6, height = 6, dpi = 300)
-
 
 ```
 
@@ -1198,7 +1105,7 @@ parametric_panel <- function(model, data, alpha = 0.1, exclude = character(0),
 ```
 
 # OCCUPANCY: Presence/Absence (binomial analysis)
-```{r fig.width=14, fig.height=10, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+```{r fig.width=14, fig.height=8, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 
 PData <- prepare_block(Modeling_data, "Presence_Kōura", vars_common)
 
@@ -1429,18 +1336,20 @@ Calibration_plot_occ <- ggplot(calib_data_occ, aes(mean_pred, obs_rate)) +
   geom_point(size = 3) +
   geom_line() +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
-  labs(x = "Mean predicted probability", y = "Observed proportion")
+  labs(x = "Mean predicted probability",
+    y = "Observed proportion")
 
-final_plot_occupancy <- patchwork::wrap_plots(
-  list(  as_plot(p_occ_smooths),
-    as_plot(p_occ_param),
-    as_plot(p_pres_roc),
-    as_plot(Calibration_plot_occ)),
-  ncol = 2,  nrow = 2)
+
+top_row <- p_occ_smooths + patchwork::plot_layout(ncol = 5)
+bottom_row <- (p_pres_roc + Calibration_plot_occ) + patchwork::plot_layout(ncol = 2)
+
+# FINAL: 2-row layout, with square panels (same x and y physical size)
+final_plot_occupancy <- (top_row / bottom_row) +
+  patchwork::plot_layout(heights = c(1, 2)) 
 
 final_plot_occupancy
 
-ggsave(file.path(fig_dir, "Occupancy_panels.png"),final_plot_occupancy, width  = 14,height = 10,dpi    = 300)
+ggsave(file.path(fig_dir, "Occupancy_panels.png"),final_plot_occupancy, width  = 14,height = 5,dpi    = 300)
 
 
 # make the smooth plots
@@ -1457,7 +1366,7 @@ final_p_occ_smooths
 ```
 
 # CPUE: HURDLE
-```{r fig.width=14, fig.height=5, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+```{r fig.width=10, fig.height=5, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 CData <- prepare_block(Modeling_data, "Weighted_CPUE_Kōura", vars_common) %>%
   dplyr::mutate(CPUE_pos = as.integer(Weighted_CPUE_Kōura > 0))
 
@@ -1468,8 +1377,7 @@ id <- "LID"
 # VIF candidates (exclude response, id, and raw CPUE columns)
 pred_fixed_cpue_pres <- setdiff(
   names(CData),
-  c("CPUE_pos", id, "Weighted_CPUE_Kōura", "Weighted_CPUE_Koura", "CPUE")
-)
+  c("CPUE_pos", id, "Weighted_CPUE_Kōura", "Weighted_CPUE_Koura", "CPUE"))
 
 # VIF pruning: all fixed effects treated the same
 vif_cpue_pres <- remove_high_vif_glmBI(
@@ -1477,8 +1385,7 @@ vif_cpue_pres <- remove_high_vif_glmBI(
   "CPUE_pos",
   pred_fixed_cpue_pres,
   threshold    = vif_thresh,
-  protect_vars = character(0)
-)
+  protect_vars = character(0))
 kept_fixed_cpue_pres <- vif_cpue_pres$predictors
 
 # Stepwise set: fixed effects + LID random effect (if requested)
@@ -1488,18 +1395,14 @@ rhs_cpue_pres <- paste(
   vapply(
     vars_step_cpue_pres,
     function(v) build_smooth_gam(v, CData, custom_k, include_re_for_LID = INCLUDE_RE),
-    character(1)
-  ),
-  collapse = " + "
-)
+    character(1)),collapse = " + ")
 
 full_ml_cpue_pres <- mgcv::gam(
   as.formula(paste("CPUE_pos ~", rhs_cpue_pres)),
   data   = CData,
   family = binomial(link = "logit"),
   method = "ML",
-  select = TRUE
-)
+  select = TRUE)
 
 # Stepwise (ML) with LID protected if used as random effect
 remaining_cpue_pres   <- vars_step_cpue_pres
@@ -1806,23 +1709,14 @@ p_cpue_pos_scatter <- ggplot(df_scat, aes(Predicted, Observed)) +
   labs(x = "Predicted CPUE", y = "Observed CPUE")
 
 CPUE_panel_positives <- patchwork::wrap_plots(
-  list(
-    as_plot(p_cpue_pos_smooths),
-    as_plot(p_cpue_pos_param),
-    as_plot(p_cpue_pos_scatter)
-  ),
-  ncol = 3
-)
+  list(as_plot(p_cpue_pos_smooths),
+    #as_plot(p_cpue_pos_param),
+    as_plot(p_cpue_pos_scatter)),
+  ncol = 2)
 
 CPUE_panel_positives
 
-ggsave(
-  file.path(fig_dir, "CPUE_panel_positives.png"),
-  CPUE_panel_positives,
-  width  = 14,
-  height = 5,
-  dpi    = 300
-)
+ggsave(file.path(fig_dir, "CPUE_panel_positives.png"), CPUE_panel_positives, width  = 10,height = 5, dpi    = 300)
 
 
 ```
@@ -2172,24 +2066,15 @@ BPUE_panel_positives <- patchwork::wrap_plots(
   list(
     as_plot(p_BPUE_pos_smooths),
     #as_plot(p_BPUE_pos_param),
-    as_plot(p_BPUE_pos_scatter)
-  ),
-  ncol = 2
-) 
+    as_plot(p_BPUE_pos_scatter)),ncol = 2) 
 
 BPUE_panel_positives
 
-ggsave(
-  file.path(fig_dir, "BPUE_panel_positives.png"),
-  BPUE_panel_positives,
-  width  = 10,
-  height = 5,
-  dpi    = 300
-)
+ggsave(file.path(fig_dir, "BPUE_panel_positives.png"),  BPUE_panel_positives, width  = 10,height = 5, dpi    = 300)
 ```
 
 # Models output
-```{r fig.width=10, fig.height=5, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
+```{r fig.width=5, fig.height=4, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
 # OCC ML
 summary(full_ml_occ)
 summary(red_ml_occ)
@@ -2241,28 +2126,164 @@ gam.check(final_BPUE_pos)
 
 # plots for paper
 # OCC
-p_occ_smooths
+p_occ_smooths1 <-p_occ_smooths + patchwork::plot_layout(ncol = 5)
+#p_occ_param
 p_pres_roc
 Calibration_plot_occ
+occ_cal_plot<- (p_pres_roc + Calibration_plot_occ) + patchwork::plot_layout(ncol = 2)
 
 
 # CPUE # BPUE
 p_cpue_pos_smooths
+#p_cpue_pos_param
 p_cpue_pos_scatter
 
 p_BPUE_pos_smooths
 p_BPUE_pos_scatter
 
 
-ggsave(file.path(fig_dir, "p_occ_smooths.png"),       p_occ_smooths, width  = 10, height = 5, dpi    = 300)
-ggsave(file.path(fig_dir, "p_pres_roc.png"),          p_pres_roc, width  = 10, height = 5, dpi    = 300)
-ggsave(file.path(fig_dir, "Calibration_plot_occ.png"),Calibration_plot_occ, width  = 10, height = 5, dpi    = 300)
+ggsave(file.path(fig_dir, "p_occ_smooths.png"),       p_occ_smooths1, width  = 14, height = 5, dp = 300)
+ggsave(file.path(fig_dir, "p_occ_param.png"),         p_occ_param, width  = 5, height = 5, dpi = 300)
+ggsave(file.path(fig_dir, "p_pres_roc.png"),          p_pres_roc, width  = 5, height = 4, dpi = 300)
+ggsave(file.path(fig_dir, "Calibration_plot_occ.png"),Calibration_plot_occ, width  = 5, height = 4, dpi = 300)
+ggsave(file.path(fig_dir, "occ_cal_plot.png"),occ_cal_plot, width  = 10, height = 4, dpi = 300)
 
-ggsave(file.path(fig_dir, "p_cpue_pos_smooths.png"),  p_cpue_pos_smooths, width  = 10, height = 5, dpi    = 300)
-ggsave(file.path(fig_dir, "p_cpue_pos_scatter.png"),  p_cpue_pos_scatter, width  = 10, height = 5, dpi    = 300)
+ggsave(file.path(fig_dir, "p_cpue_pos_smooths.png"),  p_cpue_pos_smooths, width  = 5, height = 5, dpi = 300)
+ggsave(file.path(fig_dir, "p_cpue_pos_param.png"),    p_cpue_pos_param,   width  = 5, height = 5, dpi = 300)
+ggsave(file.path(fig_dir, "p_cpue_pos_scatter.png"),  p_cpue_pos_scatter, width  = 5, height = 5, dpi = 300)
 
-ggsave(file.path(fig_dir, "p_BPUE_pos_smooths.png"),  p_BPUE_pos_smooths, width  = 10, height = 5, dpi    = 300)
-ggsave(file.path(fig_dir, "p_BPUE_pos_scatter.png"),  p_BPUE_pos_scatter, width  = 10, height = 5, dpi    = 300)
+ggsave(file.path(fig_dir, "p_BPUE_pos_smooths.png"),  p_BPUE_pos_smooths, width  = 5, height = 5, dpi = 300)
+ggsave(file.path(fig_dir, "p_BPUE_pos_scatter.png"),  p_BPUE_pos_scatter, width  = 5, height = 5, dpi = 300)
+
+
+# Panels
+final_plot_occupancy
+CPUE_panel_positives
+BPUE_panel_positives
+
+
+
+# GAM results tables
+gam_results_table <- function(model, model_name = deparse(substitute(model)), digits = 3) {
+  sm <- summary(model)
+
+  # ---------- Parametric table ----------
+  ptab <- as.data.frame(sm$p.table)
+  ptab <- rownames_to_column(ptab, "term")
+  ptab <- as_tibble(ptab)
+
+  # Identify p-value column robustly
+  p_col <- names(ptab)[grepl("^Pr\\(>\\|", names(ptab))]
+  if (length(p_col) != 1) {
+    stop("Could not uniquely identify p-value column in p.table. Found: ", paste(p_col, collapse = ", "))
+  }
+
+  # Identify statistic column robustly (t value / z value)
+  stat_col <- names(ptab)[grepl("value$", names(ptab))]
+  if (length(stat_col) != 1) {
+    stop("Could not uniquely identify statistic column in p.table. Found: ", paste(stat_col, collapse = ", "))
+  }
+
+  param_tbl <- ptab |>
+    rename(
+      estimate  = Estimate,
+      std_error = `Std. Error`,
+      statistic = all_of(stat_col),
+      p_value   = all_of(p_col)
+    ) |>
+    mutate(
+      component = "parametric",
+      model = model_name
+    ) |>
+    select(model, component, term, estimate, std_error, statistic, p_value) |>
+    mutate(across(where(is.numeric), ~ round(.x, digits)))
+
+  # ---------- Smooth table ----------
+  stab <- as.data.frame(sm$s.table)
+  stab <- rownames_to_column(stab, "term")
+  stab <- as_tibble(stab)
+
+  # mgcv usually uses: edf, Ref.df, F or Chi.sq, p-value
+  # Make robust picks
+  refdf_col <- names(stab)[grepl("^Ref\\.df$", names(stab))]
+  edf_col   <- names(stab)[grepl("^edf$", names(stab))]
+  pval_col  <- names(stab)[grepl("^p\\-value$", names(stab))]
+  stat_col2 <- names(stab)[grepl("^(F|Chi\\.sq)$", names(stab))]
+
+  if (length(edf_col) != 1) stop("Could not uniquely identify edf column in s.table.")
+  if (length(refdf_col) != 1) stop("Could not uniquely identify Ref.df column in s.table.")
+  if (length(pval_col) != 1) stop("Could not uniquely identify p-value column in s.table.")
+  if (length(stat_col2) != 1) stop("Could not uniquely identify test statistic column (F/Chi.sq) in s.table.")
+
+  smooth_tbl <- stab |>
+    rename(
+      edf = all_of(edf_col),
+      ref_df = all_of(refdf_col),
+      statistic = all_of(stat_col2),
+      p_value = all_of(pval_col)
+    ) |>
+    mutate(
+      component = "smooth",
+      model = model_name
+    ) |>
+    select(model, component, term, edf, ref_df, statistic, p_value) |>
+    mutate(across(where(is.numeric), ~ round(.x, digits)))
+
+  # ---------- Combined (paper-friendly) ----------
+  combined_tbl <- bind_rows(
+    param_tbl |>
+      mutate(edf = NA_real_, ref_df = NA_real_) |>
+      select(model, component, term, estimate, std_error, edf, ref_df, statistic, p_value),
+    smooth_tbl |>
+      mutate(estimate = NA_real_, std_error = NA_real_) |>
+      select(model, component, term, estimate, std_error, edf, ref_df, statistic, p_value)
+  )
+
+  list(
+    parametric = param_tbl,
+    smooth = smooth_tbl,
+    combined = combined_tbl
+  )
+}
+
+# Create tables for your three final models
+occ_tabs  <- gam_results_table(final_occ,      "Occupancy", digits = 3)
+cpue_tabs <- gam_results_table(final_cpue_pos, "CPUE (pos)", digits = 3)
+bpue_tabs <- gam_results_table(final_BPUE_pos, "BPUE (pos)", digits = 3)
+
+occ_table  <- occ_tabs$combined
+cpue_table <- cpue_tabs$combined
+bpue_table <- bpue_tabs$combined
+
+# Optional significance stars (remove if journal dislikes)
+add_sig <- function(df) {
+  df |>
+    mutate(
+      sig = case_when(
+        is.na(p_value) ~ "",
+        p_value < 0.001 ~ "***",
+        p_value < 0.01  ~ "**",
+        p_value < 0.05  ~ "*",
+        p_value < 0.1   ~ ".",
+        TRUE ~ ""
+      )
+    )
+}
+
+occ_table  <- add_sig(occ_table)
+cpue_table <- add_sig(cpue_table)
+bpue_table <- add_sig(bpue_table)
+
+
+# Export
+write.csv(occ_table,  file = file.path(fig_dir, "table_gam_occupancy.csv"), row.names = FALSE)
+write.csv(cpue_table, file = file.path(fig_dir, "table_gam_cpue_pos.csv"),  row.names = FALSE)
+write.csv(bpue_table, file = file.path(fig_dir, "table_gam_bpue_pos.csv"),  row.names = FALSE)
+
+# If you want one combined table for Supplement:
+all_models_table <- bind_rows(occ_table, cpue_table, bpue_table)
+write.csv(all_models_table, file=file.path(fig_dir,"table_gam_all_models.csv"), row.names = FALSE)
+
 
 
 ```
