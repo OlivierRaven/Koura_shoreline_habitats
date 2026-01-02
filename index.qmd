@@ -20,7 +20,7 @@ This site accompanies the scientific work on: 'Understanding habitat preferences
 cat("\014"); rm(list = ls())
 
 # Define the list of packages
-packages <- c("brglm2","patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
+packages <- c("rstatix", "multcompView","brglm2","patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
 
 # Load packages if not already installed
 quiet_load <- function(pkg) {
@@ -348,19 +348,19 @@ Env_summary_table <- Env_data %>%
   mutate(Var_type = "Env") %>%
   select(Lake, Variable, Var_type, Mean, SEM)
 
-# 4b. Fish presence: mean (proportion) and SEM per lake
-Fish_summary_table <- presence_data %>%
-  group_by(Lake, Fish_Type) %>%
+# 4b. Fish presence: mean (proportion) and SEM per lake (site-level)
+Fish_summary_table <- M_C_data %>%
+  select(Lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish, Presence_Goldfish) %>%
+  pivot_longer(-Lake, names_to = "Variable", values_to = "Presence") %>%
+  group_by(Lake, Variable) %>%
   summarise(
-    Mean = mean(Presence, na.rm = TRUE),               # same as Presence_prop
+    Mean = mean(Presence, na.rm = TRUE),
     SEM  = sd(Presence, na.rm = TRUE) / sqrt(sum(!is.na(Presence))),
     .groups = "drop"
   ) %>%
-  mutate(
-    Variable = as.character(Fish_Type),
-    Var_type = "Fish"
-  ) %>%
+  mutate(Var_type = "Fish") %>%
   select(Lake, Variable, Var_type, Mean, SEM)
+
 
 # 4c. Combined summary table (Env + Fish)
 EnvBio_summary_table <- bind_rows(

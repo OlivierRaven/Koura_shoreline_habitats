@@ -1,0 +1,7 @@
+"model","component","term","estimate","std_error","edf","ref_df","statistic","p_value","sig"
+"CPUE (pos)","parametric","(Intercept)",0.928,0.194,NA,NA,4.79,0,"***"
+"CPUE (pos)","parametric","Presence_Common_smelt",-0.609,0.284,NA,NA,-2.145,0.041,"*"
+"CPUE (pos)","smooth","s(Temperature)",NA,NA,0.823,9,0.561,0.019,"*"
+"CPUE (pos)","smooth","s(pH)",NA,NA,1.02,9,2.085,0,"***"
+"CPUE (pos)","smooth","s(Emergent_Native)",NA,NA,0.98,3,7.16,0,"***"
+"CPUE (pos)","smooth","s(LID)",NA,NA,0,4,0,0.482,""
