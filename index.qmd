@@ -20,7 +20,7 @@ This site accompanies the scientific work on: 'Understanding habitat preferences
 cat("\014"); rm(list = ls())
 
 # Define the list of packages
-packages <- c("rstatix", "multcompView","brglm2","patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
+packages <- c("emmeans","rstatix", "multcompView","brglm2","patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
 
 # Load packages if not already installed
 quiet_load <- function(pkg) {
@@ -100,7 +100,7 @@ formula_text <- paste0( "log10(Weight[g]) = ", round(a, 3), " + ", round(b, 3), 
 
 # Plot with formula added
 lengt_weight_plot <- ggplot(Fish_data |> dplyr::filter(is_koura),
-  aes(Length_mm, Predicted_weight, col = Weight_source, shape= Sex)) +
+  aes(Length_mm, Predicted_weight, col = Weight_source)) +
   geom_point(size = 2, alpha = 0.9) +
   labs(x = "OCL Length (mm)", y = "Weight (g)",col = "Weight source") +
   annotate("text",x = Inf, y = Inf, label = formula_text, hjust = 1.5, vjust = 5,size = 3.5) 
@@ -294,10 +294,15 @@ var_lab <- c(
   DO_mgl                = "Dissolved oxygen (mg l-1)",
   Specific_conductivity = "Specific conductivity (uS cm-1)",
   pH                    = "pH",
-  Presence_Catfish      = "Brown bullhead catfish presence (proportion of sites)",
-  Presence_Eel          = "Eel presence (proportion of sites)",
-  Presence_Goldfish     = "Goldfish presence (proportion of sites)",
-  Presence_Common_smelt = "Common smelt presence (proportion of sites)")
+  Presence_Catfish       = "Brown bullhead catfish presence (proportion of sites)",
+  Presence_Eel           = "Eel presence (proportion of sites)",
+  Presence_Goldfish      = "Goldfish presence (proportion of sites)",
+  Presence_Common_smelt  = "Common smelt presence (proportion of sites)",
+  Presence_Kōura         = "Kōura presence (proportion of sites)",
+  Presence_Kōaro         = "Kōaro presence (proportion of sites)",
+  Presence_Bullies       = "Bullies presence (proportion of sites)",
+  Presence_Trout         = "Trout presence (proportion of sites)",
+  Presence_Mosquitofish  = "Mosquitofish presence (proportion of sites)")
   
  
 
@@ -338,123 +343,194 @@ ggsave(file.path(fig_dir, "EnvBio_plot.png"),EnvBio_plot,width = 10, height = 10
 
 
 # make into table 
+# helper for 95% CI (t-based)
+ci95 <- function(x) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  if (n < 2) return(c(NA_real_, NA_real_))
+  se <- sd(x) / sqrt(n)
+  tcrit <- qt(0.975, df = n - 1)
+  m <- mean(x)
+  c(m - tcrit * se, m + tcrit * se)
+}
+
+# 4a. Env variables summary per lake (site-level)
 Env_summary_table <- Env_data %>%
   group_by(Lake, Variable) %>%
   summarise(
-    Mean = mean(Value, na.rm = TRUE),
-    SEM  = sd(Value, na.rm = TRUE) / sqrt(sum(!is.na(Value))),
-    .groups = "drop"
-  ) %>%
-  mutate(Var_type = "Env") %>%
-  select(Lake, Variable, Var_type, Mean, SEM)
+    n       = sum(!is.na(Value)),
+    Mean    = mean(Value, na.rm = TRUE),
+    Median  = median(Value, na.rm = TRUE),
+    Min     = min(Value, na.rm = TRUE),
+    Max     = max(Value, na.rm = TRUE),
+    CI_low  = ci95(Value)[1],
+    CI_high = ci95(Value)[2],
+    .groups = "drop") %>%
+  mutate(Var_type = "Env")
 
-# 4b. Fish presence: mean (proportion) and SEM per lake (site-level)
+# Env: add "All lakes"
+Env_summary_all <- Env_data %>%
+  group_by(Variable) %>%
+  summarise(
+    n       = sum(!is.na(Value)),
+    Mean    = mean(Value, na.rm = TRUE),
+    Median  = median(Value, na.rm = TRUE),
+    Min     = min(Value, na.rm = TRUE),
+    Max     = max(Value, na.rm = TRUE),
+    CI_low  = ci95(Value)[1],
+    CI_high = ci95(Value)[2],
+    .groups = "drop"  ) %>%
+  mutate(Lake = "All lakes", Var_type = "Env"  )
+
+# 4b. Fish presence summary per lake (site-level)
 Fish_summary_table <- M_C_data %>%
-  select(Lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish, Presence_Goldfish) %>%
+  select(Lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish,
+         Presence_Goldfish, Presence_Kōaro, Presence_Trout) %>%
   pivot_longer(-Lake, names_to = "Variable", values_to = "Presence") %>%
   group_by(Lake, Variable) %>%
   summarise(
-    Mean = mean(Presence, na.rm = TRUE),
-    SEM  = sd(Presence, na.rm = TRUE) / sqrt(sum(!is.na(Presence))),
-    .groups = "drop"
-  ) %>%
-  mutate(Var_type = "Fish") %>%
-  select(Lake, Variable, Var_type, Mean, SEM)
+    n       = sum(!is.na(Presence)),
+    Mean    = mean(Presence, na.rm = TRUE),
+    Median  = median(Presence, na.rm = TRUE),
+    Min     = min(Presence, na.rm = TRUE),
+    Max     = max(Presence, na.rm = TRUE),
+    CI_low  = ci95(Presence)[1],
+    CI_high = ci95(Presence)[2],
+    .groups = "drop") %>%
+  mutate(Var_type = "Fish")
 
+# Fish: add "All lakes" (report only overall proportion + CI; other stats not informative)
+Fish_summary_all <- M_C_data %>%
+  select(Presence_Eel, Presence_Common_smelt, Presence_Catfish,
+         Presence_Goldfish, Presence_Kōaro, Presence_Trout) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "Presence") %>%
+  group_by(Variable) %>%
+  summarise(
+    n       = sum(!is.na(Presence)),
+    Mean    = mean(Presence, na.rm = TRUE),
+    CI_low  = ci95(Presence)[1],
+    CI_high = ci95(Presence)[2],
+    .groups = "drop"  ) %>%
+  mutate(Lake = "All lakes",
+    Var_type = "Fish",
+    Median = NA_real_,
+    Min    = NA_real_,
+    Max    = NA_real_  ) %>%
+  select(Lake, Variable, Var_type, n, Mean, Median, Min, Max, CI_low, CI_high)
 
-# 4c. Combined summary table (Env + Fish)
+# 4c. Combined summary table (Env + Fish, incl. All lakes)
 EnvBio_summary_table <- bind_rows(
   Env_summary_table,
-  Fish_summary_table) %>%
-  mutate(Variable = factor(Variable, levels = levels(EnvBio_data$Variable))) %>%
+  Env_summary_all,
+  Fish_summary_table,
+  Fish_summary_all) %>%
+  select(Lake, Variable, Var_type, n, Mean, Median, Min, Max, CI_low, CI_high) %>%
+  mutate(Variable = factor(Variable, levels = levels(EnvBio_data$Variable)),
+    Lake = factor(Lake, levels = c(lake_order, "All lakes"))  ) %>%
   arrange(Variable, Lake)
 
-EnvBio_summary_wide <- EnvBio_summary_table %>%
-  select(Lake, Variable, Mean, SEM) %>%
-  tidyr::pivot_wider(
-    names_from  = Variable,
-    values_from = c(Mean, SEM),
-    names_glue  = "{Variable}_{.value}"
-  ) %>%
-  arrange(Lake)
+EnvBio_summary_table
 
-EnvBio_summary_wide
-
-
-
-names(M_C_data)
-ggplot(M_C_data, aes(Specific_conductivity,Presence_Kōura,  col=Lake))+
-  geom_point()
-
-
-
-
+write.csv(EnvBio_summary_table, file = file.path(fig_dir, "EnvBio_summary_table.csv"),  row.names = FALSE)
 ```
 
 # Kōura presence, CPUE, and BPUE plot 
 ```{r fig.width=6, fig.height=6, dpi=100}
-plot_koura_stats <- function(data, y_var, y_label, 
-                             test_type = c("wilcox", "fisher"),
+plot_koura_stats <- function(data, y_var, y_label,
+                             type = c("continuous", "presence"),
                              show_x_title = FALSE) {
-  test_type <- match.arg(test_type)
+
+  type <- match.arg(type)
   lakes <- levels(data$Lake)
   xlab_text <- if (show_x_title) "Lake" else NULL
-  
-  if (test_type == "wilcox") {
-    stats <- data %>%
-      rstatix::wilcox_test(as.formula(paste0(y_var, " ~ Lake")), p.adjust.method = "BH") %>%
-      { multcompView::multcompLetters(setNames(.$p.adj, paste(.$group1, .$group2, sep = "-")))$Letters } %>%
-      tibble::enframe("Lake", "Letter")
-    
-    ggplot2::ggplot(data, aes(Lake, .data[[y_var]])) +
-      ggplot2::geom_boxplot(fill = "grey70") +
-      ggplot2::geom_text(data = stats, aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
-      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
-      ggplot2::labs(y = y_label, x = xlab_text)
-    
+
+  if (type == "continuous") {
+    ggplot(data, aes(Lake, .data[[y_var]])) +
+      geom_boxplot(fill = "grey70") +
+      labs(y = y_label, x = xlab_text)
+
   } else {
+    # presence summary + binomial CI per lake (exact)
     presence_summary <- data %>%
-      dplyr::group_by(Lake) %>%
-      dplyr::summarise(Presence_Rate = mean(.data[[y_var]], na.rm = TRUE), .groups = "drop") %>%
-      dplyr::mutate(Lake = factor(Lake, levels = lakes))
-    
-    lake_pairs <- combn(lakes, 2, simplify = FALSE)
-    fisher_pair_test <- function(pair, df) {
-      sub <- df %>% dplyr::filter(Lake %in% pair)
-      tab <- table(sub[[y_var]], sub$Lake)
-      pval <- fisher.test(tab)$p.value
-      tibble::tibble(group1 = pair[1], group2 = pair[2], p.value = pval)
-    }
-    pairwise_results <- purrr::map_dfr(lake_pairs, fisher_pair_test, df = data) %>%
-      dplyr::mutate(p.adj = p.adjust(p.value, method = "BH"))
-    
-    letters <- multcompView::multcompLetters(
-      setNames(pairwise_results$p.adj, paste(pairwise_results$group1, pairwise_results$group2, sep = "-"))
-    )$Letters
-    
-    stats_col <- tibble::tibble(
-      Lake   = factor(names(letters), levels = lakes),
-      Letter = unname(letters)
-    )
-    
-    ggplot2::ggplot(presence_summary, ggplot2::aes(x = Lake, y = Presence_Rate)) +
-      ggplot2::geom_col(fill = "grey50", col = "black") +
-      ggplot2::geom_text(data = stats_col, ggplot2::aes(x = Lake, y = Inf, label = Letter), vjust = 1.1, inherit.aes = FALSE) +
-      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0.05, 0.15))) +
-      ggplot2::labs(x = xlab_text, y = y_label) +
-      ggplot2::theme(legend.position = "none")
+      group_by(Lake) %>%
+      summarise(
+        n = sum(!is.na(.data[[y_var]])),
+        k = sum(.data[[y_var]] == 1, na.rm = TRUE),
+        Presence_Rate = ifelse(n > 0, k / n, NA_real_),
+        .groups = "drop"
+      ) %>%
+      rowwise() %>%
+      mutate(
+        CI_low  = ifelse(n > 0, binom.test(k, n)$conf.int[1], NA_real_),
+        CI_high = ifelse(n > 0, binom.test(k, n)$conf.int[2], NA_real_)
+      ) %>%
+      ungroup() %>%
+      mutate(Lake = factor(Lake, levels = lakes))
+
+    ggplot(presence_summary, aes(x = Lake, y = Presence_Rate)) +
+      geom_col(fill = "grey50", col = "black") +
+      geom_errorbar(aes(ymin = CI_low, ymax = CI_high), width = 0.15) +
+      scale_y_continuous(limits = c(0, 1)) +
+      labs(x = xlab_text, y = y_label) +
+      theme(legend.position = "none")
   }
 }
 
-KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", test_type = "fisher", show_x_title = FALSE)
-KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura",     "Kōura CPUE",     test_type = "wilcox",  show_x_title = FALSE)
-KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura",     "Kōura BPUE",     test_type = "wilcox",  show_x_title = TRUE)
+
+KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", type = "presence", show_x_title = FALSE)
+KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura", "Kōura CPUE", type = "continuous", show_x_title = FALSE)
+KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura", "Kōura BPUE", type = "continuous", show_x_title = TRUE)
 
 Koura_plots <- KPRES_plot / KCPUE_plot / KBPUE_plot
 Koura_plots
 
 ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, width = 6, height = 6, dpi = 300)
 
+
+# model fitting 
+fit_presence_glmm <- function(data, response, lake_var = "Lake", random_effect = "Habitat_Type") {
+  # Binomial GLMM: presence ~ Lake + (1|Habitat_Type)
+  # If you have repeated sampling of sites, use a site ID random effect as well.
+  form <- as.formula(paste0(response, " ~ ", lake_var, " + (1|", random_effect, ")"))
+  glmmTMB(form, data = data, family = binomial(link = "logit"))
+}
+
+fit_tweedie_glmm <- function(data, response, lake_var = "Lake", random_effect = "Habitat_Type") {
+  # Tweedie GLMM: response ~ Lake + (1|Habitat_Type)
+  # Tweedie is suitable for non-negative continuous with many zeros / right skew.
+  form <- as.formula(paste0(response, " ~ ", lake_var, " + (1|", random_effect, ")"))
+  glmmTMB(form, data = data, family = tweedie(link = "log"))
+}
+
+# Presence (binomial GLMM)
+m_koura_pres <- fit_presence_glmm(M_C_data, response = "Presence_Kōura", lake_var = "Lake", random_effect = "Habitat_Type")
+
+# CPUE (Tweedie GLMM)
+m_koura_cpue <- fit_tweedie_glmm(M_C_data, response = "Weighted_CPUE_Kōura", lake_var = "Lake", random_effect = "Habitat_Type")
+
+# BPUE (Tweedie GLMM)
+m_koura_bpue <- fit_tweedie_glmm(M_C_data, response = "Weighted_BPUE_Kōura", lake_var = "Lake", random_effect = "Habitat_Type")
+
+# ---- model outputs ----
+
+# Overall lake effects (Type II/III tests are not native in glmmTMB; use drop1 LRT)
+drop1(m_koura_pres, test = "Chisq")
+drop1(m_koura_cpue, test = "Chisq")
+drop1(m_koura_bpue, test = "Chisq")
+
+# Pairwise lake comparisons (model-based; BH-adjusted)
+pres_pairs <- emmeans(m_koura_pres, ~ Lake, type = "response") %>%
+  pairs(adjust = "BH")
+
+cpue_pairs <- emmeans(m_koura_cpue, ~ Lake, type = "response") %>%
+  pairs(adjust = "BH")
+
+bpue_pairs <- emmeans(m_koura_bpue, ~ Lake, type = "response") %>%
+  pairs(adjust = "BH")
+
+pres_pairs
+cpue_pairs
+bpue_pairs
 ```
 
 # GAM helpers 
@@ -1106,7 +1182,6 @@ parametric_panel <- function(model, data, alpha = 0.1, exclude = character(0),
 
 # OCCUPANCY: Presence/Absence (binomial analysis)
 ```{r fig.width=14, fig.height=8, dpi=100, echo=FALSE, message=FALSE, warning=FALSE}
-
 PData <- prepare_block(Modeling_data, "Presence_Kōura", vars_common)
 
 # 2) Candidate predictors for VIF (fixed effects only: exclude response and LID)
@@ -1387,6 +1462,11 @@ vif_cpue_pres <- remove_high_vif_glmBI(
   threshold    = vif_thresh,
   protect_vars = character(0))
 kept_fixed_cpue_pres <- vif_cpue_pres$predictors
+
+vif_cpue_pres$report$start
+vif_cpue_pres$report$removed
+vif_cpue_pres$report$final_vif
+
 
 # Stepwise set: fixed effects + LID random effect (if requested)
 vars_step_cpue_pres <- c(kept_fixed_cpue_pres, if (INCLUDE_RE) id)
@@ -1732,18 +1812,21 @@ id <- "LID"
 
 pred_fixed_BPUE_pres <- setdiff(
   names(BData),
-  c("BPUE_pos", id, "Weighted_BPUE_Kōura", "Weighted_BPUE_Koura", "Weighted_BPUE")
-)
+  c("BPUE_pos", id, "Weighted_BPUE_Kōura", "Weighted_BPUE_Koura", "Weighted_BPUE"))
 
 vif_BPUE_pres <- remove_high_vif_glmBI(
   BData,
   "BPUE_pos",
   pred_fixed_BPUE_pres,
   threshold    = vif_thresh,
-  protect_vars = character(0)
-)
+  protect_vars = character(0))
 kept_fixed_BPUE_pres <- vif_BPUE_pres$predictors
 
+vif_BPUE_pres$report$start
+vif_BPUE_pres$report$removed
+vif_BPUE_pres$report$final_vif
+
+# Stepwise set: fixed effects + LID random effect (if requested)
 vars_step_BPUE_pres <- c(kept_fixed_BPUE_pres, if (INCLUDE_RE) id)
 
 rhs_BPUE_pres <- paste(
@@ -2285,5 +2368,73 @@ all_models_table <- bind_rows(occ_table, cpue_table, bpue_table)
 write.csv(all_models_table, file=file.path(fig_dir,"table_gam_all_models.csv"), row.names = FALSE)
 
 
+
+```
+
+
+# PCA test
+```{r}
+# select shoreline habitat variables for PCA
+habitat_vars <- M_C_data %>%
+  dplyr::select(
+    Riparian_vegetation,
+    Substrate_index,
+    Wood_cover,
+    Overhanging_trees,
+    Emergent_Native,
+    Submerged_Native
+  ) %>%
+  dplyr::filter(complete.cases(.))
+
+# run PCA
+habitat_pca <- prcomp(habitat_vars, center = TRUE, scale. = TRUE)
+
+# variance explained
+summary(habitat_pca)
+
+# loadings
+habitat_pca$rotation
+
+# extract PC1 scores
+pca_scores <- habitat_pca$x[, 1]
+
+# add PC1 back to main dataset
+M_C_data_pca <- M_C_data %>%
+  dplyr::mutate(
+    Habitat_complexity_PC1 = NA_real_
+  )
+
+M_C_data_pca$Habitat_complexity_PC1[complete.cases(habitat_vars)] <- pca_scores
+
+# Extract scores and loadings
+scores <- as.data.frame(habitat_pca$x[, 1:2])
+scores$Site <- rownames(scores)
+
+loadings <- as.data.frame(habitat_pca$rotation[, 1:2])
+loadings$Variable <- rownames(loadings)
+
+# Scale loadings for plotting
+loading_scale <- 3
+
+ggplot(scores, aes(PC1, PC2)) +
+  geom_point(alpha = 0.6) +
+  geom_segment(
+    data = loadings,
+    aes(x = 0, y = 0,
+        xend = PC1 * loading_scale,
+        yend = PC2 * loading_scale),
+    arrow = arrow(length = unit(0.2, "cm"))
+  ) +
+  geom_text(
+    data = loadings,
+    aes(x = PC1 * loading_scale,
+        y = PC2 * loading_scale,
+        label = Variable),
+    hjust = 0.5, vjust = -0.5
+  ) +
+  labs(
+    x = paste0("PC1 (", round(summary(habitat_pca)$importance[2,1] * 100, 1), "%)"),
+    y = paste0("PC2 (", round(summary(habitat_pca)$importance[2,2] * 100, 1), "%)")
+  )
 
 ```
