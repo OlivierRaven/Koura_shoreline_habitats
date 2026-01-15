@@ -233,20 +233,21 @@ Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
       TRUE ~ NA_character_),Date_Time_Numeric = as.numeric(Date_Time))
 
 habitat_classification <- Monitoring_CPUE_data %>%
-  dplyr::select(Monitoring_ID, DHT, Lake,
-                Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
-                Emergent_Native, Emergent_Non_Native, Submerged_Native, Submerged_Non_Native, Wood_cover) %>%
+  dplyr::select(
+    Monitoring_ID, DHT, Lake,
+    Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
+    Emergent_Native, Emergent_Non_Native,
+    Submerged_Native, Submerged_Non_Native, Wood_cover) %>%
   pivot_longer(
-    cols      = c(Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
-                  Emergent_Native, Emergent_Non_Native, Submerged_Native,
-                  Submerged_Non_Native, Wood_cover),
-    names_to  = "Type", values_to = "Percentage") %>%
+    cols = c(Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
+      Emergent_Native, Emergent_Non_Native,
+      Submerged_Native, Submerged_Non_Native, Wood_cover    ),
+    names_to = "Type",values_to = "Percentage") %>%
   group_by(Monitoring_ID) %>%
-  summarise(
-    Rocky_Percentage    = sum(Percentage[Type %in% c("Bedrock", "Boulders", "Cobble")], na.rm = TRUE),
-    Sand_Percentage     = sum(Percentage[Type == "Sand"], na.rm = TRUE),
-    Mud_Percentage      = sum(Percentage[Type %in% c("Mud", "Organic_matter")], na.rm = TRUE),
-    Emergent_Percentage = sum(Percentage[Type %in% c("Emergent_Native")], na.rm = TRUE),
+  summarise(Rocky_Percentage = sum(Percentage[Type %in% c("Bedrock", "Boulders", "Cobble")],    na.rm = TRUE),
+    Sand_Percentage = sum(Percentage[Type == "Sand"],  na.rm = TRUE),
+    Mud_Percentage = sum(Percentage[Type %in% c("Mud", "Organic_matter")],na.rm = TRUE),
+    Emergent_Percentage = sum(Percentage[Type == "Emergent_Native"],na.rm = TRUE),
     Substrate_index = sum(
       0.08 * Percentage[Type == "Bedrock"] +
       0.07 * Percentage[Type == "Boulders"] +
@@ -255,13 +256,35 @@ habitat_classification <- Monitoring_CPUE_data %>%
       0.03 * Percentage[Type == "Sand"] +
       0.02 * Percentage[Type == "Organic_matter"] +
       0.01 * Percentage[Type == "Mud"],
-      na.rm = TRUE),.groups = "drop") %>%
-  mutate(Habitat_Type = case_when(
-      Rocky_Percentage    > 25 ~ "Rocky",
+      na.rm = TRUE),
+    Substrate_CV = {
+      substrate_vals <- Percentage[
+        Type %in% c("Bedrock", "Boulders", "Cobble", "Gravel",
+                    "Sand", "Mud", "Organic_matter")]
+      substrate_vals <- substrate_vals[!is.na(substrate_vals)]
+      if (length(substrate_vals) > 1 && mean(substrate_vals) > 0) {
+        sd(substrate_vals) / mean(substrate_vals)
+      } else {
+        NA_real_
+      }
+    },
+    .groups = "drop"  ) %>%
+  mutate(
+    Habitat_Type = case_when(
+      Rocky_Percentage > 25 ~ "Rocky",
       Emergent_Percentage > 25 ~ "Emergent Macrophyte",
-      Sand_Percentage   >= Mud_Percentage ~ "Sandy",
+      Sand_Percentage >= Mud_Percentage ~ "Sandy",
       TRUE ~ "Muddy")) %>%
-  dplyr::select(Monitoring_ID, Habitat_Type, Substrate_index)
+  dplyr::select(
+    Monitoring_ID,
+    Habitat_Type,
+    Substrate_index,
+    Substrate_CV)
+
+cor(habitat_classification$Substrate_index,
+    habitat_classification$Substrate_CV,
+    use = "complete.obs")
+
 
 Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
   left_join(habitat_classification, by = c("Monitoring_ID"))
@@ -431,7 +454,7 @@ EnvBio_summary_table <- bind_rows(
 
 EnvBio_summary_table
 
-write.csv(EnvBio_summary_table, file = file.path(fig_dir, "EnvBio_summary_table.csv"),  row.names = FALSE)
+#write.csv(EnvBio_summary_table, file = file.path(fig_dir, "EnvBio_summary_table.csv"),  row.names = FALSE)
 ```
 
 # Kōura presence, CPUE, and BPUE plot 
@@ -2374,6 +2397,10 @@ write.csv(all_models_table, file=file.path(fig_dir,"table_gam_all_models.csv"), 
 
 # PCA test
 ```{r}
+# Comment Frank about the modeling:
+  # If you centered (on the mean) and standardized (scaled to unit variance) the predictors you could use the parameter estimates as an effect size to say something about the importance of the predictors (i.e. weak vs strong effects).
+
+
 # select shoreline habitat variables for PCA
 habitat_vars <- M_C_data %>%
   dplyr::select(
