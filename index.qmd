@@ -1,5 +1,5 @@
 ---
-title: "Kōura and their shoreline habitats"
+title: "Complex littoral habitats enhance freshwater crayfish populations"
 author: "Olivier V. Raven"
 format:
   html:
@@ -8,12 +8,14 @@ format:
 ---
 
 ## Overview
-This site accompanies the scientific work on: 'Understanding habitat preferences of freshwater crayfish in New Zealand lakes'
+This site accompanies the scientific work on: 'Complex littoral habitats enhance freshwater crayfish populations in five volcanic lakes
+of Aotearoa New Zealand'
 
 - **Code repository:** (add URL)
 - **Data DOI:** (add DOI link)
 - **Paper DOI:** (add DOI link)
-- **title:** Understanding habitat preferences of freshwater crayfish in New Zealand lakes
+- **title:** Complex littoral habitats enhance freshwater crayfish populations in five volcanic lakes
+of Aotearoa New Zealand
 
 # Load packages
 ```{r}
