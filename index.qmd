@@ -366,15 +366,6 @@ EnvBio_data <- bind_rows(
     Lake = factor(Lake, levels = lake_order),
     Variable = factor(Variable, levels = names(var_lab)))
 
-EnvBio_plot <- ggplot(EnvBio_data, aes(Lake, Value)) +
-  geom_boxplot(data = subset(EnvBio_data, Var_type == "Env")) +
-  geom_col(data = subset(EnvBio_data, Var_type == "Fish"), fill = "grey40") +
-  facet_wrap(~ Variable, scales = "free_y", ncol = 3, labeller = as_labeller(var_lab))
-
-EnvBio_plot
-
-ggsave(file.path(fig_dir, "EnvBio_plot.png"),EnvBio_plot,width = 10, height = 10,dpi = 300)
-
 
 # make into table 
 # helper for 95% CI (t-based)
@@ -1508,10 +1499,6 @@ final_plot_occupancy
 
 ggsave(filename = file.path(fig_dir, "Occupancy_panels.png"), plot = final_plot_occupancy, width = 180, height = 120, units = "mm", dpi = 1200)
 
-ggsave(filename = file.path(fig_dir, "final_p_occ_smooths.png"), plot = top_row, width = 180, height = 50, units = "mm", dpi = 1200)
-
-ggsave(filename = file.path(fig_dir, "Calibration_plot_occ.png"), plot = bottom_row, width = 180, height = 80, units = "mm", dpi = 1200)
-
 ```
 
 # CPUE: HURDLE
@@ -1693,14 +1680,6 @@ CPUE_panel_presence <- patchwork::wrap_plots(
   ncol = 3
 )
 CPUE_panel_presence
-
-ggsave(
-  file.path(fig_dir, "CPUE_panel_presence.png"),
-  CPUE_panel_presence,
-  width  = 14,
-  height = 5,
-  dpi    = 300
-)
 
 # ---------- Positives component (Gamma, log link)
 
@@ -2064,16 +2043,9 @@ BPUE_panel_presence <- patchwork::wrap_plots(
     as_plot(p_BPUE_pres_param),
     as_plot(p_BPUE_pres_roc)
   ),
-  ncol = 3
-)
+  ncol = 3)
+
 BPUE_panel_presence
-ggsave(
-  file.path(fig_dir, "BPUE_panel_presence.png"),
-  BPUE_panel_presence,
-  width  = 10,
-  height = 5,
-  dpi    = 300
-)
 
 # ---------- Positives component (Gamma, log link)
 
@@ -2308,44 +2280,6 @@ final_BPUE_pos <- mgcv::gam(formula(red_ml_BPUE_pos), data = Bpos, family = Gamm
 summary(final_BPUE_pos)
 mgcv::concurvity(final_BPUE_pos)
 gam.check(final_BPUE_pos)
-
-
-# plots for paper
-# OCC
-p_occ_smooths1 <-p_occ_smooths + patchwork::plot_layout(ncol = 5)
-#p_occ_param
-p_pres_roc
-Calibration_plot_occ
-occ_cal_plot<- (p_pres_roc + Calibration_plot_occ) + patchwork::plot_layout(ncol = 2)
-
-
-# CPUE # BPUE
-p_cpue_pos_smooths
-#p_cpue_pos_param
-p_cpue_pos_scatter
-
-p_BPUE_pos_smooths
-p_BPUE_pos_scatter
-
-
-ggsave(file.path(fig_dir, "p_occ_smooths.png"),       p_occ_smooths1, width  = 14, height = 5, dp = 300)
-ggsave(file.path(fig_dir, "p_occ_param.png"),         p_occ_param, width  = 5, height = 5, dpi = 300)
-ggsave(file.path(fig_dir, "p_pres_roc.png"),          p_pres_roc, width  = 5, height = 4, dpi = 300)
-ggsave(file.path(fig_dir, "Calibration_plot_occ.png"),Calibration_plot_occ, width  = 5, height = 4, dpi = 300)
-ggsave(file.path(fig_dir, "occ_cal_plot.png"),occ_cal_plot, width  = 10, height = 4, dpi = 300)
-
-ggsave(file.path(fig_dir, "p_cpue_pos_smooths.png"),  p_cpue_pos_smooths, width  = 5, height = 5, dpi = 300)
-ggsave(file.path(fig_dir, "p_cpue_pos_param.png"),    p_cpue_pos_param,   width  = 5, height = 5, dpi = 300)
-ggsave(file.path(fig_dir, "p_cpue_pos_scatter.png"),  p_cpue_pos_scatter, width  = 5, height = 5, dpi = 300)
-
-ggsave(file.path(fig_dir, "p_BPUE_pos_smooths.png"),  p_BPUE_pos_smooths, width  = 5, height = 5, dpi = 300)
-ggsave(file.path(fig_dir, "p_BPUE_pos_scatter.png"),  p_BPUE_pos_scatter, width  = 5, height = 5, dpi = 300)
-
-
-# Panels
-final_plot_occupancy
-CPUE_panel_positives
-BPUE_panel_positives
 
 
 
