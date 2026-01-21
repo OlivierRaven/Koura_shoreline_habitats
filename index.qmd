@@ -5,6 +5,13 @@ format:
   html:
     toc: true
     number-sections: true
+    code-fold: true
+    code-summary: "Show code"
+    code-tools: true
+execute:
+  freeze: auto
+  warning: false
+  message: false
 ---
 
 ## Overview
@@ -14,20 +21,27 @@ of Aotearoa New Zealand'
 - **Code repository:** (add URL)
 - **Data DOI:** (add DOI link)
 - **Paper DOI:** (add DOI link)
-- **title:** Complex littoral habitats enhance freshwater crayfish populations in five volcanic lakes
-of Aotearoa New Zealand
+- **Title:** Complex littoral habitats enhance freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand
 
-# Load packages
+## Setup
+
 ```{r}
-# Define the list of packages
-packages <- c("emmeans","rstatix", "multcompView","brglm2","patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
+#| label: setup
+#| include: false
 
-# Load packages if not already installed
+packages <- c(
+  "emmeans","rstatix","multcompView","brglm2","patchwork","gratia","pROC","caret",
+  "mgcv","tidyr","purrr","corrplot","glmmTMB","performance","tibble","tidyverse",
+  "dplyr","writexl","readxl"
+)
+
 quiet_load <- function(pkg) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    suppressWarnings(suppressMessages(install.packages(pkg, dependencies = TRUE)))}
+    suppressWarnings(suppressMessages(install.packages(pkg, dependencies = TRUE)))
+  }
   suppressPackageStartupMessages(require(pkg, character.only = TRUE, quietly = TRUE))
-  invisible(TRUE)}
+  invisible(TRUE)
+}
 
 invisible(lapply(packages, quiet_load))
 
