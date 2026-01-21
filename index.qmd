@@ -27,7 +27,6 @@ This site accompanies the scientific work on: *Complex littoral habitats enhance
 
 ```{r}
 #| label: setup
-#| include: false
 
 packages <- c(
   "emmeans","rstatix","multcompView","brglm2","patchwork","gratia","pROC","caret",
@@ -66,7 +65,7 @@ clean_smooth_title <- function(x) {
 # Data import
 ```{r}
 #| label: load-data
-#| include: false
+
 
 exc_file_dir <- "data/raw/Natural_habitat.xlsx"
 der_data_dir <- "data/derived"
@@ -92,7 +91,7 @@ Macroinvertebrates <- Macroinvertebrates |> dplyr::filter(!stringr::str_ends(Mon
 #| fig-width: 6
 #| fig-height: 4
 #| dpi: 120
-#| fig-cap: "Length–weight relationship for kōura (OCL length vs predicted weight)."
+#| fig-cap: "Fig. S1 Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot."
 
 lw_model <- lm(
 log10(Weight_g) ~ log10(Length_mm),
@@ -147,20 +146,14 @@ legend.text = element_text(face = "plain"),
 panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
 )
 
+ggsave(filename = file.path(fig_dir, "lengt_weight_plot.png"),plot = lengt_weight_plot,width = 170, height = 120, units = "mm", dpi = 1200)
+
 lengt_weight_plot
-
-ggsave(
-filename = file.path(fig_dir, "lengt_weight_plot.png"),
-plot = lengt_weight_plot,
-width = 170, height = 120, units = "mm", dpi = 1200
-)
-
 ```
 
 ## CPUE and BPUE tables
 ```{r}
 #| label: cpue-bpue
-#| include: false
 
 CPUE_BPUE_legacy <- Fish_data %>%
 filter(!is.na(Species)) %>%
@@ -229,13 +222,14 @@ Richness  = rowSums(dplyr::select(., starts_with("Total_Individuals_")) > 0),
 Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_with(c("_Bullies", "_Common_smelt"))))
 )
 
+
+
 ```
 
 
 # Combined dataset and habitat classification
 ```{r}
 #| label: combine-data
-#| include: false
 
 unit_metadata <- Monitoring_data %>%
 dplyr::select(Parameter, Unit) %>%
@@ -390,7 +384,6 @@ use = "complete.obs"
 # Environmental and fish summaries (tables)
 ```{r}
 #| label: env-fish-summary
-#| include: false
 
 M_C_data <- Monitoring_CPUE_data
 lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
@@ -455,7 +448,7 @@ write.csv(EnvBio_summary_table,file = file.path(fig_dir, "EnvBio_summary_table.c
 #| fig-width: 6
 #| fig-height: 7
 #| dpi: 120
-#| fig-cap: "Kōura presence, CPUE, and BPUE by lake."
+#| fig-cap: "Fig. 2 Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range)."
 
 plot_koura_stats <- function(data, y_var, y_label,
 type = c("continuous", "presence"),
@@ -562,7 +555,6 @@ bpue_pairs
 ## Helpers
 ```{r}
 #| label: gam-helpers
-#| include: false
 
 Modeling_data <- Monitoring_CPUE_data
 
@@ -960,13 +952,15 @@ patchwork::wrap_plots(plots, ncol = 1)
 ## Occupancy model (presence/absence)
 ```{r}
 #| label: occupancy-model
-#| fig-width: 14
-#| fig-height: 8
-#| dpi: 120
+#| fig-width: 7.1
+#| fig-height: 4.7
+#| dpi: 300
 #| echo: false
 #| results: hide
 #| warning: false
 #| message: false
+#| fig-cap: "Fig. 3 Kōura occupancy GAMM results and model performance. a) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. b) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. c) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration."
+
 
 PData <- prepare_block(Modeling_data, "Presence_Kōura", vars_common)
 
@@ -1176,23 +1170,22 @@ bottom_row <- (p_pres_roc + Calibration_plot_occ) + patchwork::plot_layout(ncol 
 
 final_plot_occupancy <- (top_row / bottom_row)
 
+ggsave(filename = file.path(fig_dir, "Occupancy_panels.png"), plot = final_plot_occupancy,  width = 180, height = 120, units = "mm", dpi = 1200)
+
 final_plot_occupancy
-
-ggsave(
-  filename = file.path(fig_dir, "Occupancy_panels.png"), plot = final_plot_occupancy,  width = 180, height = 120, units = "mm", dpi = 1200)
-
 ```
 
 ## CPUE hurdle model
 ```{r}
 #| label: cpue-hurdle
-#| fig-width: 10
-#| fig-height: 5
+#| fig-width: 5.1
+#| fig-height: 4.7
 #| dpi: 120
 #| echo: false
 #| results: hide
 #| warning: false
 #| message: false
+#| fig-cap: "Fig. 4 Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native vegetation, shown with partial effects and 95% confidence intervals. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 CData <- prepare_block(Modeling_data, "Weighted_CPUE_Kōura", vars_common) %>%
 dplyr::mutate(CPUE_pos = as.integer(Weighted_CPUE_Kōura > 0))
@@ -1204,121 +1197,7 @@ names(CData),
 c("CPUE_pos", id, "Weighted_CPUE_Kōura", "Weighted_CPUE_Koura", "CPUE")
 )
 
-vif_cpue_pres <- remove_high_vif_glmBI(
-CData,
-"CPUE_pos",
-pred_fixed_cpue_pres,
-threshold    = vif_thresh,
-protect_vars = character(0)
-)
-kept_fixed_cpue_pres <- vif_cpue_pres$predictors
 
-vars_step_cpue_pres <- c(kept_fixed_cpue_pres, if (INCLUDE_RE) id)
-
-rhs_cpue_pres <- paste(
-vapply(
-vars_step_cpue_pres,
-function(v) build_smooth_gam(v, CData, custom_k, include_re_for_LID = INCLUDE_RE),
-character(1)
-),
-collapse = " + "
-)
-
-full_ml_cpue_pres <- mgcv::gam(
-as.formula(paste("CPUE_pos ~", rhs_cpue_pres)),
-data   = CData,
-family = binomial(link = "logit"),
-method = "ML",
-select = TRUE
-)
-
-remaining_cpue_pres <- vars_step_cpue_pres
-protected_step_vars <- if (INCLUDE_RE) id else character(0)
-
-repeat {
-rhs_now <- paste(
-vapply(
-remaining_cpue_pres,
-function(v) build_smooth_gam(v, CData, custom_k, include_re_for_LID = INCLUDE_RE),
-character(1)
-),
-collapse = " + "
-)
-
-m_now <- mgcv::gam(
-as.formula(paste("CPUE_pos ~", rhs_now)),
-data   = CData,
-family = binomial(link = "logit"),
-method = "ML",
-select = TRUE
-)
-sm <- summary(m_now)
-
-ps <- c()
-if (!is.null(sm$p.table) && nrow(sm$p.table) > 0) {
-pcol <- intersect(colnames(sm$p.table), c("Pr(>|t|)", "Pr(>|z|)"))[1]
-pvec <- sm$p.table[, pcol]
-ps   <- c(ps, pvec[names(pvec) != "(Intercept)"])
-}
-if (!is.null(sm$s.table) && nrow(sm$s.table) > 0) {
-pvec <- sm$s.table[, "p-value"]
-names(pvec) <- rownames(sm$s.table)
-ps   <- c(ps, pvec)
-}
-drop_candidates <- ps[ps > p_cutoff_ml]
-if (!length(drop_candidates)) { red_ml_cpue_pres <- m_now; break }
-
-ordered <- names(sort(drop_candidates, decreasing = TRUE))
-ordered_vars <- vapply(
-ordered,
-function(x) if (grepl("^s\\(", x)) sub("^s\\(([^,]+).*\\)$", "\\1", x) else x,
-character(1)
-)
-
-ordered_vars <- setdiff(ordered_vars, protected_step_vars)
-if (!length(ordered_vars)) { red_ml_cpue_pres <- m_now; break }
-
-remove_v <- ordered_vars[1]
-remaining_cpue_pres <- setdiff(remaining_cpue_pres, remove_v)
-if (!length(remaining_cpue_pres)) { red_ml_cpue_pres <- m_now; break }
-}
-
-final_cpue_pres <- mgcv::gam(
-formula(red_ml_cpue_pres),
-data   = CData,
-family = binomial(link = "logit"),
-method = "REML",
-select = TRUE
-)
-
-p_cpue_pres_smooths <- gratia::draw(final_cpue_pres)
-p_cpue_pres_param <- parametric_panel(
-final_cpue_pres,
-CData,
-alpha       = alpha_sig,
-exclude     = c("LID"),
-family      = "binomial",
-fish_covars = fish_vars
-)
-
-pred_pres <- predict(final_cpue_pres, type = "response", exclude = exclude_if_RE(final_cpue_pres))
-obs_pres  <- CData$CPUE_pos
-roc_obj   <- pROC::roc(obs_pres, pred_pres)
-auc_val   <- as.numeric(pROC::auc(roc_obj))
-roc_df    <- data.frame(tpr = roc_obj$sensitivities, fpr = 1 - roc_obj$specificities)
-
-p_cpue_pres_roc <- ggplot(roc_df, aes(fpr, tpr)) +
-geom_path(colour = "black", linewidth = 0.5) +
-geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "black", linewidth = 0.4) +
-annotate("text", x = 0.6, y = 0.1, label = paste0("AUC = ", round(auc_val, 3)), size = 3) +
-labs(x = "False positive rate", y = "True positive rate") +
-base_theme_bw
-
-CPUE_panel_presence <- patchwork::wrap_plots(
-list(as_plot(p_cpue_pres_smooths), as_plot(p_cpue_pres_param), as_plot(p_cpue_pres_roc)),
-ncol = 3
-)
-CPUE_panel_presence
 
 Cpos <- dplyr::filter(CData, CPUE_pos == 1L)
 
@@ -1444,172 +1323,41 @@ base_theme_bw
 CPUE_panel_positives <- (p_cpue_pos_smooths / p_cpue_pos_scatter) +
 patchwork::plot_layout(heights = c(1, 2))
 
-CPUE_panel_positives
+ggsave(filename = file.path(fig_dir, "CPUE_panel_positives.png"),plot = CPUE_panel_positives,width = 130, height = 120, units = "mm", dpi = 1200)
 
-ggsave(
-filename = file.path(fig_dir, "CPUE_panel_positives.png"),
-plot = CPUE_panel_positives,
-width = 130, height = 120, units = "mm", dpi = 1200
-)
+CPUE_panel_positives
 ```
 
-# BPUE: HURDLE
+## BPUE hurdle model
 ```{r}
 #| label: bpue-hurdle
-#| fig-width: 10
-#| fig-height: 5
-#| dpi: 120
+#| fig-width: 3.9
+#| fig-height: 4.7
+#| dpi: 300
 #| echo: false
 #| results: hide
 #| warning: false
 #| message: false
+#| fig-cap: "Fig. 5 Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 BData <- prepare_block(Modeling_data, "Weighted_BPUE_Kōura", vars_common) %>%
 dplyr::mutate(BPUE_pos = as.integer(Weighted_BPUE_Kōura > 0))
 
 id <- "LID"
 
-pred_fixed_BPUE_pres <- setdiff(
-names(BData),
-c("BPUE_pos", id, "Weighted_BPUE_Kōura", "Weighted_BPUE_Koura", "Weighted_BPUE")
-)
-
-vif_BPUE_pres <- remove_high_vif_glmBI(
-BData,
-"BPUE_pos",
-pred_fixed_BPUE_pres,
-threshold    = vif_thresh,
-protect_vars = character(0)
-)
-kept_fixed_BPUE_pres <- vif_BPUE_pres$predictors
-
-vars_step_BPUE_pres <- c(kept_fixed_BPUE_pres, if (INCLUDE_RE) id)
-
-rhs_BPUE_pres <- paste(
-vapply(
-vars_step_BPUE_pres,
-function(v) build_smooth_gam(v, BData, custom_k, include_re_for_LID = INCLUDE_RE),
-character(1)
-),
-collapse = " + "
-)
-
-full_ml_BPUE_pres <- mgcv::gam(
-as.formula(paste("BPUE_pos ~", rhs_BPUE_pres)),
-data   = BData,
-family = binomial(link = "logit"),
-method = "ML",
-select = TRUE
-)
-
-remaining_BPUE_pres <- vars_step_BPUE_pres
-protected_step_vars_b <- if (INCLUDE_RE) id else character(0)
-
-repeat {
-rhs_now <- paste(
-vapply(
-remaining_BPUE_pres,
-function(v) build_smooth_gam(v, BData, custom_k, include_re_for_LID = INCLUDE_RE),
-character(1)
-),
-collapse = " + "
-)
-m_now <- mgcv::gam(
-as.formula(paste("BPUE_pos ~", rhs_now)),
-data   = BData,
-family = binomial(link = "logit"),
-method = "ML",
-select = TRUE
-)
-sm <- summary(m_now)
-
-ps <- c()
-if (!is.null(sm$p.table) && nrow(sm$p.table) > 0) {
-pcol <- intersect(colnames(sm$p.table), c("Pr(>|t|)", "Pr(>|z|)"))[1]
-pvec <- sm$p.table[, pcol]
-ps   <- c(ps, pvec[names(pvec) != "(Intercept)"])
-}
-if (!is.null(sm$s.table) && nrow(sm$s.table) > 0) {
-pvec <- sm$s.table[, "p-value"]
-names(pvec) <- rownames(sm$s.table)
-ps   <- c(ps, pvec)
-}
-drop_candidates <- ps[ps > p_cutoff_ml]
-if (!length(drop_candidates)) { red_ml_BPUE_pres <- m_now; break }
-
-ordered <- names(sort(drop_candidates, decreasing = TRUE))
-ordered_vars <- vapply(
-ordered,
-function(x) if (grepl("^s\\(", x)) sub("^s\\(([^,]+).*\\)$", "\\1", x) else x,
-character(1)
-)
-
-ordered_vars <- setdiff(ordered_vars, protected_step_vars_b)
-if (!length(ordered_vars)) { red_ml_BPUE_pres <- m_now; break }
-
-remove_v <- ordered_vars[1]
-remaining_BPUE_pres <- setdiff(remaining_BPUE_pres, remove_v)
-if (!length(remaining_BPUE_pres)) { red_ml_BPUE_pres <- m_now; break }
-}
-
-final_BPUE_pres <- mgcv::gam(
-formula(red_ml_BPUE_pres),
-data   = BData,
-family = binomial(link = "logit"),
-method = "REML",
-select = TRUE
-)
-
-p_BPUE_pres_smooths <- gratia::draw(final_BPUE_pres)
-p_BPUE_pres_param <- parametric_panel(
-final_BPUE_pres,
-BData,
-alpha       = alpha_sig,
-exclude     = c("LID"),
-family      = "binomial",
-fish_covars = fish_vars
-)
-
-pred_pres_b <- predict(final_BPUE_pres, type = "response", exclude = exclude_if_RE(final_BPUE_pres))
-obs_pres_b  <- BData$BPUE_pos
-roc_obj_b   <- pROC::roc(obs_pres_b, pred_pres_b)
-auc_val_b   <- as.numeric(pROC::auc(roc_obj_b))
-roc_df_b    <- data.frame(tpr = roc_obj_b$sensitivities, fpr = 1 - roc_obj_b$specificities)
-
-p_BPUE_pres_roc <- ggplot(roc_df_b, aes(fpr, tpr)) +
-geom_path(colour = "black", linewidth = 0.5) +
-geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "black", linewidth = 0.4) +
-annotate("text", x = 0.6, y = 0.1, label = paste0("AUC = ", round(auc_val_b, 3)), size = 3) +
-labs(x = "False positive rate", y = "True positive rate") +
-base_theme_bw
-
-BPUE_panel_presence <- patchwork::wrap_plots(
-list(as_plot(p_BPUE_pres_smooths), as_plot(p_BPUE_pres_param), as_plot(p_BPUE_pres_roc)),
-ncol = 3
-)
-BPUE_panel_presence
+pred_fixed_BPUE_pres <- setdiff(names(BData),c("BPUE_pos", id, "Weighted_BPUE_Kōura", "Weighted_BPUE_Koura", "Weighted_BPUE"))
 
 Bpos <- dplyr::filter(BData, BPUE_pos == 1L)
 
 pred_fixed_BPUE_pos <- setdiff(names(Bpos), c("Weighted_BPUE_Kōura", id))
 
-vif_BPUE_pos <- remove_high_vif_glmmTMB(
-Bpos,
-"Weighted_BPUE_Kōura",
-pred_fixed_BPUE_pos,
-threshold    = vif_thresh,
-protect_vars = character(0)
-)
+vif_BPUE_pos <- remove_high_vif_glmmTMB(Bpos,"Weighted_BPUE_Kōura",pred_fixed_BPUE_pos,threshold = vif_thresh,protect_vars = character(0))
 kept_fixed_BPUE_pos <- vif_BPUE_pos$predictors
 
 vars_step_BPUE_pos <- c(kept_fixed_BPUE_pos, if (INCLUDE_RE) id)
 
-rhs_BPUE_pos <- paste(
-vapply(
-vars_step_BPUE_pos,
-function(v) build_smooth_gam(v, Bpos, custom_k, include_re_for_LID = INCLUDE_RE),
-character(1)
-),
+rhs_BPUE_pos <- paste(vapply(vars_step_BPUE_pos,function(v) build_smooth_gam(v, Bpos, custom_k, include_re_for_LID = INCLUDE_RE),
+character(1)),
 collapse = " + "
 )
 
@@ -1713,20 +1461,15 @@ base_theme_bw
 BPUE_panel_positives <- (p_BPUE_pos_smooths / p_BPUE_pos_scatter) +
 patchwork::plot_layout(heights = c(1, 2))
 
-BPUE_panel_positives
+ggsave(filename = file.path(fig_dir, "BPUE_panel_positives.png"),plot = BPUE_panel_positives,width = 100, height = 120, units = "mm", dpi = 1200)
 
-ggsave(
-filename = file.path(fig_dir, "BPUE_panel_positives.png"),
-plot = BPUE_panel_positives,
-width = 100, height = 120, units = "mm", dpi = 1200
-)
+BPUE_panel_positives
 
 ```
 
 ## Model tables (exports)
 ```{r}
 #| label: model-tables
-#| include: false
 
 gam_results_table <- function(model, model_name = deparse(substitute(model)), digits = 3) {
 sm <- summary(model)
