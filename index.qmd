@@ -368,6 +368,9 @@ left_join(habitat_classification, by = "Monitoring_ID")
 writexl::write_xlsx(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.xlsx"))
 write.csv(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.csv"), row.names = FALSE)
 write.csv(habitat_classification, file.path(der_data_dir, "habitat_classification.csv"), row.names = FALSE)
+
+head(Monitoring_CPUE_data)
+
 ```
 
 ```{r}
@@ -440,6 +443,7 @@ arrange(Var_type, Variable, Lake)
 
 write.csv(EnvBio_summary_table,file = file.path(fig_dir, "EnvBio_summary_table.csv"),row.names = FALSE)
 
+EnvBio_summary_table
 ```
 
 # Kōura response summaries by lake
