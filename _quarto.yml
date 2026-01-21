@@ -8,14 +8,6 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - text: Analysis
-        menu:
-          - href: analysis/01-import.qmd
-            text: Import
-          - href: analysis/02-clean.qmd
-            text: Clean
-          - href: analysis/03-model.qmd
-            text: Model
 
 format:
   html:

@@ -19,8 +19,6 @@ of Aotearoa New Zealand
 
 # Load packages
 ```{r}
-cat("\014"); rm(list = ls())
-
 # Define the list of packages
 packages <- c("emmeans","rstatix", "multcompView","brglm2","patchwork", "gratia","pROC","caret", "mgcv","tidyr","purrr", "corrplot","glmmTMB", "performance","tibble", "tidyverse", "dplyr","writexl", "readxl")
 
