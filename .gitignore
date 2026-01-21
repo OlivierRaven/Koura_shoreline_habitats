@@ -5,3 +5,5 @@
 *.R
 *.Rproj
 *.quarto
+
+/.quarto/

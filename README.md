@@ -66,4 +66,4 @@ The code is fully self-contained and relies only on publicly available R package
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/USERNAME/REPOSITORY_NAME.git
+   git clone https://github.com/OlivierRaven/Koura_shoreline_habitats.git
