@@ -375,8 +375,6 @@ head(Monitoring_CPUE_data)
 
 ```{r}
 #| label: habitat-correlation
-#| echo: false
-
 cor(
 habitat_classification$Substrate_index,
 habitat_classification$Substrate_CV,
@@ -540,18 +538,14 @@ pres_lrt <- drop1(m_koura_pres, test = "Chisq")
 cpue_lrt <- drop1(m_koura_cpue, test = "Chisq")
 bpue_lrt <- drop1(m_koura_bpue, test = "Chisq")
 
-pres_lrt
-cpue_lrt
-bpue_lrt
-
 # Pairwise lake comparisons (BH-adjusted)
 pres_pairs <- pairs(emmeans(m_koura_pres, ~ Lake, type = "response"), adjust = "BH")
 cpue_pairs <- pairs(emmeans(m_koura_cpue, ~ Lake, type = "response"), adjust = "BH")
 bpue_pairs <- pairs(emmeans(m_koura_bpue, ~ Lake, type = "response"), adjust = "BH")
 
-pres_pairs
-cpue_pairs
-bpue_pairs
+pres_lrt
+cpue_lrt
+bpue_lrt
 
 ```
 
@@ -959,7 +953,6 @@ patchwork::wrap_plots(plots, ncol = 1)
 #| fig-width: 7.1
 #| fig-height: 4.7
 #| dpi: 300
-#| echo: false
 #| results: hide
 #| warning: false
 #| message: false
@@ -1185,7 +1178,6 @@ final_plot_occupancy
 #| fig-width: 5.1
 #| fig-height: 4.7
 #| dpi: 120
-#| echo: false
 #| results: hide
 #| warning: false
 #| message: false
@@ -1338,7 +1330,6 @@ CPUE_panel_positives
 #| fig-width: 3.9
 #| fig-height: 4.7
 #| dpi: 300
-#| echo: false
 #| results: hide
 #| warning: false
 #| message: false
@@ -1572,7 +1563,6 @@ write.csv(all_models_table, file = file.path(fig_dir, "table_gam_all_models.csv"
   # If you centered (on the mean) and standardized (scaled to unit variance) the predictors you could use the parameter estimates as an effect size to say something about the importance of the predictors (i.e. weak vs strong effects).
 
 #| label: pca
-#| echo: false
 
 habitat_vars <- M_C_data %>%
 dplyr::select(
@@ -1586,8 +1576,5 @@ Submerged_Native
 dplyr::filter(complete.cases(.))
 
 habitat_pca <- prcomp(habitat_vars, center = TRUE, scale. = TRUE)
-
-summary(habitat_pca)
-habitat_pca$rotation
 
 ```
