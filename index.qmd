@@ -24,7 +24,6 @@ This site accompanies the scientific work on: *Complex littoral habitats enhance
 - **Title:** Complex littoral habitats enhance freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand
 
 ## Setup
-
 ```{r}
 #| label: setup
 
@@ -54,6 +53,8 @@ base_theme_bw <- theme_classic() +
     panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
   )
 
+theme_set(base_theme_bw)
+
 clean_smooth_title <- function(x) {
   x <- gsub("^s\\((.*)\\)$", "\\1", x)
   x <- gsub("_", " ", x)
@@ -65,7 +66,6 @@ clean_smooth_title <- function(x) {
 # Data import
 ```{r}
 #| label: load-data
-
 
 exc_file_dir <- "data/raw/Natural_habitat.xlsx"
 der_data_dir <- "data/derived"
@@ -128,27 +128,17 @@ formula_text <- paste0(
 " * log10(OCL Length[mm])"
 )
 
-lengt_weight_plot <- ggplot(
+length_weight_plot <- ggplot(
 Fish_data |> dplyr::filter(is_koura),
-aes(x = Length_mm, y = Predicted_weight, shape = Weight_source)
-) +
+aes(x = Length_mm, y = Predicted_weight, shape = Weight_source)) +
 geom_point(size = 2.2, colour = "black", stroke = 0.6) +
 scale_shape_manual(values = c("measured" = 16, "predicted" = 1)) +
 labs(x = "OCL length (mm)", y = "Weight (g)", shape = "Weight source") +
-annotate("text", x = Inf, y = Inf, label = formula_text, hjust = 1.1, vjust = 1.3, size = 3) +
-theme_classic() +
-theme(
-text = element_text(family = "Arial", size = 8),
-axis.title = element_text(face = "plain"),
-axis.text = element_text(face = "plain"),
-legend.title = element_text(face = "plain"),
-legend.text = element_text(face = "plain"),
-panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
-)
+annotate("text", x = Inf, y = Inf, label = formula_text, hjust = 1.1, vjust = 1.3, size = 3) 
 
-ggsave(filename = file.path(fig_dir, "lengt_weight_plot.png"),plot = lengt_weight_plot,width = 170, height = 120, units = "mm", dpi = 1200)
+ggsave(filename = file.path(fig_dir, "length_weight_plot.png"),plot = length_weight_plot,width = 170, height = 120, units = "mm", dpi = 1200)
 
-lengt_weight_plot
+length_weight_plot
 ```
 
 ## CPUE and BPUE tables
@@ -369,13 +359,13 @@ head(Monitoring_CPUE_data)
 
 ```
 
+## habitat-correlation
 ```{r}
 #| label: habitat-correlation
-cor(
-habitat_classification$Substrate_index,
+
+cor(habitat_classification$Substrate_index,
 habitat_classification$Substrate_CV,
-use = "complete.obs"
-)
+use = "complete.obs")
 ```
 
 # Environmental and fish summaries (tables)
@@ -387,57 +377,194 @@ lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
 M_C_data$Lake <- factor(M_C_data$Lake, levels = lake_order)
 
 ci95 <- function(x) {
-x <- x[!is.na(x)]
-n <- length(x)
-if (n < 2) return(c(NA_real_, NA_real_))
-se <- sd(x) / sqrt(n)
-tcrit <- qt(0.975, df = n - 1)
-m <- mean(x)
-c(m - tcrit * se, m + tcrit * se)
+  x <- x[!is.na(x)]
+  n <- length(x)
+  if (n < 2) return(c(NA_real_, NA_real_))
+  se <- sd(x) / sqrt(n)
+  tcrit <- qt(0.975, df = n - 1)
+  m <- mean(x)
+  c(m - tcrit * se, m + tcrit * se)
 }
 
+# ---- unit lookup from the raw Monitoring_data sheet ----
+# Monitoring_data uses Parameter + Unit; your summary uses Variable names.
+# Create a mapping from your Variable names -> Monitoring_data$Parameter values.
+unit_lookup <- Monitoring_data %>%
+  dplyr::select(Parameter, Unit) %>%
+  dplyr::distinct() %>%
+  dplyr::mutate(
+    Variable = dplyr::case_when(
+      Parameter == "Riparian_vegetation"       ~ "Riparian_vegetation",
+      Parameter == "Overhanging_trees"         ~ "Overhanging_trees",
+      Parameter == "Wood_cover"                ~ "Wood_cover",
+      Parameter == "Temperature"               ~ "Temperature",
+      Parameter == "DO_mgl"                    ~ "DO_mgl",
+      Parameter == "pH"                        ~ "pH",
+      Parameter == "Specific_conductivity"     ~ "Specific_conductivity",
+      Parameter == "Substrate_index"           ~ "Substrate_index",
+      Parameter == "Slope_5m"                  ~ "Slope_5m",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  dplyr::filter(!is.na(Variable)) %>%
+  dplyr::select(Variable, Unit) %>%
+  dplyr::distinct()
+
+# Add units for derived variables (not in Monitoring_data)
+derived_units <- tibble::tibble(
+  Variable = c("Emergent_vegetation", "Submerged_vegetation"),
+  Unit     = c("%", "%")
+)
+
+# Fish presence units (binary)
+fish_units <- tibble::tibble(
+  Variable = c(
+    "Presence_Eel","Presence_Common_smelt","Presence_Catfish",
+    "Presence_Goldfish","Presence_Kōaro","Presence_Trout"
+  ),
+  Unit = ""
+)
+
+unit_lookup_all <- dplyr::bind_rows(unit_lookup, derived_units, fish_units) %>%
+  dplyr::distinct(Variable, .keep_all = TRUE)
+
+# ---- Environmental summary ----
 Env_data <- M_C_data %>%
-mutate(Emergent_vegetation  = Emergent_Native + Emergent_Non_Native,
-Submerged_vegetation = Submerged_Native + Submerged_Non_Native) %>%
-select(Lake, Substrate_index, Slope_5m, Riparian_vegetation, Overhanging_trees, Wood_cover,
-Temperature, DO_mgl, pH, Specific_conductivity, Emergent_vegetation, Submerged_vegetation) %>%
-pivot_longer(-Lake, names_to = "Variable", values_to = "Value")
+  dplyr::mutate(
+    Emergent_vegetation  = Emergent_Native + Emergent_Non_Native,
+    Submerged_vegetation = Submerged_Native + Submerged_Non_Native
+  ) %>%
+  dplyr::select(
+    Lake, Substrate_index, Slope_5m, Riparian_vegetation, Overhanging_trees, Wood_cover,
+    Temperature, DO_mgl, pH, Specific_conductivity, Emergent_vegetation, Submerged_vegetation
+  ) %>%
+  tidyr::pivot_longer(-Lake, names_to = "Variable", values_to = "Value")
 
 Env_summary_table <- Env_data %>%
-group_by(Lake, Variable) %>%
-summarise(
-n       = sum(!is.na(Value)),
-Mean    = mean(Value, na.rm = TRUE),
-Median  = median(Value, na.rm = TRUE),
-Min     = min(Value, na.rm = TRUE),
-Max     = max(Value, na.rm = TRUE),
-CI_low  = ci95(Value)[1],
-CI_high = ci95(Value)[2],
-.groups = "drop")
+  dplyr::group_by(Lake, Variable) %>%
+  dplyr::summarise(
+    n       = sum(!is.na(Value)),
+    Mean    = mean(Value, na.rm = TRUE),
+    Median  = median(Value, na.rm = TRUE),
+    Min     = min(Value, na.rm = TRUE),
+    Max     = max(Value, na.rm = TRUE),
+    CI_low  = ci95(Value)[1],
+    CI_high = ci95(Value)[2],
+    .groups = "drop"
+  )
 
-Fish_summary_table <- M_C_data %>%
-select(Lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish, Presence_Goldfish, Presence_Kōaro, Presence_Trout) %>%
-pivot_longer(-Lake, names_to = "Variable", values_to = "Presence") %>%
-group_by(Lake, Variable) %>%
-summarise(
-n       = sum(!is.na(Presence)),
-Mean    = mean(Presence, na.rm = TRUE),
-Median  = median(Presence, na.rm = TRUE),
-Min     = min(Presence, na.rm = TRUE),
-Max     = max(Presence, na.rm = TRUE),
-CI_low  = ci95(Presence)[1],
-CI_high = ci95(Presence)[2],
-.groups = "drop")
+Env_summary_all <- Env_data %>%
+  dplyr::group_by(Variable) %>%
+  dplyr::summarise(
+    Lake    = "All lakes",
+    n       = sum(!is.na(Value)),
+    Mean    = mean(Value, na.rm = TRUE),
+    Median  = median(Value, na.rm = TRUE),
+    Min     = min(Value, na.rm = TRUE),
+    Max     = max(Value, na.rm = TRUE),
+    CI_low  = ci95(Value)[1],
+    CI_high = ci95(Value)[2],
+    .groups = "drop"
+  ) %>%
+  dplyr::select(Lake, dplyr::everything())
 
-EnvBio_summary_table <- bind_rows(
-Env_summary_table %>% mutate(Var_type = "Env"),
-Fish_summary_table %>% mutate(Var_type = "Fish")) %>%
-select(Lake, Var_type, Variable, n, Mean, Median, Min, Max, CI_low, CI_high) %>%
-arrange(Var_type, Variable, Lake)
+Env_summary_table <- dplyr::bind_rows(Env_summary_table, Env_summary_all)
 
-write.csv(EnvBio_summary_table,file = file.path(fig_dir, "EnvBio_summary_table.csv"),row.names = FALSE)
+# ---- Fish presence summary ----
+Fish_data_long <- M_C_data %>%
+  dplyr::select(
+    Lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish,
+    Presence_Goldfish, Presence_Kōaro, Presence_Trout
+  ) %>%
+  tidyr::pivot_longer(-Lake, names_to = "Variable", values_to = "Presence")
 
-EnvBio_summary_table
+Fish_summary_table <- Fish_data_long %>%
+  dplyr::group_by(Lake, Variable) %>%
+  dplyr::summarise(
+    n       = sum(!is.na(Presence)),
+    Mean    = mean(Presence, na.rm = TRUE),
+    Median  = median(Presence, na.rm = TRUE),
+    Min     = min(Presence, na.rm = TRUE),
+    Max     = max(Presence, na.rm = TRUE),
+    CI_low  = ci95(Presence)[1],
+    CI_high = ci95(Presence)[2],
+    .groups = "drop"
+  )
+
+Fish_summary_all <- Fish_data_long %>%
+  dplyr::group_by(Variable) %>%
+  dplyr::summarise(
+    Lake    = "All lakes",
+    n       = sum(!is.na(Presence)),
+    Mean    = mean(Presence, na.rm = TRUE),
+    Median  = median(Presence, na.rm = TRUE),
+    Min     = min(Presence, na.rm = TRUE),
+    Max     = max(Presence, na.rm = TRUE),
+    CI_low  = ci95(Presence)[1],
+    CI_high = ci95(Presence)[2],
+    .groups = "drop"
+  ) %>%
+  dplyr::select(Lake, dplyr::everything())
+
+Fish_summary_table <- dplyr::bind_rows(Fish_summary_table, Fish_summary_all)
+
+# ---- Combine + attach units + make Variable labels pretty ----
+EnvBio_summary_table <- dplyr::bind_rows(Env_summary_table, Fish_summary_table) %>%
+  dplyr::left_join(unit_lookup_all, by = "Variable") %>%
+  dplyr::mutate(
+    Variable = dplyr::recode(
+      Variable,
+      Substrate_index       = "Substrate index",
+      Slope_5m              = "Slope 5m",
+      Riparian_vegetation   = "Riparian vegetation",
+      Overhanging_trees     = "Overhanging trees",
+      Wood_cover            = "Wood cover",
+      Emergent_vegetation   = "Emergent vegetation",
+      Submerged_vegetation  = "Submerged vegetation",
+      Temperature           = "Temperature",
+      DO_mgl                = "Dissolved oxygen",
+      Specific_conductivity = "Specific conductivity",
+      pH                    = "pH",
+      Presence_Catfish      = "Presence Catfish",
+      Presence_Eel          = "Presence Eel",
+      Presence_Goldfish     = "Presence Goldfish",
+      Presence_Common_smelt = "Presence Common smelt",
+      Presence_Kōaro        = "Presence Kōaro",
+      Presence_Trout        = "Presence Trout"
+    ),
+    Unit = dplyr::coalesce(Unit, "")
+  )
+
+lake_order_exact <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka", "All lakes")
+
+var_order_exact <- c("Substrate index","Slope 5m","Riparian vegetation","Overhanging trees","Wood cover","Emergent vegetation", "Submerged vegetation", "Temperature", "Dissolved oxygen", "Specific conductivity","pH", "Presence Catfish", "Presence Eel", "Presence Goldfish", "Presence Common smelt", "Presence Kōaro", "Presence Trout")
+
+EnvBio_summary_table <- EnvBio_summary_table %>%
+  dplyr::mutate(
+    Lake     = factor(as.character(Lake), levels = lake_order_exact),
+    Variable = factor(as.character(Variable), levels = var_order_exact)
+  ) %>%
+  dplyr::select(Lake, Variable, Unit, n, Mean, Median, Min, Max, CI_low, CI_high) %>%
+  dplyr::arrange(Variable, Lake) %>%
+  dplyr::mutate(
+    Lake     = as.character(Lake),
+    Variable = as.character(Variable)
+  )
+
+
+# Save if you still want the CSV
+write.csv(
+  EnvBio_summary_table,
+  file = file.path(fig_dir, "EnvBio_summary_table.csv"),
+  row.names = FALSE
+)
+
+knitr::kable(
+  EnvBio_summary_table,
+  caption = "Table 1. Summary statistics (n, mean, median, range, and 95% confidence intervals) for environmental variables and fish presence across lakes.",
+  digits = 2,
+  align = c("l","l","l","r","r","r","r","r","r","r")
+)
 ```
 
 # Kōura response summaries by lake
@@ -1175,7 +1302,7 @@ final_plot_occupancy
 #| label: cpue-hurdle
 #| fig-width: 5.1
 #| fig-height: 4.7
-#| dpi: 120
+#| dpi: 300
 #| results: hide
 #| warning: false
 #| message: false
@@ -1553,6 +1680,9 @@ write.csv(bpue_table, file = file.path(fig_dir, "table_gam_bpue_pos.csv"),  row.
 
 all_models_table <- bind_rows(occ_table, cpue_table, bpue_table)
 write.csv(all_models_table, file = file.path(fig_dir, "table_gam_all_models.csv"), row.names = FALSE)
+
+print(all_models_table)
+
 ```
 
 # PCA (habitat complexity)
