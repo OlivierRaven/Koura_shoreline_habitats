@@ -221,11 +221,7 @@ mutate(
 Richness  = rowSums(dplyr::select(., starts_with("Total_Individuals_")) > 0),
 Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_with(c("_Bullies", "_Common_smelt"))))
 )
-
-
-
 ```
-
 
 # Combined dataset and habitat classification
 ```{r}
@@ -506,9 +502,10 @@ KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura", "Kōura CPUE", 
 KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura", "Kōura BPUE", type = "continuous", show_x_title = TRUE)
 
 Koura_plots <- KPRES_plot / KCPUE_plot / KBPUE_plot
-Koura_plots
 
 ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, width = 120, height = 120, units = "mm", dpi = 1200)
+
+Koura_plots
 ```
 
 ```{r}
@@ -1165,7 +1162,8 @@ Calibration_plot_occ <- ggplot(calib_data_occ, aes(mean_pred, obs_rate)) +
 top_row    <- final_p_occ_smooths
 bottom_row <- (p_pres_roc + Calibration_plot_occ) + patchwork::plot_layout(ncol = 2)
 
-final_plot_occupancy <- (top_row / bottom_row)
+final_plot_occupancy <- (top_row / bottom_row)+
+  patchwork::plot_layout(heights = c(1, 2))
 
 ggsave(filename = file.path(fig_dir, "Occupancy_panels.png"), plot = final_plot_occupancy,  width = 180, height = 120, units = "mm", dpi = 1200)
 
