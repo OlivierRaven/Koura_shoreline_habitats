@@ -386,9 +386,6 @@ ci95 <- function(x) {
   c(m - tcrit * se, m + tcrit * se)
 }
 
-# ---- unit lookup from the raw Monitoring_data sheet ----
-# Monitoring_data uses Parameter + Unit; your summary uses Variable names.
-# Create a mapping from your Variable names -> Monitoring_data$Parameter values.
 unit_lookup <- Monitoring_data %>%
   dplyr::select(Parameter, Unit) %>%
   dplyr::distinct() %>%
@@ -551,7 +548,6 @@ EnvBio_summary_table <- EnvBio_summary_table %>%
     Variable = as.character(Variable)
   )
 
-
 # Save if you still want the CSV
 write.csv(
   EnvBio_summary_table,
@@ -559,12 +555,8 @@ write.csv(
   row.names = FALSE
 )
 
-knitr::kable(
-  EnvBio_summary_table,
-  caption = "Table 1. Summary statistics (n, mean, median, range, and 95% confidence intervals) for environmental variables and fish presence across lakes.",
-  digits = 2,
-  align = c("l","l","l","r","r","r","r","r","r","r")
-)
+knitr::kable(EnvBio_summary_table, caption = "Table S1 Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand.",
+  digits = 2, align = c("l","l","l","r","r","r","r","r","r","r"))
 ```
 
 # Kōura response summaries by lake
@@ -619,8 +611,7 @@ ggplot(presence_summary, aes(x = Lake, y = Presence_Rate)) +
   geom_col(fill = NA, colour = "black", linewidth = 0.3) +
   geom_errorbar(aes(ymin = CI_low, ymax = CI_high), width = 0.15, linewidth = 0.3) +
   scale_y_continuous(limits = c(0, 1)) +
-  labs(x = xlab_text, y = y_label) +
-  base_theme
+  labs(x = xlab_text, y = y_label) 
 }
 }
 
