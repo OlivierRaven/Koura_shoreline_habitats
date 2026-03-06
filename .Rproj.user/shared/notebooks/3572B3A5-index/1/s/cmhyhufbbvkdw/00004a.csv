@@ -1,0 +1,2 @@
+"0","# Plots (positive CPUE)"
+"0","p_cpue_pos_smooths <- gratia::draw(final_cpue_pos)"

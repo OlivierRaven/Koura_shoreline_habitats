@@ -1,0 +1,8 @@
+"0","p_cpue_pos_param <- parametric_panel("
+"0","  final_cpue_pos,"
+"0","  Cpos,"
+"0","  alpha       = alpha_sig,"
+"0","  exclude     = c(""LID""),"
+"0","  family      = ""gamma"","
+"0","  fish_covars = fish_vars"
+"0",")"

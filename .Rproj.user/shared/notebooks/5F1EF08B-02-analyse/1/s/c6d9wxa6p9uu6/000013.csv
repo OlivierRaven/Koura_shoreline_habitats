@@ -1,0 +1,3 @@
+"0",""
+"0","ggsave(file.path(fig_dir, ""Physical_plot.png""), Physical_plot, width = 14, height = 10, dpi = 300)"
+"0",""
