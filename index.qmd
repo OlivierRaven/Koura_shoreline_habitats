@@ -30,8 +30,7 @@ This site accompanies the scientific work on: *Complex littoral habitats enhance
 packages <- c(
   "emmeans","rstatix","multcompView","brglm2","patchwork","gratia","pROC","caret",
   "mgcv","tidyr","purrr","corrplot","glmmTMB","performance","tibble","tidyverse",
-  "dplyr","writexl","readxl","lubridate"
-)
+  "dplyr","writexl","readxl","lubridate")
 
 quiet_load <- function(pkg) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
