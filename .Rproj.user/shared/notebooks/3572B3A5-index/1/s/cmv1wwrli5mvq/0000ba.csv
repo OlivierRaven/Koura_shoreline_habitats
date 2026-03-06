@@ -1,3 +1,0 @@
-"0","# plots for paper"
-"0","# OCC"
-"0","p_occ_smooths1 <-p_occ_smooths + patchwork::plot_layout(ncol = 5)"

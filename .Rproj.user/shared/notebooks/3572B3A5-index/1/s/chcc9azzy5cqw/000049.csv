@@ -1,2 +1,0 @@
-"0","# Plots (positive BPUE)"
-"0","p_BPUE_pos_smooths <- gratia::draw(final_BPUE_pos)"

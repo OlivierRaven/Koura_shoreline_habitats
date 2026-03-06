@@ -1,2 +1,0 @@
-"0","# Plots (BPUE presence)"
-"0","p_BPUE_pres_smooths <- gratia::draw(final_BPUE_pres)"

@@ -1,8 +1,0 @@
-"0","p_BPUE_pres_param <- parametric_panel("
-"0","  final_BPUE_pres,"
-"0","  BData,"
-"0","  alpha       = alpha_sig,"
-"0","  exclude     = c(""LID""),"
-"0","  family      = ""binomial"","
-"0","  fish_covars = fish_vars"
-"0",")"

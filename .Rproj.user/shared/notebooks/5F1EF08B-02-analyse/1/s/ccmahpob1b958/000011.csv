@@ -1,3 +1,0 @@
-"0",""
-"0","ggsave(file.path(fig_dir, ""Chemical_plot.png""), Chemical_plot, width = 12, height = 5, dpi = 300)"
-"0",""
