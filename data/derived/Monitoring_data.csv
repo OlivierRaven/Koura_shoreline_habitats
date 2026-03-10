@@ -1,0 +1,1681 @@
+"Site_ID","Monitoring_ID","Group","Parameter","Unit","Value","Notes"
+61,"61_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+61,"61_0","Physical","Bottom_visible","0/1","0",NA
+61,"61_0","Physical","Water_clarity","m",NA,NA
+61,"61_0","Physical","Depth_10m","m","0.6",NA
+61,"61_0","Physical","Slope","degrees","0.06","Calculated from depth"
+61,"61_0","Physical","Riparian_vegetation","%","50",NA
+61,"61_0","Physical","Riparian_species",NA,"Native forest",NA
+61,"61_0","Physical","Overhanging_trees","%","0",NA
+61,"61_0","Physical","Erosion","%","0",NA
+61,"61_0","Physical","Structure","0/1","0",NA
+61,"61_0","Physical","Bedrock","%","0",NA
+61,"61_0","Physical","Boulders","%","0",NA
+61,"61_0","Physical","Cobble","%","0",NA
+61,"61_0","Physical","Gravel","%","0",NA
+61,"61_0","Physical","Sand","%","90",NA
+61,"61_0","Physical","Mud","%","10",NA
+61,"61_0","Physical","Organic_matter","%","0",NA
+61,"61_0","Physical","Rock_size","mm",NA,NA
+61,"61_0","Chemical","Temperature","Degree C","25.3",NA
+61,"61_0","Chemical","DO_mgl","mg/l","5.25",NA
+61,"61_0","Chemical","DO_percent","%","63.9",NA
+61,"61_0","Chemical","Conductivity","µS/cm","445.8",NA
+61,"61_0","Chemical","Specific_conductivity","µS/cm","443.00904302891786",NA
+61,"61_0","Chemical","pH",NA,"3.78","Extreme low due to being in vulcanic zone (3.78) therfor replaced with the value from site 72 (7.19) as most nearby just to check"
+61,"61_0","Habitat","Vegetation_nearby","0/1","0",NA
+61,"61_0","Habitat","Vegetation_species",NA,NA,NA
+61,"61_0","Habitat","Wood_cover","%","10",NA
+61,"61_0","Habitat","Other",NA,NA,NA
+62,"62_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+62,"62_0","Physical","Bottom_visible","0/1","1",NA
+62,"62_0","Physical","Water_clarity","m",NA,NA
+62,"62_0","Physical","Depth_10m","m","1.7",NA
+62,"62_0","Physical","Slope","degrees","0.16999999999999998","Calculated from depth"
+62,"62_0","Physical","Riparian_vegetation","%","100",NA
+62,"62_0","Physical","Riparian_species",NA,"Native forest",NA
+62,"62_0","Physical","Overhanging_trees","%","100",NA
+62,"62_0","Physical","Erosion","%","0",NA
+62,"62_0","Physical","Structure","0/1","0",NA
+62,"62_0","Physical","Bedrock","%","0",NA
+62,"62_0","Physical","Boulders","%","40",NA
+62,"62_0","Physical","Cobble","%","0",NA
+62,"62_0","Physical","Gravel","%","0",NA
+62,"62_0","Physical","Sand","%","60",NA
+62,"62_0","Physical","Mud","%","0",NA
+62,"62_0","Physical","Organic_matter","%","0",NA
+62,"62_0","Physical","Rock_size","mm",NA,NA
+62,"62_0","Chemical","Temperature","Degree C","22.9",NA
+62,"62_0","Chemical","DO_mgl","mg/l","7.85",NA
+62,"62_0","Chemical","DO_percent","%","91.3",NA
+62,"62_0","Chemical","Conductivity","µS/cm","192.6",NA
+62,"62_0","Chemical","Specific_conductivity","µS/cm","201.48551103671932",NA
+62,"62_0","Chemical","pH",NA,"7.03",NA
+62,"62_0","Habitat","Vegetation_nearby","0/1","0",NA
+62,"62_0","Habitat","Vegetation_species",NA,NA,NA
+62,"62_0","Habitat","Wood_cover","%","20",NA
+62,"62_0","Habitat","Other",NA,NA,NA
+63,"63_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+63,"63_0","Physical","Bottom_visible","0/1","1",NA
+63,"63_0","Physical","Water_clarity","m","3.4",NA
+63,"63_0","Physical","Depth_10m","m","0.48",NA
+63,"63_0","Physical","Slope","degrees","4.8000000000000001E-2","Calculated from depth"
+63,"63_0","Physical","Riparian_vegetation","%","100",NA
+63,"63_0","Physical","Riparian_species",NA,"Native forest",NA
+63,"63_0","Physical","Overhanging_trees","%","100",NA
+63,"63_0","Physical","Erosion","%","0",NA
+63,"63_0","Physical","Structure","0/1","0",NA
+63,"63_0","Physical","Bedrock","%","0",NA
+63,"63_0","Physical","Boulders","%","10",NA
+63,"63_0","Physical","Cobble","%","0",NA
+63,"63_0","Physical","Gravel","%","0",NA
+63,"63_0","Physical","Sand","%","90",NA
+63,"63_0","Physical","Mud","%","0",NA
+63,"63_0","Physical","Organic_matter","%","0",NA
+63,"63_0","Physical","Rock_size","mm",NA,NA
+63,"63_0","Chemical","Temperature","Degree C","22.4",NA
+63,"63_0","Chemical","DO_mgl","mg/l","6.89",NA
+63,"63_0","Chemical","DO_percent","%","79.3",NA
+63,"63_0","Chemical","Conductivity","µS/cm","181.7",NA
+63,"63_0","Chemical","Specific_conductivity","µS/cm","192.19378041040827",NA
+63,"63_0","Chemical","pH",NA,"7.02",NA
+63,"63_0","Habitat","Vegetation_nearby","0/1","1",NA
+63,"63_0","Habitat","Vegetation_species",NA,"Elodea",NA
+63,"63_0","Habitat","Wood_cover","%","3",NA
+63,"63_0","Habitat","Other",NA,NA,NA
+64,"64_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+64,"64_0","Physical","Bottom_visible","0/1","1",NA
+64,"64_0","Physical","Water_clarity","m",NA,NA
+64,"64_0","Physical","Depth_10m","m","0.5",NA
+64,"64_0","Physical","Slope","degrees","0.05","Calculated from depth"
+64,"64_0","Physical","Riparian_vegetation","%","50",NA
+64,"64_0","Physical","Riparian_species",NA,"Willow",NA
+64,"64_0","Physical","Overhanging_trees","%","50",NA
+64,"64_0","Physical","Erosion","%","0",NA
+64,"64_0","Physical","Structure","0/1","0",NA
+64,"64_0","Physical","Bedrock","%","0",NA
+64,"64_0","Physical","Boulders","%","0",NA
+64,"64_0","Physical","Cobble","%","0",NA
+64,"64_0","Physical","Gravel","%","0",NA
+64,"64_0","Physical","Sand","%","100",NA
+64,"64_0","Physical","Mud","%","0",NA
+64,"64_0","Physical","Organic_matter","%","0",NA
+64,"64_0","Physical","Rock_size","mm",NA,NA
+64,"64_0","Chemical","Temperature","Degree C","21.8",NA
+64,"64_0","Chemical","DO_mgl","mg/l","8",NA
+64,"64_0","Chemical","DO_percent","%","91",NA
+64,"64_0","Chemical","Conductivity","µS/cm","145.69999999999999",NA
+64,"64_0","Chemical","Specific_conductivity","µS/cm","156.19639794168094",NA
+64,"64_0","Chemical","pH",NA,"7.04",NA
+64,"64_0","Habitat","Vegetation_nearby","0/1","0",NA
+64,"64_0","Habitat","Vegetation_species",NA,NA,NA
+64,"64_0","Habitat","Wood_cover","%","3",NA
+64,"64_0","Habitat","Other",NA,NA,NA
+65,"65_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+65,"65_0","Physical","Bottom_visible","0/1","1",NA
+65,"65_0","Physical","Water_clarity","m",NA,NA
+65,"65_0","Physical","Depth_10m","m","0.4",NA
+65,"65_0","Physical","Slope","degrees","0.04","Calculated from depth"
+65,"65_0","Physical","Riparian_vegetation","%","100",NA
+65,"65_0","Physical","Riparian_species",NA,"Willow",NA
+65,"65_0","Physical","Overhanging_trees","%","100",NA
+65,"65_0","Physical","Erosion","%","0",NA
+65,"65_0","Physical","Structure","0/1","0",NA
+65,"65_0","Physical","Bedrock","%","10",NA
+65,"65_0","Physical","Boulders","%","0",NA
+65,"65_0","Physical","Cobble","%","0",NA
+65,"65_0","Physical","Gravel","%","0",NA
+65,"65_0","Physical","Sand","%","90",NA
+65,"65_0","Physical","Mud","%","0",NA
+65,"65_0","Physical","Organic_matter","%","0",NA
+65,"65_0","Physical","Rock_size","mm",NA,NA
+65,"65_0","Chemical","Temperature","Degree C","23.9",NA
+65,"65_0","Chemical","DO_mgl","mg/l","9.9",NA
+65,"65_0","Chemical","DO_percent","%","117.6",NA
+65,"65_0","Chemical","Conductivity","µS/cm","169.6",NA
+65,"65_0","Chemical","Specific_conductivity","µS/cm","173.61040024567509",NA
+65,"65_0","Chemical","pH",NA,"7.02",NA
+65,"65_0","Habitat","Vegetation_nearby","0/1","0",NA
+65,"65_0","Habitat","Vegetation_species",NA,NA,NA
+65,"65_0","Habitat","Wood_cover","%","20",NA
+65,"65_0","Habitat","Other",NA,NA,NA
+66,"66_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+66,"66_0","Physical","Bottom_visible","0/1","1",NA
+66,"66_0","Physical","Water_clarity","m",NA,NA
+66,"66_0","Physical","Depth_10m","m","0.6",NA
+66,"66_0","Physical","Slope","degrees","0.06","Calculated from depth"
+66,"66_0","Physical","Riparian_vegetation","%","100",NA
+66,"66_0","Physical","Riparian_species",NA,"Native forest",NA
+66,"66_0","Physical","Overhanging_trees","%","0",NA
+66,"66_0","Physical","Erosion","%","0",NA
+66,"66_0","Physical","Structure","0/1","0",NA
+66,"66_0","Physical","Bedrock","%","60",NA
+66,"66_0","Physical","Boulders","%","0",NA
+66,"66_0","Physical","Cobble","%","10",NA
+66,"66_0","Physical","Gravel","%","0",NA
+66,"66_0","Physical","Sand","%","30",NA
+66,"66_0","Physical","Mud","%","0",NA
+66,"66_0","Physical","Organic_matter","%","0",NA
+66,"66_0","Physical","Rock_size","mm",NA,NA
+66,"66_0","Chemical","Temperature","Degree C","24",NA
+66,"66_0","Chemical","DO_mgl","mg/l","11.05",NA
+66,"66_0","Chemical","DO_percent","%","131.9",NA
+66,"66_0","Chemical","Conductivity","µS/cm","215.2",NA
+66,"66_0","Chemical","Specific_conductivity","µS/cm","219.81613891726249",NA
+66,"66_0","Chemical","pH",NA,"7.69",NA
+66,"66_0","Habitat","Vegetation_nearby","0/1","1",NA
+66,"66_0","Habitat","Vegetation_species",NA,"Lagarosiphon",NA
+66,"66_0","Habitat","Wood_cover","%","0",NA
+66,"66_0","Habitat","Other",NA,NA,NA
+67,"67_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+67,"67_0","Physical","Bottom_visible","0/1","1",NA
+67,"67_0","Physical","Water_clarity","m",NA,NA
+67,"67_0","Physical","Depth_10m","m","0.5",NA
+67,"67_0","Physical","Slope","degrees","0.05","Calculated from depth"
+67,"67_0","Physical","Riparian_vegetation","%","0",NA
+67,"67_0","Physical","Riparian_species",NA,NA,NA
+67,"67_0","Physical","Overhanging_trees","%","0",NA
+67,"67_0","Physical","Erosion","%","0",NA
+67,"67_0","Physical","Structure","0/1","0",NA
+67,"67_0","Physical","Bedrock","%","0",NA
+67,"67_0","Physical","Boulders","%","0",NA
+67,"67_0","Physical","Cobble","%","0",NA
+67,"67_0","Physical","Gravel","%","0",NA
+67,"67_0","Physical","Sand","%","100",NA
+67,"67_0","Physical","Mud","%","0",NA
+67,"67_0","Physical","Organic_matter","%","0",NA
+67,"67_0","Physical","Rock_size","mm",NA,NA
+67,"67_0","Chemical","Temperature","Degree C","23.1",NA
+67,"67_0","Chemical","DO_mgl","mg/l","10.25",NA
+67,"67_0","Chemical","DO_percent","%","120.3",NA
+67,"67_0","Chemical","Conductivity","µS/cm","157.1",NA
+67,"67_0","Chemical","Specific_conductivity","µS/cm","163.62878866784709",NA
+67,"67_0","Chemical","pH",NA,"7.51",NA
+67,"67_0","Habitat","Vegetation_nearby","0/1","0",NA
+67,"67_0","Habitat","Vegetation_species",NA,NA,NA
+67,"67_0","Habitat","Wood_cover","%","0",NA
+67,"67_0","Habitat","Other",NA,NA,NA
+68,"68_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+68,"68_0","Physical","Bottom_visible","0/1","1",NA
+68,"68_0","Physical","Water_clarity","m",NA,NA
+68,"68_0","Physical","Depth_10m","m","0.6",NA
+68,"68_0","Physical","Slope","degrees","0.06","Calculated from depth"
+68,"68_0","Physical","Riparian_vegetation","%","100",NA
+68,"68_0","Physical","Riparian_species",NA,"els",NA
+68,"68_0","Physical","Overhanging_trees","%","100",NA
+68,"68_0","Physical","Erosion","%","0",NA
+68,"68_0","Physical","Structure","0/1","0",NA
+68,"68_0","Physical","Bedrock","%","0",NA
+68,"68_0","Physical","Boulders","%","40",NA
+68,"68_0","Physical","Cobble","%","0",NA
+68,"68_0","Physical","Gravel","%","0",NA
+68,"68_0","Physical","Sand","%","60",NA
+68,"68_0","Physical","Mud","%","0",NA
+68,"68_0","Physical","Organic_matter","%","0",NA
+68,"68_0","Physical","Rock_size","mm",NA,NA
+68,"68_0","Chemical","Temperature","Degree C","23.4",NA
+68,"68_0","Chemical","DO_mgl","mg/l","9.83",NA
+68,"68_0","Chemical","DO_percent","%","115.3",NA
+68,"68_0","Chemical","Conductivity","µS/cm","185.2",NA
+68,"68_0","Chemical","Specific_conductivity","µS/cm","191.63907284768212",NA
+68,"68_0","Chemical","pH",NA,"7.49",NA
+68,"68_0","Habitat","Vegetation_nearby","0/1","0",NA
+68,"68_0","Habitat","Vegetation_species",NA,NA,NA
+68,"68_0","Habitat","Wood_cover","%","0",NA
+68,"68_0","Habitat","Other",NA,NA,NA
+69,"69_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+69,"69_0","Physical","Bottom_visible","0/1","1",NA
+69,"69_0","Physical","Water_clarity","m",NA,NA
+69,"69_0","Physical","Depth_10m","m","0.45",NA
+69,"69_0","Physical","Slope","degrees","4.4999999999999998E-2","Calculated from depth"
+69,"69_0","Physical","Riparian_vegetation","%","0",NA
+69,"69_0","Physical","Riparian_species",NA,NA,NA
+69,"69_0","Physical","Overhanging_trees","%","0",NA
+69,"69_0","Physical","Erosion","%","0",NA
+69,"69_0","Physical","Structure","0/1","0",NA
+69,"69_0","Physical","Bedrock","%","10",NA
+69,"69_0","Physical","Boulders","%","0",NA
+69,"69_0","Physical","Cobble","%","0",NA
+69,"69_0","Physical","Gravel","%","0",NA
+69,"69_0","Physical","Sand","%","90",NA
+69,"69_0","Physical","Mud","%","0",NA
+69,"69_0","Physical","Organic_matter","%","0",NA
+69,"69_0","Physical","Rock_size","mm",NA,NA
+69,"69_0","Chemical","Temperature","Degree C","23.4",NA
+69,"69_0","Chemical","DO_mgl","mg/l","7.82",NA
+69,"69_0","Chemical","DO_percent","%","91.8",NA
+69,"69_0","Chemical","Conductivity","µS/cm","188.6",NA
+69,"69_0","Chemical","Specific_conductivity","µS/cm","195.15728476821192",NA
+69,"69_0","Chemical","pH",NA,"7",NA
+69,"69_0","Habitat","Vegetation_nearby","0/1","0",NA
+69,"69_0","Habitat","Vegetation_species",NA,NA,NA
+69,"69_0","Habitat","Wood_cover","%","10",NA
+69,"69_0","Habitat","Other",NA,NA,NA
+70,"70_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+70,"70_0","Physical","Bottom_visible","0/1","1",NA
+70,"70_0","Physical","Water_clarity","m",NA,NA
+70,"70_0","Physical","Depth_10m","m","0.5",NA
+70,"70_0","Physical","Slope","degrees","0.05","Calculated from depth"
+70,"70_0","Physical","Riparian_vegetation","%","100",NA
+70,"70_0","Physical","Riparian_species",NA,"Native forest",NA
+70,"70_0","Physical","Overhanging_trees","%","0",NA
+70,"70_0","Physical","Erosion","%","0",NA
+70,"70_0","Physical","Structure","0/1","0",NA
+70,"70_0","Physical","Bedrock","%","0",NA
+70,"70_0","Physical","Boulders","%","5",NA
+70,"70_0","Physical","Cobble","%","0",NA
+70,"70_0","Physical","Gravel","%","0",NA
+70,"70_0","Physical","Sand","%","95",NA
+70,"70_0","Physical","Mud","%","0",NA
+70,"70_0","Physical","Organic_matter","%","0",NA
+70,"70_0","Physical","Rock_size","mm",NA,NA
+70,"70_0","Chemical","Temperature","Degree C","22.4",NA
+70,"70_0","Chemical","DO_mgl","mg/l","7.25",NA
+70,"70_0","Chemical","DO_percent","%","83.5",NA
+70,"70_0","Chemical","Conductivity","µS/cm","174.8",NA
+70,"70_0","Chemical","Specific_conductivity","µS/cm","184.89528242013964",NA
+70,"70_0","Chemical","pH",NA,"7.04",NA
+70,"70_0","Habitat","Vegetation_nearby","0/1","0",NA
+70,"70_0","Habitat","Vegetation_species",NA,NA,NA
+70,"70_0","Habitat","Wood_cover","%","0",NA
+70,"70_0","Habitat","Other",NA,NA,NA
+71,"71_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+71,"71_0","Physical","Bottom_visible","0/1","1",NA
+71,"71_0","Physical","Water_clarity","m",NA,NA
+71,"71_0","Physical","Depth_10m","m","0.5",NA
+71,"71_0","Physical","Slope","degrees","0.05","Calculated from depth"
+71,"71_0","Physical","Riparian_vegetation","%","100",NA
+71,"71_0","Physical","Riparian_species",NA,"Willow",NA
+71,"71_0","Physical","Overhanging_trees","%","100",NA
+71,"71_0","Physical","Erosion","%","0",NA
+71,"71_0","Physical","Structure","0/1","0",NA
+71,"71_0","Physical","Bedrock","%","0",NA
+71,"71_0","Physical","Boulders","%","0",NA
+71,"71_0","Physical","Cobble","%","0",NA
+71,"71_0","Physical","Gravel","%","0",NA
+71,"71_0","Physical","Sand","%","100",NA
+71,"71_0","Physical","Mud","%","0",NA
+71,"71_0","Physical","Organic_matter","%","0",NA
+71,"71_0","Physical","Rock_size","mm",NA,NA
+71,"71_0","Chemical","Temperature","Degree C","21.8",NA
+71,"71_0","Chemical","DO_mgl","mg/l","7.61",NA
+71,"71_0","Chemical","DO_percent","%","86.8",NA
+71,"71_0","Chemical","Conductivity","µS/cm","149.1",NA
+71,"71_0","Chemical","Specific_conductivity","µS/cm","159.84133790737565",NA
+71,"71_0","Chemical","pH",NA,"7.51",NA
+71,"71_0","Habitat","Vegetation_nearby","0/1","0",NA
+71,"71_0","Habitat","Vegetation_species",NA,NA,NA
+71,"71_0","Habitat","Wood_cover","%","30",NA
+71,"71_0","Habitat","Other",NA,NA,NA
+72,"72_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+72,"72_0","Physical","Bottom_visible","0/1","1",NA
+72,"72_0","Physical","Water_clarity","m",NA,NA
+72,"72_0","Physical","Depth_10m","m","0.5",NA
+72,"72_0","Physical","Slope","degrees","0.05","Calculated from depth"
+72,"72_0","Physical","Riparian_vegetation","%","10",NA
+72,"72_0","Physical","Riparian_species",NA,"Willow",NA
+72,"72_0","Physical","Overhanging_trees","%","10",NA
+72,"72_0","Physical","Erosion","%","0",NA
+72,"72_0","Physical","Structure","0/1","0",NA
+72,"72_0","Physical","Bedrock","%","0",NA
+72,"72_0","Physical","Boulders","%","0",NA
+72,"72_0","Physical","Cobble","%","0",NA
+72,"72_0","Physical","Gravel","%","0",NA
+72,"72_0","Physical","Sand","%","100",NA
+72,"72_0","Physical","Mud","%","0",NA
+72,"72_0","Physical","Organic_matter","%","0",NA
+72,"72_0","Physical","Rock_size","mm",NA,NA
+72,"72_0","Chemical","Temperature","Degree C","23.4",NA
+72,"72_0","Chemical","DO_mgl","mg/l","10.19",NA
+72,"72_0","Chemical","DO_percent","%","119.6",NA
+72,"72_0","Chemical","Conductivity","µS/cm","176.7",NA
+72,"72_0","Chemical","Specific_conductivity","µS/cm","182.84354304635761",NA
+72,"72_0","Chemical","pH",NA,"7.19",NA
+72,"72_0","Habitat","Vegetation_nearby","0/1","0",NA
+72,"72_0","Habitat","Vegetation_species",NA,NA,NA
+72,"72_0","Habitat","Wood_cover","%","4",NA
+72,"72_0","Habitat","Other",NA,NA,NA
+73,"73_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+73,"73_0","Physical","Bottom_visible","0/1","1",NA
+73,"73_0","Physical","Water_clarity","m",NA,NA
+73,"73_0","Physical","Depth_10m","m","0.75",NA
+73,"73_0","Physical","Slope","degrees","7.4999999999999997E-2","Calculated from depth"
+73,"73_0","Physical","Riparian_vegetation","%","100",NA
+73,"73_0","Physical","Riparian_species",NA,"Native forest",NA
+73,"73_0","Physical","Overhanging_trees","%","0",NA
+73,"73_0","Physical","Erosion","%","0",NA
+73,"73_0","Physical","Structure","0/1","0",NA
+73,"73_0","Physical","Bedrock","%","0",NA
+73,"73_0","Physical","Boulders","%","0",NA
+73,"73_0","Physical","Cobble","%","70",NA
+73,"73_0","Physical","Gravel","%","10",NA
+73,"73_0","Physical","Sand","%","20",NA
+73,"73_0","Physical","Mud","%","0",NA
+73,"73_0","Physical","Organic_matter","%","0",NA
+73,"73_0","Physical","Rock_size","mm","10.505000000000001",NA
+73,"73_0","Chemical","Temperature","Degree C","20.7",NA
+73,"73_0","Chemical","DO_mgl","mg/l","10.42",NA
+73,"73_0","Chemical","DO_percent","%","116.1",NA
+73,"73_0","Chemical","Conductivity","µS/cm","144",NA
+73,"73_0","Chemical","Specific_conductivity","µS/cm","158.29394305815106",NA
+73,"73_0","Chemical","pH",NA,"9.01",NA
+73,"73_0","Habitat","Vegetation_nearby","0/1","1",NA
+73,"73_0","Habitat","Vegetation_species",NA,"Hornwort",NA
+73,"73_0","Habitat","Wood_cover","%","1",NA
+73,"73_0","Habitat","Other",NA,NA,NA
+74,"74_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+74,"74_0","Physical","Bottom_visible","0/1","1",NA
+74,"74_0","Physical","Water_clarity","m",NA,NA
+74,"74_0","Physical","Depth_10m","m","0.7",NA
+74,"74_0","Physical","Slope","degrees","6.9999999999999993E-2","Calculated from depth"
+74,"74_0","Physical","Riparian_vegetation","%","100",NA
+74,"74_0","Physical","Riparian_species",NA,"Native forest",NA
+74,"74_0","Physical","Overhanging_trees","%","100",NA
+74,"74_0","Physical","Erosion","%","0",NA
+74,"74_0","Physical","Structure","0/1","0",NA
+74,"74_0","Physical","Bedrock","%","0",NA
+74,"74_0","Physical","Boulders","%","10",NA
+74,"74_0","Physical","Cobble","%","0",NA
+74,"74_0","Physical","Gravel","%","0",NA
+74,"74_0","Physical","Sand","%","90",NA
+74,"74_0","Physical","Mud","%","0",NA
+74,"74_0","Physical","Organic_matter","%","0",NA
+74,"74_0","Physical","Rock_size","mm",NA,NA
+74,"74_0","Chemical","Temperature","Degree C","21.5",NA
+74,"74_0","Chemical","DO_mgl","mg/l","9.89",NA
+74,"74_0","Chemical","DO_percent","%","112.1",NA
+74,"74_0","Chemical","Conductivity","µS/cm","146.9",NA
+74,"74_0","Chemical","Specific_conductivity","µS/cm","158.55369670804103",NA
+74,"74_0","Chemical","pH",NA,"9.02",NA
+74,"74_0","Habitat","Vegetation_nearby","0/1","0",NA
+74,"74_0","Habitat","Vegetation_species",NA,NA,NA
+74,"74_0","Habitat","Wood_cover","%","0",NA
+74,"74_0","Habitat","Other",NA,NA,NA
+75,"75_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+75,"75_0","Physical","Bottom_visible","0/1","0",NA
+75,"75_0","Physical","Water_clarity","m","3.5","Secci"
+75,"75_0","Physical","Depth_10m","m","8",NA
+75,"75_0","Physical","Slope","degrees","0.8","Calculated from depth"
+75,"75_0","Physical","Riparian_vegetation","%","100",NA
+75,"75_0","Physical","Riparian_species",NA,"Native forest",NA
+75,"75_0","Physical","Overhanging_trees","%","100",NA
+75,"75_0","Physical","Erosion","%","0",NA
+75,"75_0","Physical","Structure","0/1","0",NA
+75,"75_0","Physical","Bedrock","%","100",NA
+75,"75_0","Physical","Boulders","%","0",NA
+75,"75_0","Physical","Cobble","%","0",NA
+75,"75_0","Physical","Gravel","%","0",NA
+75,"75_0","Physical","Sand","%","0",NA
+75,"75_0","Physical","Mud","%","0",NA
+75,"75_0","Physical","Organic_matter","%","0",NA
+75,"75_0","Physical","Rock_size","mm",NA,NA
+75,"75_0","Chemical","Temperature","Degree C","22.3",NA
+75,"75_0","Chemical","DO_mgl","mg/l","9.74",NA
+75,"75_0","Chemical","DO_percent","%","111.6",NA
+75,"75_0","Chemical","Conductivity","µS/cm","153.4",NA
+75,"75_0","Chemical","Specific_conductivity","µS/cm","162.6205872999046",NA
+75,"75_0","Chemical","pH",NA,"8.08",NA
+75,"75_0","Habitat","Vegetation_nearby","0/1","0",NA
+75,"75_0","Habitat","Vegetation_species",NA,NA,NA
+75,"75_0","Habitat","Wood_cover","%","2",NA
+75,"75_0","Habitat","Other",NA,NA,NA
+76,"76_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+76,"76_0","Physical","Bottom_visible","0/1","1",NA
+76,"76_0","Physical","Water_clarity","m",NA,NA
+76,"76_0","Physical","Depth_10m","m","0.6",NA
+76,"76_0","Physical","Slope","degrees","0.06","Calculated from depth"
+76,"76_0","Physical","Riparian_vegetation","%","100",NA
+76,"76_0","Physical","Riparian_species",NA,"Bushes",NA
+76,"76_0","Physical","Overhanging_trees","%","30",NA
+76,"76_0","Physical","Erosion","%","0",NA
+76,"76_0","Physical","Structure","0/1","0",NA
+76,"76_0","Physical","Bedrock","%","0",NA
+76,"76_0","Physical","Boulders","%","0",NA
+76,"76_0","Physical","Cobble","%","0",NA
+76,"76_0","Physical","Gravel","%","0",NA
+76,"76_0","Physical","Sand","%","100",NA
+76,"76_0","Physical","Mud","%","0",NA
+76,"76_0","Physical","Organic_matter","%","0",NA
+76,"76_0","Physical","Rock_size","mm",NA,NA
+76,"76_0","Chemical","Temperature","Degree C","21.5",NA
+76,"76_0","Chemical","DO_mgl","mg/l","6.8",NA
+76,"76_0","Chemical","DO_percent","%","77.3",NA
+76,"76_0","Chemical","Conductivity","µS/cm","181.6",NA
+76,"76_0","Chemical","Specific_conductivity","µS/cm","196.00647598488936",NA
+76,"76_0","Chemical","pH",NA,"8.24",NA
+76,"76_0","Habitat","Vegetation_nearby","0/1","0",NA
+76,"76_0","Habitat","Vegetation_species",NA,NA,NA
+76,"76_0","Habitat","Wood_cover","%","10",NA
+76,"76_0","Habitat","Other",NA,NA,NA
+77,"77_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+77,"77_0","Physical","Bottom_visible","0/1","1",NA
+77,"77_0","Physical","Water_clarity","m",NA,NA
+77,"77_0","Physical","Depth_10m","m","2",NA
+77,"77_0","Physical","Slope","degrees","0.2","Calculated from depth"
+77,"77_0","Physical","Riparian_vegetation","%","100",NA
+77,"77_0","Physical","Riparian_species",NA,"Native forest",NA
+77,"77_0","Physical","Overhanging_trees","%","100",NA
+77,"77_0","Physical","Erosion","%","0",NA
+77,"77_0","Physical","Structure","0/1","0",NA
+77,"77_0","Physical","Bedrock","%","0",NA
+77,"77_0","Physical","Boulders","%","100",NA
+77,"77_0","Physical","Cobble","%","0",NA
+77,"77_0","Physical","Gravel","%","0",NA
+77,"77_0","Physical","Sand","%","0",NA
+77,"77_0","Physical","Mud","%","0",NA
+77,"77_0","Physical","Organic_matter","%","0",NA
+77,"77_0","Physical","Rock_size","mm",NA,NA
+77,"77_0","Chemical","Temperature","Degree C","20.6",NA
+77,"77_0","Chemical","DO_mgl","mg/l","9.77",NA
+77,"77_0","Chemical","DO_percent","%","108.6",NA
+77,"77_0","Chemical","Conductivity","µS/cm","143.19999999999999",NA
+77,"77_0","Chemical","Specific_conductivity","µS/cm","157.77875716174526",NA
+77,"77_0","Chemical","pH",NA,"8.91",NA
+77,"77_0","Habitat","Vegetation_nearby","0/1","0",NA
+77,"77_0","Habitat","Vegetation_species",NA,NA,NA
+77,"77_0","Habitat","Wood_cover","%","0",NA
+77,"77_0","Habitat","Other",NA,NA,NA
+78,"78_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+78,"78_0","Physical","Bottom_visible","0/1","1",NA
+78,"78_0","Physical","Water_clarity","m",NA,NA
+78,"78_0","Physical","Depth_10m","m","0.6",NA
+78,"78_0","Physical","Slope","degrees","0.06","Calculated from depth"
+78,"78_0","Physical","Riparian_vegetation","%","100",NA
+78,"78_0","Physical","Riparian_species",NA,"Blackberries",NA
+78,"78_0","Physical","Overhanging_trees","%","0",NA
+78,"78_0","Physical","Erosion","%","0",NA
+78,"78_0","Physical","Structure","0/1","1","Jetty"
+78,"78_0","Physical","Bedrock","%","0",NA
+78,"78_0","Physical","Boulders","%","0",NA
+78,"78_0","Physical","Cobble","%","0",NA
+78,"78_0","Physical","Gravel","%","10",NA
+78,"78_0","Physical","Sand","%","90",NA
+78,"78_0","Physical","Mud","%","0",NA
+78,"78_0","Physical","Organic_matter","%","0",NA
+78,"78_0","Physical","Rock_size","mm",NA,NA
+78,"78_0","Chemical","Temperature","Degree C","23.8",NA
+78,"78_0","Chemical","DO_mgl","mg/l","10.47",NA
+78,"78_0","Chemical","DO_percent","%","124.1",NA
+78,"78_0","Chemical","Conductivity","µS/cm","158.6",NA
+78,"78_0","Chemical","Specific_conductivity","µS/cm","162.70004103405827",NA
+78,"78_0","Chemical","pH",NA,"8.43",NA
+78,"78_0","Habitat","Vegetation_nearby","0/1","0",NA
+78,"78_0","Habitat","Vegetation_species",NA,NA,NA
+78,"78_0","Habitat","Wood_cover","%","0",NA
+78,"78_0","Habitat","Other",NA,NA,NA
+79,"79_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+79,"79_0","Physical","Bottom_visible","0/1","1",NA
+79,"79_0","Physical","Water_clarity","m",NA,NA
+79,"79_0","Physical","Depth_10m","m","1.55",NA
+79,"79_0","Physical","Slope","degrees","0.155","Calculated from depth"
+79,"79_0","Physical","Riparian_vegetation","%","100",NA
+79,"79_0","Physical","Riparian_species",NA,"Flax",NA
+79,"79_0","Physical","Overhanging_trees","%","20",NA
+79,"79_0","Physical","Erosion","%","0",NA
+79,"79_0","Physical","Structure","0/1","0",NA
+79,"79_0","Physical","Bedrock","%","0",NA
+79,"79_0","Physical","Boulders","%","0",NA
+79,"79_0","Physical","Cobble","%","0",NA
+79,"79_0","Physical","Gravel","%","0",NA
+79,"79_0","Physical","Sand","%","0",NA
+79,"79_0","Physical","Mud","%","0",NA
+79,"79_0","Physical","Organic_matter","%","100",NA
+79,"79_0","Physical","Rock_size","mm",NA,NA
+79,"79_0","Chemical","Temperature","Degree C","21.6",NA
+79,"79_0","Chemical","DO_mgl","mg/l","9.1300000000000008",NA
+79,"79_0","Chemical","DO_percent","%","103.7",NA
+79,"79_0","Chemical","Conductivity","µS/cm","146.19999999999999",NA
+79,"79_0","Chemical","Specific_conductivity","µS/cm","157.44130949816929",NA
+79,"79_0","Chemical","pH",NA,"8.6300000000000008",NA
+79,"79_0","Habitat","Vegetation_nearby","0/1","0",NA
+79,"79_0","Habitat","Vegetation_species",NA,NA,NA
+79,"79_0","Habitat","Wood_cover","%","5",NA
+79,"79_0","Habitat","Other",NA,NA,NA
+80,"80_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+80,"80_0","Physical","Bottom_visible","0/1","1",NA
+80,"80_0","Physical","Water_clarity","m","3","Secci"
+80,"80_0","Physical","Depth_10m","m","1",NA
+80,"80_0","Physical","Slope","degrees","0.1","Calculated from depth"
+80,"80_0","Physical","Riparian_vegetation","%","100",NA
+80,"80_0","Physical","Riparian_species",NA,"Raupō",NA
+80,"80_0","Physical","Overhanging_trees","%","0",NA
+80,"80_0","Physical","Erosion","%","0",NA
+80,"80_0","Physical","Structure","0/1","0",NA
+80,"80_0","Physical","Bedrock","%","0",NA
+80,"80_0","Physical","Boulders","%","0",NA
+80,"80_0","Physical","Cobble","%","0",NA
+80,"80_0","Physical","Gravel","%","0",NA
+80,"80_0","Physical","Sand","%","0",NA
+80,"80_0","Physical","Mud","%","0",NA
+80,"80_0","Physical","Organic_matter","%","100",NA
+80,"80_0","Physical","Rock_size","mm",NA,NA
+80,"80_0","Chemical","Temperature","Degree C","22",NA
+80,"80_0","Chemical","DO_mgl","mg/l","8.8000000000000007",NA
+80,"80_0","Chemical","DO_percent","%","100.4",NA
+80,"80_0","Chemical","Conductivity","µS/cm","154.5",NA
+80,"80_0","Chemical","Specific_conductivity","µS/cm","164.88794023479187",NA
+80,"80_0","Chemical","pH",NA,"8.36",NA
+80,"80_0","Habitat","Vegetation_nearby","0/1","0",NA
+80,"80_0","Habitat","Vegetation_species",NA,NA,NA
+80,"80_0","Habitat","Wood_cover","%","0",NA
+80,"80_0","Habitat","Other",NA,NA,NA
+81,"81_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+81,"81_0","Physical","Bottom_visible","0/1","1",NA
+81,"81_0","Physical","Water_clarity","m",NA,NA
+81,"81_0","Physical","Depth_10m","m","1",NA
+81,"81_0","Physical","Slope","degrees","0.1","Calculated from depth"
+81,"81_0","Physical","Riparian_vegetation","%","100",NA
+81,"81_0","Physical","Riparian_species",NA,"Native forest",NA
+81,"81_0","Physical","Overhanging_trees","%","100",NA
+81,"81_0","Physical","Erosion","%","0",NA
+81,"81_0","Physical","Structure","0/1","0",NA
+81,"81_0","Physical","Bedrock","%","0",NA
+81,"81_0","Physical","Boulders","%","0",NA
+81,"81_0","Physical","Cobble","%","0",NA
+81,"81_0","Physical","Gravel","%","10",NA
+81,"81_0","Physical","Sand","%","90",NA
+81,"81_0","Physical","Mud","%","0",NA
+81,"81_0","Physical","Organic_matter","%","0",NA
+81,"81_0","Physical","Rock_size","mm",NA,NA
+81,"81_0","Chemical","Temperature","Degree C","21",NA
+81,"81_0","Chemical","DO_mgl","mg/l","9.36",NA
+81,"81_0","Chemical","DO_percent","%","105",NA
+81,"81_0","Chemical","Conductivity","µS/cm","142.69999999999999",NA
+81,"81_0","Chemical","Specific_conductivity","µS/cm","155.78602620087335",NA
+81,"81_0","Chemical","pH",NA,"8.65",NA
+81,"81_0","Habitat","Vegetation_nearby","0/1","1",NA
+81,"81_0","Habitat","Vegetation_species",NA,"Hornwort",NA
+81,"81_0","Habitat","Wood_cover","%","20",NA
+81,"81_0","Habitat","Other",NA,NA,NA
+82,"82_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+82,"82_0","Physical","Bottom_visible","0/1","1",NA
+82,"82_0","Physical","Water_clarity","m",NA,NA
+82,"82_0","Physical","Depth_10m","m","0.55000000000000004",NA
+82,"82_0","Physical","Slope","degrees","5.5000000000000007E-2","Calculated from depth"
+82,"82_0","Physical","Riparian_vegetation","%","90",NA
+82,"82_0","Physical","Riparian_species",NA,"Weeds",NA
+82,"82_0","Physical","Overhanging_trees","%","0",NA
+82,"82_0","Physical","Erosion","%","0",NA
+82,"82_0","Physical","Structure","0/1","0",NA
+82,"82_0","Physical","Bedrock","%","0",NA
+82,"82_0","Physical","Boulders","%","0",NA
+82,"82_0","Physical","Cobble","%","0",NA
+82,"82_0","Physical","Gravel","%","5",NA
+82,"82_0","Physical","Sand","%","95",NA
+82,"82_0","Physical","Mud","%","0",NA
+82,"82_0","Physical","Organic_matter","%","0",NA
+82,"82_0","Physical","Rock_size","mm",NA,NA
+82,"82_0","Chemical","Temperature","Degree C","21.2",NA
+82,"82_0","Chemical","DO_mgl","mg/l","10.42",NA
+82,"82_0","Chemical","DO_percent","%","117.5",NA
+82,"82_0","Chemical","Conductivity","µS/cm","152.80000000000001",NA
+82,"82_0","Chemical","Specific_conductivity","µS/cm","166.05085850901978",NA
+82,"82_0","Chemical","pH",NA,"8.8000000000000007",NA
+82,"82_0","Habitat","Vegetation_nearby","0/1","0",NA
+82,"82_0","Habitat","Vegetation_species",NA,NA,NA
+82,"82_0","Habitat","Wood_cover","%","10",NA
+82,"82_0","Habitat","Other",NA,NA,NA
+83,"83_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+83,"83_0","Physical","Bottom_visible","0/1","1",NA
+83,"83_0","Physical","Water_clarity","m",NA,NA
+83,"83_0","Physical","Depth_10m","m","1.3",NA
+83,"83_0","Physical","Slope","degrees","0.13","Calculated from depth"
+83,"83_0","Physical","Riparian_vegetation","%","20",NA
+83,"83_0","Physical","Riparian_species",NA,"Native forest",NA
+83,"83_0","Physical","Overhanging_trees","%","100",NA
+83,"83_0","Physical","Erosion","%","0",NA
+83,"83_0","Physical","Structure","0/1","0",NA
+83,"83_0","Physical","Bedrock","%","0",NA
+83,"83_0","Physical","Boulders","%","0",NA
+83,"83_0","Physical","Cobble","%","30",NA
+83,"83_0","Physical","Gravel","%","0",NA
+83,"83_0","Physical","Sand","%","70",NA
+83,"83_0","Physical","Mud","%","0",NA
+83,"83_0","Physical","Organic_matter","%","0",NA
+83,"83_0","Physical","Rock_size","mm","0",NA
+83,"83_0","Chemical","Temperature","Degree C","20.7",NA
+83,"83_0","Chemical","DO_mgl","mg/l","9.61",NA
+83,"83_0","Chemical","DO_percent","%","107.3",NA
+83,"83_0","Chemical","Conductivity","µS/cm","144.5",NA
+83,"83_0","Chemical","Specific_conductivity","µS/cm","158.84357480488075",NA
+83,"83_0","Chemical","pH",NA,"8.86",NA
+83,"83_0","Habitat","Vegetation_nearby","0/1","0",NA
+83,"83_0","Habitat","Vegetation_species",NA,NA,NA
+83,"83_0","Habitat","Wood_cover","%","0",NA
+83,"83_0","Habitat","Other",NA,NA,NA
+84,"84_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+84,"84_0","Physical","Bottom_visible","0/1","1",NA
+84,"84_0","Physical","Water_clarity","m","3.5","Secci"
+84,"84_0","Physical","Depth_10m","m","0.65",NA
+84,"84_0","Physical","Slope","degrees","6.5000000000000002E-2","Calculated from depth"
+84,"84_0","Physical","Riparian_vegetation","%","100",NA
+84,"84_0","Physical","Riparian_species",NA,"Native forest",NA
+84,"84_0","Physical","Overhanging_trees","%","100",NA
+84,"84_0","Physical","Erosion","%","0",NA
+84,"84_0","Physical","Structure","0/1","0",NA
+84,"84_0","Physical","Bedrock","%","0",NA
+84,"84_0","Physical","Boulders","%","0",NA
+84,"84_0","Physical","Cobble","%","10",NA
+84,"84_0","Physical","Gravel","%","0",NA
+84,"84_0","Physical","Sand","%","90",NA
+84,"84_0","Physical","Mud","%","0",NA
+84,"84_0","Physical","Organic_matter","%","0",NA
+84,"84_0","Physical","Rock_size","mm",NA,NA
+84,"84_0","Chemical","Temperature","Degree C","22.6",NA
+84,"84_0","Chemical","DO_mgl","mg/l","10.64",NA
+84,"84_0","Chemical","DO_percent","%","123.3",NA
+84,"84_0","Chemical","Conductivity","µS/cm","150.4",NA
+84,"84_0","Chemical","Specific_conductivity","µS/cm","158.38247683235048",NA
+84,"84_0","Chemical","pH",NA,"9.02",NA
+84,"84_0","Habitat","Vegetation_nearby","0/1","0",NA
+84,"84_0","Habitat","Vegetation_species",NA,NA,NA
+84,"84_0","Habitat","Wood_cover","%","3",NA
+84,"84_0","Habitat","Other",NA,NA,NA
+85,"85_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+85,"85_0","Physical","Bottom_visible","0/1","1",NA
+85,"85_0","Physical","Water_clarity","m",NA,NA
+85,"85_0","Physical","Depth_10m","m","0.9",NA
+85,"85_0","Physical","Slope","degrees","0.09","Calculated from depth"
+85,"85_0","Physical","Riparian_vegetation","%","100",NA
+85,"85_0","Physical","Riparian_species",NA,NA,NA
+85,"85_0","Physical","Overhanging_trees","%","100",NA
+85,"85_0","Physical","Erosion","%","20",NA
+85,"85_0","Physical","Structure","0/1","0",NA
+85,"85_0","Physical","Bedrock","%","0",NA
+85,"85_0","Physical","Boulders","%","0",NA
+85,"85_0","Physical","Cobble","%","0",NA
+85,"85_0","Physical","Gravel","%","10",NA
+85,"85_0","Physical","Sand","%","90",NA
+85,"85_0","Physical","Mud","%","0",NA
+85,"85_0","Physical","Organic_matter","%","0",NA
+85,"85_0","Physical","Rock_size","mm",NA,NA
+85,"85_0","Chemical","Temperature","Degree C","21.2",NA
+85,"85_0","Chemical","DO_mgl","mg/l","9.1999999999999993",NA
+85,"85_0","Chemical","DO_percent","%","103.8",NA
+85,"85_0","Chemical","Conductivity","µS/cm","423.8",NA
+85,"85_0","Chemical","Specific_conductivity","µS/cm","460.55205390132579",NA
+85,"85_0","Chemical","pH",NA,"8.56",NA
+85,"85_0","Habitat","Vegetation_nearby","0/1","0",NA
+85,"85_0","Habitat","Vegetation_species",NA,NA,NA
+85,"85_0","Habitat","Wood_cover","%","20",NA
+85,"85_0","Habitat","Other",NA,NA,NA
+86,"86_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+86,"86_0","Physical","Bottom_visible","0/1","1",NA
+86,"86_0","Physical","Water_clarity","m","4","Secci"
+86,"86_0","Physical","Depth_10m","m","0.79",NA
+86,"86_0","Physical","Slope","degrees","7.9000000000000001E-2","Calculated from depth"
+86,"86_0","Physical","Riparian_vegetation","%","10",NA
+86,"86_0","Physical","Riparian_species",NA,"dead manuka",NA
+86,"86_0","Physical","Overhanging_trees","%","0",NA
+86,"86_0","Physical","Erosion","%","0",NA
+86,"86_0","Physical","Structure","0/1","0",NA
+86,"86_0","Physical","Bedrock","%","0",NA
+86,"86_0","Physical","Boulders","%","0",NA
+86,"86_0","Physical","Cobble","%","0",NA
+86,"86_0","Physical","Gravel","%","0",NA
+86,"86_0","Physical","Sand","%","0",NA
+86,"86_0","Physical","Mud","%","0",NA
+86,"86_0","Physical","Organic_matter","%","100",NA
+86,"86_0","Physical","Rock_size","mm",NA,NA
+86,"86_0","Chemical","Temperature","Degree C","21.9",NA
+86,"86_0","Chemical","DO_mgl","mg/l","11.12",NA
+86,"86_0","Chemical","DO_percent","%","127",NA
+86,"86_0","Chemical","Conductivity","µS/cm","427.3",NA
+86,"86_0","Chemical","Specific_conductivity","µS/cm","457.05423039897317",NA
+86,"86_0","Chemical","pH",NA,"8.91",NA
+86,"86_0","Habitat","Vegetation_nearby","0/1","0",NA
+86,"86_0","Habitat","Vegetation_species",NA,NA,NA
+86,"86_0","Habitat","Wood_cover","%","5",NA
+86,"86_0","Habitat","Other",NA,NA,NA
+87,"87_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+87,"87_0","Physical","Bottom_visible","0/1","1",NA
+87,"87_0","Physical","Water_clarity","m","3.3","Secci"
+87,"87_0","Physical","Depth_10m","m","1.05",NA
+87,"87_0","Physical","Slope","degrees","0.10500000000000001","Calculated from depth"
+87,"87_0","Physical","Riparian_vegetation","%","100",NA
+87,"87_0","Physical","Riparian_species",NA,"Grass",NA
+87,"87_0","Physical","Overhanging_trees","%","0",NA
+87,"87_0","Physical","Erosion","%","0",NA
+87,"87_0","Physical","Structure","0/1","0",NA
+87,"87_0","Physical","Bedrock","%","0",NA
+87,"87_0","Physical","Boulders","%","0",NA
+87,"87_0","Physical","Cobble","%","0",NA
+87,"87_0","Physical","Gravel","%","0",NA
+87,"87_0","Physical","Sand","%","80",NA
+87,"87_0","Physical","Mud","%","0",NA
+87,"87_0","Physical","Organic_matter","%","20",NA
+87,"87_0","Physical","Rock_size","mm",NA,NA
+87,"87_0","Chemical","Temperature","Degree C","21.3",NA
+87,"87_0","Chemical","DO_mgl","mg/l","8.93",NA
+87,"87_0","Chemical","DO_percent","%","100.6",NA
+87,"87_0","Chemical","Conductivity","µS/cm","423.4",NA
+87,"87_0","Chemical","Specific_conductivity","µS/cm","459.06971701181823",NA
+87,"87_0","Chemical","pH",NA,"8.49",NA
+87,"87_0","Habitat","Vegetation_nearby","0/1","1",NA
+87,"87_0","Habitat","Vegetation_species",NA,"Three-leaved milfoil",NA
+87,"87_0","Habitat","Wood_cover","%","3",NA
+87,"87_0","Habitat","Other",NA,NA,NA
+88,"88_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+88,"88_0","Physical","Bottom_visible","0/1","0",NA
+88,"88_0","Physical","Water_clarity","m",NA,NA
+88,"88_0","Physical","Depth_10m","m","1",NA
+88,"88_0","Physical","Slope","degrees","0.1","Calculated from depth"
+88,"88_0","Physical","Riparian_vegetation","%","0",NA
+88,"88_0","Physical","Riparian_species",NA,NA,NA
+88,"88_0","Physical","Overhanging_trees","%","0",NA
+88,"88_0","Physical","Erosion","%","100",NA
+88,"88_0","Physical","Structure","0/1","0",NA
+88,"88_0","Physical","Bedrock","%","0",NA
+88,"88_0","Physical","Boulders","%","0",NA
+88,"88_0","Physical","Cobble","%","0",NA
+88,"88_0","Physical","Gravel","%","0",NA
+88,"88_0","Physical","Sand","%","100",NA
+88,"88_0","Physical","Mud","%","0",NA
+88,"88_0","Physical","Organic_matter","%","0",NA
+88,"88_0","Physical","Rock_size","mm",NA,NA
+88,"88_0","Chemical","Temperature","Degree C","22.5",NA
+88,"88_0","Chemical","DO_mgl","mg/l","9.42",NA
+88,"88_0","Chemical","DO_percent","%","109.2",NA
+88,"88_0","Chemical","Conductivity","µS/cm","431.8",NA
+88,"88_0","Chemical","Specific_conductivity","µS/cm","455.72559366754621",NA
+88,"88_0","Chemical","pH",NA,"8.75",NA
+88,"88_0","Habitat","Vegetation_nearby","0/1","0",NA
+88,"88_0","Habitat","Vegetation_species",NA,NA,NA
+88,"88_0","Habitat","Wood_cover","%","10",NA
+88,"88_0","Habitat","Other",NA,NA,NA
+89,"89_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+89,"89_0","Physical","Bottom_visible","0/1","1",NA
+89,"89_0","Physical","Water_clarity","m",NA,NA
+89,"89_0","Physical","Depth_10m","m","1.1000000000000001",NA
+89,"89_0","Physical","Slope","degrees","0.11000000000000001","Calculated from depth"
+89,"89_0","Physical","Riparian_vegetation","%","100",NA
+89,"89_0","Physical","Riparian_species",NA,"Native forest",NA
+89,"89_0","Physical","Overhanging_trees","%","0",NA
+89,"89_0","Physical","Erosion","%","0",NA
+89,"89_0","Physical","Structure","0/1","0",NA
+89,"89_0","Physical","Bedrock","%","0",NA
+89,"89_0","Physical","Boulders","%","0",NA
+89,"89_0","Physical","Cobble","%","0",NA
+89,"89_0","Physical","Gravel","%","0",NA
+89,"89_0","Physical","Sand","%","0",NA
+89,"89_0","Physical","Mud","%","0",NA
+89,"89_0","Physical","Organic_matter","%","100",NA
+89,"89_0","Physical","Rock_size","mm",NA,NA
+89,"89_0","Chemical","Temperature","Degree C","22",NA
+89,"89_0","Chemical","DO_mgl","mg/l","10.92",NA
+89,"89_0","Chemical","DO_percent","%","124.9",NA
+89,"89_0","Chemical","Conductivity","µS/cm","427.3",NA
+89,"89_0","Chemical","Specific_conductivity","µS/cm","456.0298826040555",NA
+89,"89_0","Chemical","pH",NA,"8.91",NA
+89,"89_0","Habitat","Vegetation_nearby","0/1","1",NA
+89,"89_0","Habitat","Vegetation_species",NA,"Hornwort",NA
+89,"89_0","Habitat","Wood_cover","%","3",NA
+89,"89_0","Habitat","Other",NA,NA,NA
+90,"90_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+90,"90_0","Physical","Bottom_visible","0/1","1",NA
+90,"90_0","Physical","Water_clarity","m",NA,NA
+90,"90_0","Physical","Depth_10m","m","1",NA
+90,"90_0","Physical","Slope","degrees","0.1","Calculated from depth"
+90,"90_0","Physical","Riparian_vegetation","%","100",NA
+90,"90_0","Physical","Riparian_species",NA,"Native forest",NA
+90,"90_0","Physical","Overhanging_trees","%","0",NA
+90,"90_0","Physical","Erosion","%","0",NA
+90,"90_0","Physical","Structure","0/1","0",NA
+90,"90_0","Physical","Bedrock","%","0",NA
+90,"90_0","Physical","Boulders","%","0",NA
+90,"90_0","Physical","Cobble","%","0",NA
+90,"90_0","Physical","Gravel","%","0",NA
+90,"90_0","Physical","Sand","%","0",NA
+90,"90_0","Physical","Mud","%","0",NA
+90,"90_0","Physical","Organic_matter","%","100",NA
+90,"90_0","Physical","Rock_size","mm",NA,NA
+90,"90_0","Chemical","Temperature","Degree C","21.6",NA
+90,"90_0","Chemical","DO_mgl","mg/l","11.06",NA
+90,"90_0","Chemical","DO_percent","%","125.9",NA
+90,"90_0","Chemical","Conductivity","µS/cm","426.2",NA
+90,"90_0","Chemical","Specific_conductivity","µS/cm","458.97049321559336",NA
+90,"90_0","Chemical","pH",NA,"8.9",NA
+90,"90_0","Habitat","Vegetation_nearby","0/1","0",NA
+90,"90_0","Habitat","Vegetation_species",NA,NA,NA
+90,"90_0","Habitat","Wood_cover","%","10",NA
+90,"90_0","Habitat","Other",NA,NA,NA
+91,"91_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+91,"91_0","Physical","Bottom_visible","0/1","1",NA
+91,"91_0","Physical","Water_clarity","m",NA,NA
+91,"91_0","Physical","Depth_10m","m","1.02",NA
+91,"91_0","Physical","Slope","degrees","0.10200000000000001","Calculated from depth"
+91,"91_0","Physical","Riparian_vegetation","%","0",NA
+91,"91_0","Physical","Riparian_species",NA,NA,NA
+91,"91_0","Physical","Overhanging_trees","%","0",NA
+91,"91_0","Physical","Erosion","%","100",NA
+91,"91_0","Physical","Structure","0/1","0",NA
+91,"91_0","Physical","Bedrock","%","0",NA
+91,"91_0","Physical","Boulders","%","0",NA
+91,"91_0","Physical","Cobble","%","20",NA
+91,"91_0","Physical","Gravel","%","70",NA
+91,"91_0","Physical","Sand","%","10",NA
+91,"91_0","Physical","Mud","%","0",NA
+91,"91_0","Physical","Organic_matter","%","0",NA
+91,"91_0","Physical","Rock_size","mm",NA,NA
+91,"91_0","Chemical","Temperature","Degree C","22.6",NA
+91,"91_0","Chemical","DO_mgl","mg/l","11.08",NA
+91,"91_0","Chemical","DO_percent","%","128.30000000000001",NA
+91,"91_0","Chemical","Conductivity","µS/cm","441.3",NA
+91,"91_0","Chemical","Specific_conductivity","µS/cm","464.72198820556025",NA
+91,"91_0","Chemical","pH",NA,"8.9499999999999993",NA
+91,"91_0","Habitat","Vegetation_nearby","0/1","0",NA
+91,"91_0","Habitat","Vegetation_species",NA,NA,NA
+91,"91_0","Habitat","Wood_cover","%","20",NA
+91,"91_0","Habitat","Other",NA,NA,NA
+92,"92_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+92,"92_0","Physical","Bottom_visible","0/1","1",NA
+92,"92_0","Physical","Water_clarity","m",NA,NA
+92,"92_0","Physical","Depth_10m","m","1.3",NA
+92,"92_0","Physical","Slope","degrees","0.13","Calculated from depth"
+92,"92_0","Physical","Riparian_vegetation","%","100",NA
+92,"92_0","Physical","Riparian_species",NA,"Native forest",NA
+92,"92_0","Physical","Overhanging_trees","%","100",NA
+92,"92_0","Physical","Erosion","%","0",NA
+92,"92_0","Physical","Structure","0/1","0",NA
+92,"92_0","Physical","Bedrock","%","0",NA
+92,"92_0","Physical","Boulders","%","0",NA
+92,"92_0","Physical","Cobble","%","0",NA
+92,"92_0","Physical","Gravel","%","0",NA
+92,"92_0","Physical","Sand","%","5",NA
+92,"92_0","Physical","Mud","%","0",NA
+92,"92_0","Physical","Organic_matter","%","95",NA
+92,"92_0","Physical","Rock_size","mm",NA,NA
+92,"92_0","Chemical","Temperature","Degree C","22.8",NA
+92,"92_0","Chemical","DO_mgl","mg/l","11.79",NA
+92,"92_0","Chemical","DO_percent","%","137.6",NA
+92,"92_0","Chemical","Conductivity","µS/cm","434.4",NA
+92,"92_0","Chemical","Specific_conductivity","µS/cm","455.44139232543506",NA
+92,"92_0","Chemical","pH",NA,"9.2100000000000009",NA
+92,"92_0","Habitat","Vegetation_nearby","0/1","1",NA
+92,"92_0","Habitat","Vegetation_species",NA,"Hornwort",NA
+92,"92_0","Habitat","Wood_cover","%","10",NA
+92,"92_0","Habitat","Other",NA,NA,NA
+93,"93_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+93,"93_0","Physical","Bottom_visible","0/1","1",NA
+93,"93_0","Physical","Water_clarity","m",NA,NA
+93,"93_0","Physical","Depth_10m","m","1",NA
+93,"93_0","Physical","Slope","degrees","0.1","Calculated from depth"
+93,"93_0","Physical","Riparian_vegetation","%","100",NA
+93,"93_0","Physical","Riparian_species",NA,"Manuka",NA
+93,"93_0","Physical","Overhanging_trees","%","0",NA
+93,"93_0","Physical","Erosion","%","0",NA
+93,"93_0","Physical","Structure","0/1","0",NA
+93,"93_0","Physical","Bedrock","%","0",NA
+93,"93_0","Physical","Boulders","%","0",NA
+93,"93_0","Physical","Cobble","%","0",NA
+93,"93_0","Physical","Gravel","%","0",NA
+93,"93_0","Physical","Sand","%","0",NA
+93,"93_0","Physical","Mud","%","0",NA
+93,"93_0","Physical","Organic_matter","%","100",NA
+93,"93_0","Physical","Rock_size","mm",NA,NA
+93,"93_0","Chemical","Temperature","Degree C","21.6",NA
+93,"93_0","Chemical","DO_mgl","mg/l","10.61",NA
+93,"93_0","Chemical","DO_percent","%","120.4",NA
+93,"93_0","Chemical","Conductivity","µS/cm","424.8",NA
+93,"93_0","Chemical","Specific_conductivity","µS/cm","457.46284729700625",NA
+93,"93_0","Chemical","pH",NA,"9.02",NA
+93,"93_0","Habitat","Vegetation_nearby","0/1","1",NA
+93,"93_0","Habitat","Vegetation_species",NA,"Lagarosiphon (Oxygen Weed)",NA
+93,"93_0","Habitat","Wood_cover","%","25",NA
+93,"93_0","Habitat","Other",NA,NA,NA
+94,"94_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+94,"94_0","Physical","Bottom_visible","0/1","1",NA
+94,"94_0","Physical","Water_clarity","m",NA,NA
+94,"94_0","Physical","Depth_10m","m","1.46",NA
+94,"94_0","Physical","Slope","degrees","0.14599999999999999","Calculated from depth"
+94,"94_0","Physical","Riparian_vegetation","%","100",NA
+94,"94_0","Physical","Riparian_species",NA,"Native forest",NA
+94,"94_0","Physical","Overhanging_trees","%","30",NA
+94,"94_0","Physical","Erosion","%","0",NA
+94,"94_0","Physical","Structure","0/1","0",NA
+94,"94_0","Physical","Bedrock","%","0",NA
+94,"94_0","Physical","Boulders","%","0",NA
+94,"94_0","Physical","Cobble","%","0",NA
+94,"94_0","Physical","Gravel","%","0",NA
+94,"94_0","Physical","Sand","%","10",NA
+94,"94_0","Physical","Mud","%","0",NA
+94,"94_0","Physical","Organic_matter","%","90",NA
+94,"94_0","Physical","Rock_size","mm",NA,NA
+94,"94_0","Chemical","Temperature","Degree C","22.7",NA
+94,"94_0","Chemical","DO_mgl","mg/l","11.73",NA
+94,"94_0","Chemical","DO_percent","%","135.6",NA
+94,"94_0","Chemical","Conductivity","µS/cm","434.3",NA
+94,"94_0","Chemical","Specific_conductivity","µS/cm","456.34128401807294",NA
+94,"94_0","Chemical","pH",NA,"9.1199999999999992",NA
+94,"94_0","Habitat","Vegetation_nearby","0/1","0",NA
+94,"94_0","Habitat","Vegetation_species",NA,NA,NA
+94,"94_0","Habitat","Wood_cover","%","30",NA
+94,"94_0","Habitat","Other",NA,NA,NA
+95,"95_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+95,"95_0","Physical","Bottom_visible","0/1","0",NA
+95,"95_0","Physical","Water_clarity","m",NA,NA
+95,"95_0","Physical","Depth_10m","m","2",NA
+95,"95_0","Physical","Slope","degrees","0.2","Calculated from depth"
+95,"95_0","Physical","Riparian_vegetation","%","100",NA
+95,"95_0","Physical","Riparian_species",NA,"Native forest",NA
+95,"95_0","Physical","Overhanging_trees","%","100",NA
+95,"95_0","Physical","Erosion","%","100",NA
+95,"95_0","Physical","Structure","0/1","0",NA
+95,"95_0","Physical","Bedrock","%","0",NA
+95,"95_0","Physical","Boulders","%","40",NA
+95,"95_0","Physical","Cobble","%","0",NA
+95,"95_0","Physical","Gravel","%","30",NA
+95,"95_0","Physical","Sand","%","30",NA
+95,"95_0","Physical","Mud","%","0",NA
+95,"95_0","Physical","Organic_matter","%","0",NA
+95,"95_0","Physical","Rock_size","mm",NA,NA
+95,"95_0","Chemical","Temperature","Degree C","23",NA
+95,"95_0","Chemical","DO_mgl","mg/l","9.64",NA
+95,"95_0","Chemical","DO_percent","%","111.9",NA
+95,"95_0","Chemical","Conductivity","µS/cm","443",NA
+95,"95_0","Chemical","Specific_conductivity","µS/cm","462.42171189979126",NA
+95,"95_0","Chemical","pH",NA,"8.69",NA
+95,"95_0","Habitat","Vegetation_nearby","0/1","0",NA
+95,"95_0","Habitat","Vegetation_species",NA,NA,NA
+95,"95_0","Habitat","Wood_cover","%","40",NA
+95,"95_0","Habitat","Other",NA,NA,NA
+96,"96_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+96,"96_0","Physical","Bottom_visible","0/1","1",NA
+96,"96_0","Physical","Water_clarity","m","2.9",NA
+96,"96_0","Physical","Depth_10m","m","1.05",NA
+96,"96_0","Physical","Slope","degrees","0.10500000000000001","Calculated from depth"
+96,"96_0","Physical","Riparian_vegetation","%","0",NA
+96,"96_0","Physical","Riparian_species",NA,"Native forest",NA
+96,"96_0","Physical","Overhanging_trees","%","100",NA
+96,"96_0","Physical","Erosion","%","0",NA
+96,"96_0","Physical","Structure","0/1","0",NA
+96,"96_0","Physical","Bedrock","%","0",NA
+96,"96_0","Physical","Boulders","%","0",NA
+96,"96_0","Physical","Cobble","%","0",NA
+96,"96_0","Physical","Gravel","%","0",NA
+96,"96_0","Physical","Sand","%","100",NA
+96,"96_0","Physical","Mud","%","0",NA
+96,"96_0","Physical","Organic_matter","%","0",NA
+96,"96_0","Physical","Rock_size","mm",NA,NA
+96,"96_0","Chemical","Temperature","Degree C","22.1",NA
+96,"96_0","Chemical","DO_mgl","mg/l","8.85",NA
+96,"96_0","Chemical","DO_percent","%","101.7",NA
+96,"96_0","Chemical","Conductivity","µS/cm","434.7",NA
+96,"96_0","Chemical","Specific_conductivity","µS/cm","462.89000106484929",NA
+96,"96_0","Chemical","pH",NA,"8.4600000000000009",NA
+96,"96_0","Habitat","Vegetation_nearby","0/1","0",NA
+96,"96_0","Habitat","Vegetation_species",NA,NA,NA
+96,"96_0","Habitat","Wood_cover","%","3",NA
+96,"96_0","Habitat","Other",NA,NA,NA
+97,"97_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+97,"97_0","Physical","Bottom_visible","0/1","1",NA
+97,"97_0","Physical","Water_clarity","m",NA,NA
+97,"97_0","Physical","Depth_10m","m","1.6",NA
+97,"97_0","Physical","Slope","degrees","0.16","Calculated from depth"
+97,"97_0","Physical","Riparian_vegetation","%","100",NA
+97,"97_0","Physical","Riparian_species",NA,NA,NA
+97,"97_0","Physical","Overhanging_trees","%","100",NA
+97,"97_0","Physical","Erosion","%","0",NA
+97,"97_0","Physical","Structure","0/1","0",NA
+97,"97_0","Physical","Bedrock","%","0",NA
+97,"97_0","Physical","Boulders","%","0",NA
+97,"97_0","Physical","Cobble","%","0",NA
+97,"97_0","Physical","Gravel","%","10",NA
+97,"97_0","Physical","Sand","%","80",NA
+97,"97_0","Physical","Mud","%","0",NA
+97,"97_0","Physical","Organic_matter","%","10",NA
+97,"97_0","Physical","Rock_size","mm",NA,NA
+97,"97_0","Chemical","Temperature","Degree C","16.5",NA
+97,"97_0","Chemical","DO_mgl","mg/l","9.9700000000000006",NA
+97,"97_0","Chemical","DO_percent","%","102",NA
+97,"97_0","Chemical","Conductivity","µS/cm","132.80000000000001",NA
+97,"97_0","Chemical","Specific_conductivity","µS/cm","161.65550821667682",NA
+97,"97_0","Chemical","pH",NA,"8",NA
+97,"97_0","Habitat","Vegetation_nearby","0/1","1",NA
+97,"97_0","Habitat","Vegetation_species",NA,NA,NA
+97,"97_0","Habitat","Wood_cover","%","30",NA
+97,"97_0","Habitat","Other",NA,NA,NA
+98,"98_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+98,"98_0","Physical","Bottom_visible","0/1","1",NA
+98,"98_0","Physical","Water_clarity","m",NA,NA
+98,"98_0","Physical","Depth_10m","m","2.8",NA
+98,"98_0","Physical","Slope","degrees","0.27999999999999997","Calculated from depth"
+98,"98_0","Physical","Riparian_vegetation","%","100",NA
+98,"98_0","Physical","Riparian_species",NA,NA,NA
+98,"98_0","Physical","Overhanging_trees","%","80",NA
+98,"98_0","Physical","Erosion","%","0",NA
+98,"98_0","Physical","Structure","0/1","0",NA
+98,"98_0","Physical","Bedrock","%","0",NA
+98,"98_0","Physical","Boulders","%","50",NA
+98,"98_0","Physical","Cobble","%","0",NA
+98,"98_0","Physical","Gravel","%","0",NA
+98,"98_0","Physical","Sand","%","50",NA
+98,"98_0","Physical","Mud","%","0",NA
+98,"98_0","Physical","Organic_matter","%","0",NA
+98,"98_0","Physical","Rock_size","mm",NA,NA
+98,"98_0","Chemical","Temperature","Degree C","16.8",NA
+98,"98_0","Chemical","DO_mgl","mg/l","9.81",NA
+98,"98_0","Chemical","DO_percent","%","101.1",NA
+98,"98_0","Chemical","Conductivity","µS/cm","134.5",NA
+98,"98_0","Chemical","Specific_conductivity","µS/cm","162.47885962792947",NA
+98,"98_0","Chemical","pH",NA,"7.95",NA
+98,"98_0","Habitat","Vegetation_nearby","0/1","1",NA
+98,"98_0","Habitat","Vegetation_species",NA,NA,NA
+98,"98_0","Habitat","Wood_cover","%","10",NA
+98,"98_0","Habitat","Other",NA,NA,NA
+99,"99_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+99,"99_0","Physical","Bottom_visible","0/1","1",NA
+99,"99_0","Physical","Water_clarity","m","7.6","Secci"
+99,"99_0","Physical","Depth_10m","m","0.65",NA
+99,"99_0","Physical","Slope","degrees","6.5000000000000002E-2","Calculated from depth"
+99,"99_0","Physical","Riparian_vegetation","%","30","Dead"
+99,"99_0","Physical","Riparian_species",NA,NA,NA
+99,"99_0","Physical","Overhanging_trees","%","100","Dead"
+99,"99_0","Physical","Erosion","%","0",NA
+99,"99_0","Physical","Structure","0/1","0",NA
+99,"99_0","Physical","Bedrock","%","0",NA
+99,"99_0","Physical","Boulders","%","0",NA
+99,"99_0","Physical","Cobble","%","0",NA
+99,"99_0","Physical","Gravel","%","0",NA
+99,"99_0","Physical","Sand","%","100",NA
+99,"99_0","Physical","Mud","%","0",NA
+99,"99_0","Physical","Organic_matter","%","0",NA
+99,"99_0","Physical","Rock_size","mm",NA,NA
+99,"99_0","Chemical","Temperature","Degree C","16.3",NA
+99,"99_0","Chemical","DO_mgl","mg/l","9.7100000000000009",NA
+99,"99_0","Chemical","DO_percent","%","99.1",NA
+99,"99_0","Chemical","Conductivity","µS/cm","132.5",NA
+99,"99_0","Chemical","Specific_conductivity","µS/cm","162.11917288633305",NA
+99,"99_0","Chemical","pH",NA,"8.56",NA
+99,"99_0","Habitat","Vegetation_nearby","0/1","0",NA
+99,"99_0","Habitat","Vegetation_species",NA,NA,NA
+99,"99_0","Habitat","Wood_cover","%","5",NA
+99,"99_0","Habitat","Other",NA,NA,NA
+100,"100_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+100,"100_0","Physical","Bottom_visible","0/1","1",NA
+100,"100_0","Physical","Water_clarity","m",NA,NA
+100,"100_0","Physical","Depth_10m","m","2",NA
+100,"100_0","Physical","Slope","degrees","0.2","Calculated from depth"
+100,"100_0","Physical","Riparian_vegetation","%","100",NA
+100,"100_0","Physical","Riparian_species",NA,NA,NA
+100,"100_0","Physical","Overhanging_trees","%","100",NA
+100,"100_0","Physical","Erosion","%","0",NA
+100,"100_0","Physical","Structure","0/1","0",NA
+100,"100_0","Physical","Bedrock","%","0",NA
+100,"100_0","Physical","Boulders","%","0",NA
+100,"100_0","Physical","Cobble","%","0",NA
+100,"100_0","Physical","Gravel","%","0",NA
+100,"100_0","Physical","Sand","%","0",NA
+100,"100_0","Physical","Mud","%","0",NA
+100,"100_0","Physical","Organic_matter","%","100",NA
+100,"100_0","Physical","Rock_size","mm",NA,NA
+100,"100_0","Chemical","Temperature","Degree C","17.7",NA
+100,"100_0","Chemical","DO_mgl","mg/l","8.66",NA
+100,"100_0","Chemical","DO_percent","%","91.3",NA
+100,"100_0","Chemical","Conductivity","µS/cm","142.30000000000001",NA
+100,"100_0","Chemical","Specific_conductivity","µS/cm","168.06424943899847",NA
+100,"100_0","Chemical","pH",NA,"7.4",NA
+100,"100_0","Habitat","Vegetation_nearby","0/1","1",NA
+100,"100_0","Habitat","Vegetation_species",NA,NA,NA
+100,"100_0","Habitat","Wood_cover","%","10",NA
+100,"100_0","Habitat","Other",NA,NA,NA
+101,"101_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+101,"101_0","Physical","Bottom_visible","0/1","1",NA
+101,"101_0","Physical","Water_clarity","m","7.6","Secci"
+101,"101_0","Physical","Depth_10m","m","0.6",NA
+101,"101_0","Physical","Slope","degrees","0.06","Calculated from depth"
+101,"101_0","Physical","Riparian_vegetation","%","80",NA
+101,"101_0","Physical","Riparian_species",NA,NA,NA
+101,"101_0","Physical","Overhanging_trees","%","30",NA
+101,"101_0","Physical","Erosion","%","0",NA
+101,"101_0","Physical","Structure","0/1","0",NA
+101,"101_0","Physical","Bedrock","%","0",NA
+101,"101_0","Physical","Boulders","%","0",NA
+101,"101_0","Physical","Cobble","%","0",NA
+101,"101_0","Physical","Gravel","%","0",NA
+101,"101_0","Physical","Sand","%","20",NA
+101,"101_0","Physical","Mud","%","0",NA
+101,"101_0","Physical","Organic_matter","%","80",NA
+101,"101_0","Physical","Rock_size","mm",NA,NA
+101,"101_0","Chemical","Temperature","Degree C","16.899999999999999",NA
+101,"101_0","Chemical","DO_mgl","mg/l","9.4",NA
+101,"101_0","Chemical","DO_percent","%","97.1",NA
+101,"101_0","Chemical","Conductivity","µS/cm","135.80000000000001",NA
+101,"101_0","Chemical","Specific_conductivity","µS/cm","163.63417279190267",NA
+101,"101_0","Chemical","pH",NA,"7.75",NA
+101,"101_0","Habitat","Vegetation_nearby","0/1","1",NA
+101,"101_0","Habitat","Vegetation_species",NA,NA,NA
+101,"101_0","Habitat","Wood_cover","%","20","Dead trees"
+101,"101_0","Habitat","Other",NA,NA,NA
+102,"102_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+102,"102_0","Physical","Bottom_visible","0/1","1",NA
+102,"102_0","Physical","Water_clarity","m",NA,NA
+102,"102_0","Physical","Depth_10m","m","2.9",NA
+102,"102_0","Physical","Slope","degrees","0.28999999999999998","Calculated from depth"
+102,"102_0","Physical","Riparian_vegetation","%","100",NA
+102,"102_0","Physical","Riparian_species",NA,NA,NA
+102,"102_0","Physical","Overhanging_trees","%","100",NA
+102,"102_0","Physical","Erosion","%","0",NA
+102,"102_0","Physical","Structure","0/1","0",NA
+102,"102_0","Physical","Bedrock","%","0",NA
+102,"102_0","Physical","Boulders","%","80",NA
+102,"102_0","Physical","Cobble","%","0",NA
+102,"102_0","Physical","Gravel","%","0",NA
+102,"102_0","Physical","Sand","%","20",NA
+102,"102_0","Physical","Mud","%","0",NA
+102,"102_0","Physical","Organic_matter","%","0",NA
+102,"102_0","Physical","Rock_size","mm",NA,NA
+102,"102_0","Chemical","Temperature","Degree C","16.600000000000001",NA
+102,"102_0","Chemical","DO_mgl","mg/l","9.59",NA
+102,"102_0","Chemical","DO_percent","%","98.4",NA
+102,"102_0","Chemical","Conductivity","µS/cm","133",NA
+102,"102_0","Chemical","Specific_conductivity","µS/cm","161.48615832928607",NA
+102,"102_0","Chemical","pH",NA,"7.82",NA
+102,"102_0","Habitat","Vegetation_nearby","0/1","0",NA
+102,"102_0","Habitat","Vegetation_species",NA,NA,NA
+102,"102_0","Habitat","Wood_cover","%","10",NA
+102,"102_0","Habitat","Other",NA,NA,NA
+103,"103_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+103,"103_0","Physical","Bottom_visible","0/1","1",NA
+103,"103_0","Physical","Water_clarity","m",NA,NA
+103,"103_0","Physical","Depth_10m","m","1.7",NA
+103,"103_0","Physical","Slope","degrees","0.16999999999999998","Calculated from depth"
+103,"103_0","Physical","Riparian_vegetation","%","0",NA
+103,"103_0","Physical","Riparian_species",NA,NA,NA
+103,"103_0","Physical","Overhanging_trees","%","0",NA
+103,"103_0","Physical","Erosion","%","0",NA
+103,"103_0","Physical","Structure","0/1","0",NA
+103,"103_0","Physical","Bedrock","%","0",NA
+103,"103_0","Physical","Boulders","%","5",NA
+103,"103_0","Physical","Cobble","%","0",NA
+103,"103_0","Physical","Gravel","%","45","vulcanic gravel"
+103,"103_0","Physical","Sand","%","50",NA
+103,"103_0","Physical","Mud","%","0",NA
+103,"103_0","Physical","Organic_matter","%","0",NA
+103,"103_0","Physical","Rock_size","mm",NA,NA
+103,"103_0","Chemical","Temperature","Degree C","17",NA
+103,"103_0","Chemical","DO_mgl","mg/l","9.91",NA
+103,"103_0","Chemical","DO_percent","%","102.5",NA
+103,"103_0","Chemical","Conductivity","µS/cm","130.4",NA
+103,"103_0","Chemical","Specific_conductivity","µS/cm","156.73076923076925",NA
+103,"103_0","Chemical","pH",NA,"7.61",NA
+103,"103_0","Habitat","Vegetation_nearby","0/1","0",NA
+103,"103_0","Habitat","Vegetation_species",NA,NA,NA
+103,"103_0","Habitat","Wood_cover","%","3",NA
+103,"103_0","Habitat","Other",NA,NA,NA
+104,"104_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+104,"104_0","Physical","Bottom_visible","0/1","1",NA
+104,"104_0","Physical","Water_clarity","m",NA,NA
+104,"104_0","Physical","Depth_10m","m","3",NA
+104,"104_0","Physical","Slope","degrees","0.3","Calculated from depth"
+104,"104_0","Physical","Riparian_vegetation","%","100",NA
+104,"104_0","Physical","Riparian_species",NA,NA,NA
+104,"104_0","Physical","Overhanging_trees","%","20",NA
+104,"104_0","Physical","Erosion","%","0",NA
+104,"104_0","Physical","Structure","0/1","0",NA
+104,"104_0","Physical","Bedrock","%","0",NA
+104,"104_0","Physical","Boulders","%","0",NA
+104,"104_0","Physical","Cobble","%","0",NA
+104,"104_0","Physical","Gravel","%","0",NA
+104,"104_0","Physical","Sand","%","0",NA
+104,"104_0","Physical","Mud","%","0",NA
+104,"104_0","Physical","Organic_matter","%","100",NA
+104,"104_0","Physical","Rock_size","mm",NA,NA
+104,"104_0","Chemical","Temperature","Degree C","18.100000000000001",NA
+104,"104_0","Chemical","DO_mgl","mg/l","9.61",NA
+104,"104_0","Chemical","DO_percent","%","101.8",NA
+104,"104_0","Chemical","Conductivity","µS/cm","138.30000000000001",NA
+104,"104_0","Chemical","Specific_conductivity","µS/cm","161.73546953572682",NA
+104,"104_0","Chemical","pH",NA,"8.2100000000000009",NA
+104,"104_0","Habitat","Vegetation_nearby","0/1","1",NA
+104,"104_0","Habitat","Vegetation_species",NA,NA,NA
+104,"104_0","Habitat","Wood_cover","%","10",NA
+104,"104_0","Habitat","Other",NA,NA,NA
+105,"105_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+105,"105_0","Physical","Bottom_visible","0/1","1",NA
+105,"105_0","Physical","Water_clarity","m",NA,NA
+105,"105_0","Physical","Depth_10m","m","2",NA
+105,"105_0","Physical","Slope","degrees","0.2","Calculated from depth"
+105,"105_0","Physical","Riparian_vegetation","%","100",NA
+105,"105_0","Physical","Riparian_species",NA,NA,NA
+105,"105_0","Physical","Overhanging_trees","%","100",NA
+105,"105_0","Physical","Erosion","%","0",NA
+105,"105_0","Physical","Structure","0/1","0",NA
+105,"105_0","Physical","Bedrock","%","0",NA
+105,"105_0","Physical","Boulders","%","60",NA
+105,"105_0","Physical","Cobble","%","0",NA
+105,"105_0","Physical","Gravel","%","0",NA
+105,"105_0","Physical","Sand","%","40",NA
+105,"105_0","Physical","Mud","%","0",NA
+105,"105_0","Physical","Organic_matter","%","0",NA
+105,"105_0","Physical","Rock_size","mm",NA,NA
+105,"105_0","Chemical","Temperature","Degree C","16.600000000000001",NA
+105,"105_0","Chemical","DO_mgl","mg/l","9.9",NA
+105,"105_0","Chemical","DO_percent","%","101.5",NA
+105,"105_0","Chemical","Conductivity","µS/cm","133.30000000000001",NA
+105,"105_0","Chemical","Specific_conductivity","µS/cm","161.85041282175814",NA
+105,"105_0","Chemical","pH",NA,"8.02",NA
+105,"105_0","Habitat","Vegetation_nearby","0/1","0",NA
+105,"105_0","Habitat","Vegetation_species",NA,NA,NA
+105,"105_0","Habitat","Wood_cover","%","20",NA
+105,"105_0","Habitat","Other",NA,NA,NA
+106,"106_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+106,"106_0","Physical","Bottom_visible","0/1","1",NA
+106,"106_0","Physical","Water_clarity","m",NA,NA
+106,"106_0","Physical","Depth_10m","m","1",NA
+106,"106_0","Physical","Slope","degrees","0.1","Calculated from depth"
+106,"106_0","Physical","Riparian_vegetation","%","50",NA
+106,"106_0","Physical","Riparian_species",NA,NA,NA
+106,"106_0","Physical","Overhanging_trees","%","0",NA
+106,"106_0","Physical","Erosion","%","0",NA
+106,"106_0","Physical","Structure","0/1","0",NA
+106,"106_0","Physical","Bedrock","%","0",NA
+106,"106_0","Physical","Boulders","%","0",NA
+106,"106_0","Physical","Cobble","%","0",NA
+106,"106_0","Physical","Gravel","%","5",NA
+106,"106_0","Physical","Sand","%","95",NA
+106,"106_0","Physical","Mud","%","0",NA
+106,"106_0","Physical","Organic_matter","%","0",NA
+106,"106_0","Physical","Rock_size","mm",NA,NA
+106,"106_0","Chemical","Temperature","Degree C","16.8",NA
+106,"106_0","Chemical","DO_mgl","mg/l","10.06",NA
+106,"106_0","Chemical","DO_percent","%","103.6",NA
+106,"106_0","Chemical","Conductivity","µS/cm","131.30000000000001",NA
+106,"106_0","Chemical","Specific_conductivity","µS/cm","158.61319159217203",NA
+106,"106_0","Chemical","pH",NA,"7.98",NA
+106,"106_0","Habitat","Vegetation_nearby","0/1","1",NA
+106,"106_0","Habitat","Vegetation_species",NA,NA,NA
+106,"106_0","Habitat","Wood_cover","%","2",NA
+106,"106_0","Habitat","Other",NA,NA,NA
+107,"107_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+107,"107_0","Physical","Bottom_visible","0/1","1",NA
+107,"107_0","Physical","Water_clarity","m",NA,NA
+107,"107_0","Physical","Depth_10m","m","0.8",NA
+107,"107_0","Physical","Slope","degrees","0.08","Calculated from depth"
+107,"107_0","Physical","Riparian_vegetation","%","0",NA
+107,"107_0","Physical","Riparian_species",NA,NA,NA
+107,"107_0","Physical","Overhanging_trees","%","0",NA
+107,"107_0","Physical","Erosion","%","0",NA
+107,"107_0","Physical","Structure","0/1","0",NA
+107,"107_0","Physical","Bedrock","%","0",NA
+107,"107_0","Physical","Boulders","%","0",NA
+107,"107_0","Physical","Cobble","%","0",NA
+107,"107_0","Physical","Gravel","%","50",NA
+107,"107_0","Physical","Sand","%","50",NA
+107,"107_0","Physical","Mud","%","0",NA
+107,"107_0","Physical","Organic_matter","%","0",NA
+107,"107_0","Physical","Rock_size","mm",NA,NA
+107,"107_0","Chemical","Temperature","Degree C","18",NA
+107,"107_0","Chemical","DO_mgl","mg/l","9.66",NA
+107,"107_0","Chemical","DO_percent","%","101.8",NA
+107,"107_0","Chemical","Conductivity","µS/cm","137.69999999999999",NA
+107,"107_0","Chemical","Specific_conductivity","µS/cm","161.43024618991794",NA
+107,"107_0","Chemical","pH",NA,"7.89",NA
+107,"107_0","Habitat","Vegetation_nearby","0/1","0",NA
+107,"107_0","Habitat","Vegetation_species",NA,NA,NA
+107,"107_0","Habitat","Wood_cover","%","0",NA
+107,"107_0","Habitat","Other",NA,NA,NA
+108,"108_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+108,"108_0","Physical","Bottom_visible","0/1","1",NA
+108,"108_0","Physical","Water_clarity","m",NA,NA
+108,"108_0","Physical","Depth_10m","m","1.5",NA
+108,"108_0","Physical","Slope","degrees","0.15","Calculated from depth"
+108,"108_0","Physical","Riparian_vegetation","%","0",NA
+108,"108_0","Physical","Riparian_species",NA,NA,NA
+108,"108_0","Physical","Overhanging_trees","%","0",NA
+108,"108_0","Physical","Erosion","%","0",NA
+108,"108_0","Physical","Structure","0/1","0",NA
+108,"108_0","Physical","Bedrock","%","0",NA
+108,"108_0","Physical","Boulders","%","0",NA
+108,"108_0","Physical","Cobble","%","0",NA
+108,"108_0","Physical","Gravel","%","0",NA
+108,"108_0","Physical","Sand","%","100",NA
+108,"108_0","Physical","Mud","%","0",NA
+108,"108_0","Physical","Organic_matter","%","0",NA
+108,"108_0","Physical","Rock_size","mm",NA,NA
+108,"108_0","Chemical","Temperature","Degree C","16.899999999999999",NA
+108,"108_0","Chemical","DO_mgl","mg/l","10.31",NA
+108,"108_0","Chemical","DO_percent","%","106.5",NA
+108,"108_0","Chemical","Conductivity","µS/cm","145.19999999999999",NA
+108,"108_0","Chemical","Specific_conductivity","µS/cm","174.96083865525966",NA
+108,"108_0","Chemical","pH",NA,"6.44",NA
+108,"108_0","Habitat","Vegetation_nearby","0/1","0",NA
+108,"108_0","Habitat","Vegetation_species",NA,NA,NA
+108,"108_0","Habitat","Wood_cover","%","0",NA
+108,"108_0","Habitat","Other",NA,NA,NA
+109,"109_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+109,"109_0","Physical","Bottom_visible","0/1","1",NA
+109,"109_0","Physical","Water_clarity","m",NA,NA
+109,"109_0","Physical","Depth_10m","m","1.5",NA
+109,"109_0","Physical","Slope","degrees","0.15",NA
+109,"109_0","Physical","Riparian_vegetation","%","100",NA
+109,"109_0","Physical","Riparian_species",NA,NA,NA
+109,"109_0","Physical","Overhanging_trees","%","100",NA
+109,"109_0","Physical","Erosion","%","0",NA
+109,"109_0","Physical","Structure","0/1","0",NA
+109,"109_0","Physical","Bedrock","%","0",NA
+109,"109_0","Physical","Boulders","%","30",NA
+109,"109_0","Physical","Cobble","%","0",NA
+109,"109_0","Physical","Gravel","%","0",NA
+109,"109_0","Physical","Sand","%","70",NA
+109,"109_0","Physical","Mud","%","0",NA
+109,"109_0","Physical","Organic_matter","%","0",NA
+109,"109_0","Physical","Rock_size","mm",NA,NA
+109,"109_0","Chemical","Temperature","Degree C","16.3",NA
+109,"109_0","Chemical","DO_mgl","mg/l","9.2100000000000009",NA
+109,"109_0","Chemical","DO_percent","%","93.8",NA
+109,"109_0","Chemical","Conductivity","µS/cm","61.9",NA
+109,"109_0","Chemical","Specific_conductivity","µS/cm","75.737183408785015",NA
+109,"109_0","Chemical","pH",NA,"8.2799999999999994",NA
+109,"109_0","Habitat","Vegetation_nearby","0/1","0",NA
+109,"109_0","Habitat","Vegetation_species",NA,NA,NA
+109,"109_0","Habitat","Wood_cover","%","40",NA
+109,"109_0","Habitat","Other",NA,NA,NA
+110,"110_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+110,"110_0","Physical","Bottom_visible","0/1","1",NA
+110,"110_0","Physical","Water_clarity","m",NA,NA
+110,"110_0","Physical","Depth_10m","m","0.6",NA
+110,"110_0","Physical","Slope","degrees","0.06",NA
+110,"110_0","Physical","Riparian_vegetation","%","100",NA
+110,"110_0","Physical","Riparian_species",NA,NA,NA
+110,"110_0","Physical","Overhanging_trees","%","80",NA
+110,"110_0","Physical","Erosion","%","0",NA
+110,"110_0","Physical","Structure","0/1","0",NA
+110,"110_0","Physical","Bedrock","%","0",NA
+110,"110_0","Physical","Boulders","%","0",NA
+110,"110_0","Physical","Cobble","%","0",NA
+110,"110_0","Physical","Gravel","%","0",NA
+110,"110_0","Physical","Sand","%","90",NA
+110,"110_0","Physical","Mud","%","0",NA
+110,"110_0","Physical","Organic_matter","%","10",NA
+110,"110_0","Physical","Rock_size","mm",NA,NA
+110,"110_0","Chemical","Temperature","Degree C","16.3",NA
+110,"110_0","Chemical","DO_mgl","mg/l","9.61",NA
+110,"110_0","Chemical","DO_percent","%","98",NA
+110,"110_0","Chemical","Conductivity","µS/cm","62.2",NA
+110,"110_0","Chemical","Specific_conductivity","µS/cm","76.104245687018235",NA
+110,"110_0","Chemical","pH",NA,"8.35",NA
+110,"110_0","Habitat","Vegetation_nearby","0/1","0",NA
+110,"110_0","Habitat","Vegetation_species",NA,NA,NA
+110,"110_0","Habitat","Wood_cover","%","10",NA
+110,"110_0","Habitat","Other",NA,NA,NA
+111,"111_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+111,"111_0","Physical","Bottom_visible","0/1","1",NA
+111,"111_0","Physical","Water_clarity","m",NA,NA
+111,"111_0","Physical","Depth_10m","m","3",NA
+111,"111_0","Physical","Slope","degrees","0.3",NA
+111,"111_0","Physical","Riparian_vegetation","%","100",NA
+111,"111_0","Physical","Riparian_species",NA,NA,NA
+111,"111_0","Physical","Overhanging_trees","%","0",NA
+111,"111_0","Physical","Erosion","%","0",NA
+111,"111_0","Physical","Structure","0/1","0",NA
+111,"111_0","Physical","Bedrock","%","0",NA
+111,"111_0","Physical","Boulders","%","0",NA
+111,"111_0","Physical","Cobble","%","0",NA
+111,"111_0","Physical","Gravel","%","0",NA
+111,"111_0","Physical","Sand","%","0",NA
+111,"111_0","Physical","Mud","%","0",NA
+111,"111_0","Physical","Organic_matter","%","100",NA
+111,"111_0","Physical","Rock_size","mm",NA,NA
+111,"111_0","Chemical","Temperature","Degree C","16.600000000000001",NA
+111,"111_0","Chemical","DO_mgl","mg/l","9.43",NA
+111,"111_0","Chemical","DO_percent","%","96.8",NA
+111,"111_0","Chemical","Conductivity","µS/cm","62.6",NA
+111,"111_0","Chemical","Specific_conductivity","µS/cm","76.00777076250607",NA
+111,"111_0","Chemical","pH",NA,"8.3000000000000007",NA
+111,"111_0","Habitat","Vegetation_nearby","0/1","1",NA
+111,"111_0","Habitat","Vegetation_species",NA,NA,NA
+111,"111_0","Habitat","Wood_cover","%","0",NA
+111,"111_0","Habitat","Other",NA,NA,NA
+112,"112_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+112,"112_0","Physical","Bottom_visible","0/1","1",NA
+112,"112_0","Physical","Water_clarity","m",NA,NA
+112,"112_0","Physical","Depth_10m","m","0.5",NA
+112,"112_0","Physical","Slope","degrees","0.05",NA
+112,"112_0","Physical","Riparian_vegetation","%","0",NA
+112,"112_0","Physical","Riparian_species",NA,NA,NA
+112,"112_0","Physical","Overhanging_trees","%","0",NA
+112,"112_0","Physical","Erosion","%","0",NA
+112,"112_0","Physical","Structure","0/1","0",NA
+112,"112_0","Physical","Bedrock","%","0",NA
+112,"112_0","Physical","Boulders","%","0",NA
+112,"112_0","Physical","Cobble","%","0",NA
+112,"112_0","Physical","Gravel","%","0",NA
+112,"112_0","Physical","Sand","%","0",NA
+112,"112_0","Physical","Mud","%","100",NA
+112,"112_0","Physical","Organic_matter","%","0",NA
+112,"112_0","Physical","Rock_size","mm",NA,NA
+112,"112_0","Chemical","Temperature","Degree C","20.3",NA
+112,"112_0","Chemical","DO_mgl","mg/l","9.32",NA
+112,"112_0","Chemical","DO_percent","%","102.8",NA
+112,"112_0","Chemical","Conductivity","µS/cm","69.2",NA
+112,"112_0","Chemical","Specific_conductivity","µS/cm","76.777987351603244",NA
+112,"112_0","Chemical","pH",NA,"8.6",NA
+112,"112_0","Habitat","Vegetation_nearby","0/1","0",NA
+112,"112_0","Habitat","Vegetation_species",NA,NA,NA
+112,"112_0","Habitat","Wood_cover","%","0",NA
+112,"112_0","Habitat","Other",NA,NA,NA
+113,"113_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+113,"113_0","Physical","Bottom_visible","0/1","1",NA
+113,"113_0","Physical","Water_clarity","m","9.1999999999999993","Secci"
+113,"113_0","Physical","Depth_10m","m","1.8",NA
+113,"113_0","Physical","Slope","degrees","0.18",NA
+113,"113_0","Physical","Riparian_vegetation","%","100",NA
+113,"113_0","Physical","Riparian_species",NA,"Native forest",NA
+113,"113_0","Physical","Overhanging_trees","%","100",NA
+113,"113_0","Physical","Erosion","%","0",NA
+113,"113_0","Physical","Structure","0/1","0",NA
+113,"113_0","Physical","Bedrock","%","0",NA
+113,"113_0","Physical","Boulders","%","30",NA
+113,"113_0","Physical","Cobble","%","0",NA
+113,"113_0","Physical","Gravel","%","0",NA
+113,"113_0","Physical","Sand","%","70",NA
+113,"113_0","Physical","Mud","%","0",NA
+113,"113_0","Physical","Organic_matter","%","0",NA
+113,"113_0","Physical","Rock_size","mm",NA,NA
+113,"113_0","Chemical","Temperature","Degree C","20.7",NA
+113,"113_0","Chemical","DO_mgl","mg/l","8.83",NA
+113,"113_0","Chemical","DO_percent","%","98.5",NA
+113,"113_0","Chemical","Conductivity","µS/cm","69.7",NA
+113,"113_0","Chemical","Specific_conductivity","µS/cm","76.618665494118943",NA
+113,"113_0","Chemical","pH",NA,"9",NA
+113,"113_0","Habitat","Vegetation_nearby","0/1","0",NA
+113,"113_0","Habitat","Vegetation_species",NA,NA,NA
+113,"113_0","Habitat","Wood_cover","%","30",NA
+113,"113_0","Habitat","Other",NA,NA,NA
+114,"114_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+114,"114_0","Physical","Bottom_visible","0/1","1",NA
+114,"114_0","Physical","Water_clarity","m","6.4","Secci"
+114,"114_0","Physical","Depth_10m","m","1.1000000000000001",NA
+114,"114_0","Physical","Slope","degrees","0.11000000000000001",NA
+114,"114_0","Physical","Riparian_vegetation","%","100",NA
+114,"114_0","Physical","Riparian_species",NA,NA,NA
+114,"114_0","Physical","Overhanging_trees","%","50",NA
+114,"114_0","Physical","Erosion","%","0",NA
+114,"114_0","Physical","Structure","0/1","0",NA
+114,"114_0","Physical","Bedrock","%","0",NA
+114,"114_0","Physical","Boulders","%","0",NA
+114,"114_0","Physical","Cobble","%","0",NA
+114,"114_0","Physical","Gravel","%","0",NA
+114,"114_0","Physical","Sand","%","0",NA
+114,"114_0","Physical","Mud","%","0",NA
+114,"114_0","Physical","Organic_matter","%","100",NA
+114,"114_0","Physical","Rock_size","mm",NA,NA
+114,"114_0","Chemical","Temperature","Degree C","16",NA
+114,"114_0","Chemical","DO_mgl","mg/l","9.18",NA
+114,"114_0","Chemical","DO_percent","%","93.1",NA
+114,"114_0","Chemical","Conductivity","µS/cm","61.8",NA
+114,"114_0","Chemical","Specific_conductivity","µS/cm","76.202219482120839",NA
+114,"114_0","Chemical","pH",NA,"8.31",NA
+114,"114_0","Habitat","Vegetation_nearby","0/1","1",NA
+114,"114_0","Habitat","Vegetation_species",NA,NA,NA
+114,"114_0","Habitat","Wood_cover","%","0",NA
+114,"114_0","Habitat","Other",NA,NA,NA
+115,"115_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+115,"115_0","Physical","Bottom_visible","0/1","1",NA
+115,"115_0","Physical","Water_clarity","m",NA,NA
+115,"115_0","Physical","Depth_10m","m","0.8",NA
+115,"115_0","Physical","Slope","degrees","0.08","goes deep very fast"
+115,"115_0","Physical","Riparian_vegetation","%","100",NA
+115,"115_0","Physical","Riparian_species",NA,NA,NA
+115,"115_0","Physical","Overhanging_trees","%","100",NA
+115,"115_0","Physical","Erosion","%","0",NA
+115,"115_0","Physical","Structure","0/1","0",NA
+115,"115_0","Physical","Bedrock","%","0",NA
+115,"115_0","Physical","Boulders","%","0",NA
+115,"115_0","Physical","Cobble","%","0",NA
+115,"115_0","Physical","Gravel","%","0",NA
+115,"115_0","Physical","Sand","%","50",NA
+115,"115_0","Physical","Mud","%","0",NA
+115,"115_0","Physical","Organic_matter","%","50",NA
+115,"115_0","Physical","Rock_size","mm",NA,NA
+115,"115_0","Chemical","Temperature","Degree C","16.399999999999999",NA
+115,"115_0","Chemical","DO_mgl","mg/l","9.5500000000000007",NA
+115,"115_0","Chemical","DO_percent","%","97.5",NA
+115,"115_0","Chemical","Conductivity","µS/cm","62",NA
+115,"115_0","Chemical","Specific_conductivity","µS/cm","75.665120820112293",NA
+115,"115_0","Chemical","pH",NA,"8.2200000000000006",NA
+115,"115_0","Habitat","Vegetation_nearby","0/1","0",NA
+115,"115_0","Habitat","Vegetation_species",NA,NA,NA
+115,"115_0","Habitat","Wood_cover","%","25",NA
+115,"115_0","Habitat","Other",NA,NA,NA
+116,"116_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+116,"116_0","Physical","Bottom_visible","0/1","1",NA
+116,"116_0","Physical","Water_clarity","m",NA,NA
+116,"116_0","Physical","Depth_10m","m","0.5",NA
+116,"116_0","Physical","Slope","degrees","0.05",NA
+116,"116_0","Physical","Riparian_vegetation","%","10",NA
+116,"116_0","Physical","Riparian_species",NA,NA,NA
+116,"116_0","Physical","Overhanging_trees","%","0",NA
+116,"116_0","Physical","Erosion","%","0",NA
+116,"116_0","Physical","Structure","0/1","1","2 jetties"
+116,"116_0","Physical","Bedrock","%","0",NA
+116,"116_0","Physical","Boulders","%","0",NA
+116,"116_0","Physical","Cobble","%","0",NA
+116,"116_0","Physical","Gravel","%","0",NA
+116,"116_0","Physical","Sand","%","0",NA
+116,"116_0","Physical","Mud","%","90",NA
+116,"116_0","Physical","Organic_matter","%","10",NA
+116,"116_0","Physical","Rock_size","mm",NA,NA
+116,"116_0","Chemical","Temperature","Degree C","16.100000000000001",NA
+116,"116_0","Chemical","DO_mgl","mg/l","9.14",NA
+116,"116_0","Chemical","DO_percent","%","94.1",NA
+116,"116_0","Chemical","Conductivity","µS/cm","63.9",NA
+116,"116_0","Chemical","Specific_conductivity","µS/cm","78.588119542491697",NA
+116,"116_0","Chemical","pH",NA,"7.77",NA
+116,"116_0","Habitat","Vegetation_nearby","0/1","1",NA
+116,"116_0","Habitat","Vegetation_species",NA,"Giant spike rush, Water lilies",NA
+116,"116_0","Habitat","Wood_cover","%","0",NA
+116,"116_0","Habitat","Other",NA,NA,NA
+117,"117_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+117,"117_0","Physical","Bottom_visible","0/1","1",NA
+117,"117_0","Physical","Water_clarity","m",NA,NA
+117,"117_0","Physical","Depth_10m","m","2",NA
+117,"117_0","Physical","Slope","degrees","0.2",NA
+117,"117_0","Physical","Riparian_vegetation","%","100",NA
+117,"117_0","Physical","Riparian_species",NA,NA,NA
+117,"117_0","Physical","Overhanging_trees","%","100",NA
+117,"117_0","Physical","Erosion","%","0",NA
+117,"117_0","Physical","Structure","0/1","0",NA
+117,"117_0","Physical","Bedrock","%","0",NA
+117,"117_0","Physical","Boulders","%","80",NA
+117,"117_0","Physical","Cobble","%","0",NA
+117,"117_0","Physical","Gravel","%","0",NA
+117,"117_0","Physical","Sand","%","20",NA
+117,"117_0","Physical","Mud","%","0",NA
+117,"117_0","Physical","Organic_matter","%","0",NA
+117,"117_0","Physical","Rock_size","mm",NA,NA
+117,"117_0","Chemical","Temperature","Degree C","16.3",NA
+117,"117_0","Chemical","DO_mgl","mg/l","9.2100000000000009",NA
+117,"117_0","Chemical","DO_percent","%","93.8",NA
+117,"117_0","Chemical","Conductivity","µS/cm","61.9",NA
+117,"117_0","Chemical","Specific_conductivity","µS/cm","75.737183408785015",NA
+117,"117_0","Chemical","pH",NA,"8.2799999999999994",NA
+117,"117_0","Habitat","Vegetation_nearby","0/1","0",NA
+117,"117_0","Habitat","Vegetation_species",NA,NA,NA
+117,"117_0","Habitat","Wood_cover","%","10",NA
+117,"117_0","Habitat","Other",NA,NA,NA
+118,"118_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+118,"118_0","Physical","Bottom_visible","0/1","1",NA
+118,"118_0","Physical","Water_clarity","m","7.4","Secci"
+118,"118_0","Physical","Depth_10m","m","0.9",NA
+118,"118_0","Physical","Slope","degrees","0.09",NA
+118,"118_0","Physical","Riparian_vegetation","%","0",NA
+118,"118_0","Physical","Riparian_species",NA,NA,NA
+118,"118_0","Physical","Overhanging_trees","%","0",NA
+118,"118_0","Physical","Erosion","%","0",NA
+118,"118_0","Physical","Structure","0/1","1","Jetty + AR"
+118,"118_0","Physical","Bedrock","%","0",NA
+118,"118_0","Physical","Boulders","%","5",NA
+118,"118_0","Physical","Cobble","%","0",NA
+118,"118_0","Physical","Gravel","%","0",NA
+118,"118_0","Physical","Sand","%","95",NA
+118,"118_0","Physical","Mud","%","0",NA
+118,"118_0","Physical","Organic_matter","%","0",NA
+118,"118_0","Physical","Rock_size","mm",NA,NA
+118,"118_0","Chemical","Temperature","Degree C","16",NA
+118,"118_0","Chemical","DO_mgl","mg/l","9.74",NA
+118,"118_0","Chemical","DO_percent","%","98.6",NA
+118,"118_0","Chemical","Conductivity","µS/cm","62.3",NA
+118,"118_0","Chemical","Specific_conductivity","µS/cm","76.818742293464865",NA
+118,"118_0","Chemical","pH",NA,"8.19",NA
+118,"118_0","Habitat","Vegetation_nearby","0/1","0",NA
+118,"118_0","Habitat","Vegetation_species",NA,NA,NA
+118,"118_0","Habitat","Wood_cover","%","0",NA
+118,"118_0","Habitat","Other",NA,NA,NA
+119,"119_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+119,"119_0","Physical","Bottom_visible","0/1","1",NA
+119,"119_0","Physical","Water_clarity","m",NA,NA
+119,"119_0","Physical","Depth_10m","m","1.2",NA
+119,"119_0","Physical","Slope","degrees","0.12",NA
+119,"119_0","Physical","Riparian_vegetation","%","100",NA
+119,"119_0","Physical","Riparian_species",NA,NA,NA
+119,"119_0","Physical","Overhanging_trees","%","100",NA
+119,"119_0","Physical","Erosion","%","0",NA
+119,"119_0","Physical","Structure","0/1","0",NA
+119,"119_0","Physical","Bedrock","%","0",NA
+119,"119_0","Physical","Boulders","%","0",NA
+119,"119_0","Physical","Cobble","%","0",NA
+119,"119_0","Physical","Gravel","%","0",NA
+119,"119_0","Physical","Sand","%","0",NA
+119,"119_0","Physical","Mud","%","0",NA
+119,"119_0","Physical","Organic_matter","%","100",NA
+119,"119_0","Physical","Rock_size","mm",NA,NA
+119,"119_0","Chemical","Temperature","Degree C","16.8",NA
+119,"119_0","Chemical","DO_mgl","mg/l","9.69",NA
+119,"119_0","Chemical","DO_percent","%","99.7",NA
+119,"119_0","Chemical","Conductivity","µS/cm","62.6",NA
+119,"119_0","Chemical","Specific_conductivity","µS/cm","75.622130949504708",NA
+119,"119_0","Chemical","pH",NA,"8.32",NA
+119,"119_0","Habitat","Vegetation_nearby","0/1","1",NA
+119,"119_0","Habitat","Vegetation_species",NA,NA,NA
+119,"119_0","Habitat","Wood_cover","%","15",NA
+119,"119_0","Habitat","Other",NA,NA,NA
+120,"120_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
+120,"120_0","Physical","Bottom_visible","0/1","1",NA
+120,"120_0","Physical","Water_clarity","m","6.2","Secci /Black:1.7"
+120,"120_0","Physical","Depth_10m","m","0.6",NA
+120,"120_0","Physical","Slope","degrees","0.06",NA
+120,"120_0","Physical","Riparian_vegetation","%","100",NA
+120,"120_0","Physical","Riparian_species",NA,NA,NA
+120,"120_0","Physical","Overhanging_trees","%","0",NA
+120,"120_0","Physical","Erosion","%","0",NA
+120,"120_0","Physical","Structure","0/1","1","Boatramp+ boat house+ Jetty"
+120,"120_0","Physical","Bedrock","%","0",NA
+120,"120_0","Physical","Boulders","%","0",NA
+120,"120_0","Physical","Cobble","%","0",NA
+120,"120_0","Physical","Gravel","%","0",NA
+120,"120_0","Physical","Sand","%","100",NA
+120,"120_0","Physical","Mud","%","0",NA
+120,"120_0","Physical","Organic_matter","%","0",NA
+120,"120_0","Physical","Rock_size","mm",NA,NA
+120,"120_0","Chemical","Temperature","Degree C","16",NA
+120,"120_0","Chemical","DO_mgl","mg/l","9.48",NA
+120,"120_0","Chemical","DO_percent","%","96",NA
+120,"120_0","Chemical","Conductivity","µS/cm","61.8",NA
+120,"120_0","Chemical","Specific_conductivity","µS/cm","76.202219482120839",NA
+120,"120_0","Chemical","pH",NA,"8.2799999999999994",NA
+120,"120_0","Habitat","Vegetation_nearby","0/1","1","Lely field"
+120,"120_0","Habitat","Vegetation_species",NA,NA,NA
+120,"120_0","Habitat","Wood_cover","%","5",NA
+120,"120_0","Habitat","Other",NA,NA,NA

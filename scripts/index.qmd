@@ -68,7 +68,7 @@ clean_smooth_title <- function(x) {
 
 exc_file_dir <- "data/raw/Natural_habitat.xlsx"
 der_data_dir <- "data/derived"
-fig_dir      <- "figures"
+fig_dir      <- "outputs"
 
 Site_info          <- read_excel(exc_file_dir, sheet = "Site_info")
 Monitoring_data    <- read_excel(exc_file_dir, sheet = "Monitoring_data")
@@ -81,6 +81,14 @@ Monitoring_data    <- Monitoring_data    |> dplyr::filter(!stringr::str_ends(Mon
 Weed_data          <- Weed_data          |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
 Fish_data          <- Fish_data          |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
 Macroinvertebrates <- Macroinvertebrates |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
+
+# Save as csv to derived
+write.csv(Site_info,          file.path(der_data_dir, "Site_info.csv"),          row.names = FALSE)
+write.csv(Monitoring_data,    file.path(der_data_dir, "Monitoring_data.csv"),    row.names = FALSE)
+write.csv(Weed_data,          file.path(der_data_dir, "Weed_data.csv"),          row.names = FALSE)
+write.csv(Fish_data,          file.path(der_data_dir, "Fish_data.csv"),          row.names = FALSE)
+write.csv(Macroinvertebrates, file.path(der_data_dir, "Macroinvertebrates.csv"), row.names = FALSE)
+
 ```
 
 # CPUE and BPUE derivation
@@ -230,7 +238,7 @@ values_fill = list(Value = NA)
 mutate(across(
 c(
 Bottom_visible, Water_clarity, Depth_10m, Slope, Riparian_vegetation, Vegetation_nearby,
-Overhanging_trees, Erosion, Sructure, Bedrock, Boulders, Cobble, Gravel,
+Overhanging_trees, Erosion, Structure, Bedrock, Boulders, Cobble, Gravel,
 Sand, Mud, Organic_matter, Rock_size, Temperature, DO_mgl, DO_percent,
 Conductivity, Specific_conductivity, pH, Wood_cover
 ),

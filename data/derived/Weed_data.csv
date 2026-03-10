@@ -1,0 +1,189 @@
+"Site_ID","Monitoring_ID","Weed_Type","Species","Scientific_name","Native_Status","Percentage_Cover"
+61,"61_0","Emergent",NA,NA,NA,0
+61,"61_0","Submerged",NA,NA,NA,0
+61,"61_0","Turf",NA,NA,NA,0
+62,"62_0","Emergent",NA,NA,NA,0
+62,"62_0","Submerged",NA,NA,NA,0
+62,"62_0","Turf",NA,NA,NA,0
+63,"63_0","Emergent",NA,NA,NA,0
+63,"63_0","Submerged",NA,NA,NA,0
+63,"63_0","Turf",NA,NA,NA,0
+64,"64_0","Emergent",NA,NA,NA,0
+64,"64_0","Submerged",NA,NA,NA,0
+64,"64_0","Turf",NA,NA,NA,0
+65,"65_0","Emergent",NA,NA,NA,0
+65,"65_0","Submerged","Green_algae","Algea","Native",10
+65,"65_0","Turf",NA,NA,NA,0
+66,"66_0","Emergent",NA,NA,NA,0
+66,"66_0","Submerged",NA,NA,NA,0
+66,"66_0","Turf",NA,NA,NA,0
+67,"67_0","Emergent",NA,NA,NA,0
+67,"67_0","Submerged",NA,NA,NA,0
+67,"67_0","Turf",NA,NA,NA,0
+68,"68_0","Emergent",NA,NA,NA,0
+68,"68_0","Submerged",NA,NA,NA,0
+68,"68_0","Turf",NA,NA,NA,0
+69,"69_0","Emergent",NA,NA,NA,0
+69,"69_0","Submerged",NA,NA,NA,0
+69,"69_0","Turf","Turf_Gloss","Glossostigma","Native",30
+70,"70_0","Emergent",NA,NA,NA,0
+70,"70_0","Submerged",NA,NA,NA,0
+70,"70_0","Turf",NA,NA,NA,0
+71,"71_0","Emergent",NA,NA,NA,0
+71,"71_0","Submerged",NA,NA,NA,0
+71,"71_0","Turf",NA,NA,NA,0
+72,"72_0","Emergent",NA,NA,NA,0
+72,"72_0","Submerged",NA,NA,NA,0
+72,"72_0","Turf",NA,NA,NA,0
+73,"73_0","Emergent",NA,NA,NA,0
+73,"73_0","Submerged",NA,NA,NA,0
+73,"73_0","Turf",NA,NA,NA,0
+74,"74_0","Emergent",NA,NA,NA,0
+74,"74_0","Submerged",NA,NA,NA,0
+74,"74_0","Turf","Turf_Gloss","Glossostigma","Native",10
+75,"75_0","Emergent",NA,NA,NA,0
+75,"75_0","Submerged",NA,NA,NA,0
+75,"75_0","Turf",NA,NA,NA,0
+76,"76_0","Emergent",NA,NA,NA,0
+76,"76_0","Submerged",NA,NA,NA,0
+76,"76_0","Turf","Turf_Gloss","Glossostigma","Native",10
+77,"77_0","Emergent",NA,NA,NA,0
+77,"77_0","Submerged",NA,NA,NA,0
+77,"77_0","Turf",NA,NA,NA,0
+78,"78_0","Emergent",NA,NA,NA,0
+78,"78_0","Submerged",NA,NA,NA,0
+78,"78_0","Turf",NA,NA,NA,0
+79,"79_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",10
+79,"79_0","Submerged",NA,NA,NA,0
+79,"79_0","Turf",NA,NA,NA,0
+80,"80_0","Emergent","Raupō_(Bulrush)","Typha orientalis","Native",90
+80,"80_0","Emergent","Hornwort","Ceratophyllum demersum","Non_Native",10
+80,"80_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",10
+80,"80_0","Turf",NA,NA,NA,0
+81,"81_0","Emergent",NA,NA,NA,0
+81,"81_0","Submerged",NA,NA,NA,0
+81,"81_0","Turf",NA,NA,NA,0
+82,"82_0","Emergent","Niggerhead_sedge","Carex secta","Native",4
+82,"82_0","Submerged",NA,NA,NA,0
+82,"82_0","Turf","Turf_Gloss","Glossostigma","Native",5
+83,"83_0","Emergent",NA,NA,NA,0
+83,"83_0","Submerged",NA,NA,NA,0
+83,"83_0","Turf",NA,NA,NA,0
+84,"84_0","Emergent",NA,NA,NA,0
+84,"84_0","Submerged",NA,NA,NA,0
+84,"84_0","Turf",NA,NA,NA,0
+85,"85_0","Emergent",NA,NA,NA,0
+85,"85_0","Submerged",NA,NA,NA,0
+85,"85_0","Turf",NA,NA,NA,0
+86,"86_0","Emergent","Raupō_(Bulrush)","Typha orientalis","Native",25
+86,"86_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",5
+86,"86_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",100
+86,"86_0","Turf",NA,NA,NA,0
+87,"87_0","Emergent",NA,NA,NA,0
+87,"87_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",10
+87,"87_0","Turf",NA,NA,NA,0
+88,"88_0","Emergent",NA,NA,NA,0
+88,"88_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",10
+88,"88_0","Turf",NA,NA,NA,0
+89,"89_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",35
+89,"89_0","Submerged","Green_algae","Algea","Native",5
+89,"89_0","Submerged","Canadian_pondweed_(Oxygen_Weed)","Elodea canadensis","Non_Native",2
+89,"89_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",90
+89,"89_0","Turf",NA,NA,NA,0
+90,"90_0","Emergent",NA,NA,NA,0
+90,"90_0","Submerged","Three-leaved_milfoil","Myriophyllum triphyllum","Native",20
+90,"90_0","Submerged","Curly-leaf_pondweed","Potamogeton crispus","Non_Native",5
+90,"90_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",70
+90,"90_0","Turf",NA,NA,NA,0
+91,"91_0","Emergent",NA,NA,NA,0
+91,"91_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",10
+91,"91_0","Turf",NA,NA,NA,0
+92,"92_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",5
+92,"92_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",100
+92,"92_0","Turf",NA,NA,NA,0
+93,"93_0","Emergent","Raupō_(Bulrush)","Typha orientalis","Native",30
+93,"93_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",5
+93,"93_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",100
+93,"93_0","Turf",NA,NA,NA,0
+94,"94_0","Emergent",NA,NA,NA,0
+94,"94_0","Submerged","Hornwort","Ceratophyllum demersum","Non_Native",95
+94,"94_0","Turf",NA,NA,NA,0
+95,"95_0","Emergent",NA,NA,NA,0
+95,"95_0","Submerged",NA,NA,NA,0
+95,"95_0","Turf",NA,NA,NA,0
+96,"96_0","Emergent",NA,NA,NA,0
+96,"96_0","Submerged",NA,NA,NA,0
+96,"96_0","Turf",NA,NA,NA,0
+97,"97_0","Emergent",NA,NA,NA,0
+97,"97_0","Submerged","Lagarosiphon_(Oxygen_Weed)","Lagarosiphon major","Non_Native",80
+97,"97_0","Turf",NA,NA,NA,0
+98,"98_0","Emergent",NA,NA,NA,0
+98,"98_0","Submerged","Charophytes","Chara corallina/ Chara globularis","Native",5
+98,"98_0","Turf",NA,NA,NA,0
+99,"99_0","Emergent",NA,NA,NA,0
+99,"99_0","Submerged",NA,NA,NA,0
+99,"99_0","Turf",NA,NA,NA,0
+100,"100_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",80
+100,"100_0","Submerged","Lagarosiphon_(Oxygen_Weed)","Lagarosiphon major","Non_Native",20
+100,"100_0","Turf",NA,NA,NA,0
+101,"101_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",40
+101,"101_0","Submerged","Lagarosiphon_(Oxygen_Weed)","Lagarosiphon major","Non_Native",10
+101,"101_0","Turf",NA,NA,NA,0
+102,"102_0","Emergent",NA,NA,NA,0
+102,"102_0","Submerged","Lagarosiphon_(Oxygen_Weed)","Lagarosiphon major","Non_Native",10
+102,"102_0","Turf",NA,NA,NA,0
+103,"103_0","Emergent",NA,NA,NA,0
+103,"103_0","Submerged",NA,NA,NA,0
+103,"103_0","Turf",NA,NA,NA,0
+104,"104_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",5
+104,"104_0","Submerged","Lagarosiphon_(Oxygen_Weed)","Lagarosiphon major","Non_Native",85
+104,"104_0","Turf",NA,NA,NA,0
+105,"105_0","Emergent",NA,NA,NA,0
+105,"105_0","Submerged",NA,NA,NA,0
+105,"105_0","Turf",NA,NA,NA,0
+106,"106_0","Emergent",NA,NA,NA,0
+106,"106_0","Submerged","Lagarosiphon_(Oxygen_Weed)","Lagarosiphon major","Non_Native",10
+106,"106_0","Turf",NA,NA,NA,0
+107,"107_0","Emergent",NA,NA,NA,0
+107,"107_0","Submerged",NA,NA,NA,0
+107,"107_0","Turf",NA,NA,NA,0
+108,"108_0","Emergent","Raupō_(Bulrush)","Typha orientalis","Native",5
+108,"108_0","Submerged","Lagarosiphon_(Oxygen_Weed)","Lagarosiphon major","Non_Native",40
+108,"108_0","Turf",NA,NA,NA,0
+109,"109_0","Emergent",NA,NA,NA,0
+109,"109_0","Submerged",NA,NA,NA,0
+109,"109_0","Turf",NA,NA,NA,0
+110,"110_0","Emergent",NA,NA,NA,0
+110,"110_0","Submerged",NA,NA,NA,0
+110,"110_0","Turf",NA,NA,NA,0
+111,"111_0","Emergent","Raupō_(Bulrush)","Typha orientalis","Native",90
+111,"111_0","Submerged","Charophytes","Chara corallina/ Chara globularis","Native",100
+111,"111_0","Turf",NA,NA,NA,0
+112,"112_0","Emergent",NA,NA,NA,0
+112,"112_0","Submerged",NA,NA,NA,0
+112,"112_0","Turf","Turf_Lilae","Lilaeopsis","Native",50
+113,"113_0","Emergent",NA,NA,NA,0
+113,"113_0","Submerged",NA,NA,NA,0
+113,"113_0","Turf",NA,NA,NA,0
+114,"114_0","Emergent","Raupō_(Bulrush)","Typha orientalis","Native",90
+114,"114_0","Submerged",NA,NA,NA,0
+114,"114_0","Turf",NA,NA,NA,0
+115,"115_0","Emergent",NA,NA,NA,0
+115,"115_0","Submerged",NA,NA,NA,0
+115,"115_0","Turf",NA,NA,NA,0
+116,"116_0","Emergent","Giant_spike_rush","Eleocharis sphacelata","Native",10
+116,"116_0","Emergent","Water_lilies","Nymphaea spp.","Non_Native",30
+116,"116_0","Submerged",NA,NA,NA,0
+116,"116_0","Turf",NA,NA,NA,0
+117,"117_0","Emergent",NA,NA,NA,0
+117,"117_0","Submerged",NA,NA,NA,0
+117,"117_0","Turf",NA,NA,NA,0
+118,"118_0","Emergent",NA,NA,NA,0
+118,"118_0","Submerged",NA,NA,NA,0
+118,"118_0","Turf","Turf_Gloss","Glossostigma","Native",75
+119,"119_0","Emergent","Raupō_(Bulrush)","Typha orientalis","Native",50
+119,"119_0","Submerged","Charophytes","Chara corallina/ Chara globularis","Native",20
+119,"119_0","Turf",NA,NA,NA,0
+120,"120_0","Emergent",NA,NA,NA,0
+120,"120_0","Submerged","Charophytes","Chara corallina/ Chara globularis","Native",10
+120,"120_0","Turf","Turf_Gloss","Glossostigma","Native",90
