@@ -569,9 +569,9 @@ knitr::kable(EnvBio_summary_table, caption = "Table S1 Distribution of environme
 # Kōura response summaries by lake
 ```{r}
 #| label: koura-by-lake
-#| fig-width: 6
-#| fig-height: 7
-#| dpi: 120
+#| fig-width: 3.1
+#| fig-height: 4.7
+#| dpi: 300
 #| fig-cap: "Fig. 2 Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range)."
 
 plot_koura_stats <- function(data, y_var, y_label,
@@ -628,7 +628,8 @@ KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura", "Kōura BPUE", 
 
 Koura_plots <- KPRES_plot / KCPUE_plot / KBPUE_plot
 
-ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, width = 120, height = 120, units = "mm", dpi = 1200)
+ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots, 
+       width = 80, height = 120, units = "mm", dpi = 1200)
 
 Koura_plots
 ```
@@ -1276,6 +1277,7 @@ calib_data_occ <- tibble::tibble(pred = pred_cv_occ, obs = PData$Presence_Kōura
     .groups   = "drop"
   )
 
+
 Calibration_plot_occ <- ggplot(calib_data_occ, aes(mean_pred, obs_rate)) +
   geom_point(size = 2.2, colour = "black") +
   geom_line(colour = "black", linewidth = 0.5) +
@@ -1585,9 +1587,55 @@ BPUE_panel_positives
 
 ```
 
+## Raw-data-plots CPUE & BPUE
+```{r}
+#| label: raw-data-plots
+#| fig-width: 7
+#| fig-height: 4
+#| dpi: 300
+#| fig-cap: "Fig. S2 Raw relationships between kōura CPUE and BPUE and significant habitat predictors. Points show observed values at individual sites."
+
+make_raw_plot <- function(data, x_var, y_var, y_label) {
+  ggplot(data, aes(x = .data[[x_var]], y = .data[[y_var]])) +
+    geom_point(size = 1.8, colour = "black") +
+    labs(x = gsub("_", " ", x_var), y = y_label) +
+    base_theme_bw
+}
+
+# CPUE raw plots
+p_raw_temp_cpue  <- make_raw_plot(Cpos, "Temperature",     "Weighted_CPUE_Kōura", "CPUE")
+p_raw_ph_cpue    <- make_raw_plot(Cpos, "pH",              "Weighted_CPUE_Kōura", "CPUE")
+p_raw_emerg_cpue <- make_raw_plot(Cpos, "Emergent_Native", "Weighted_CPUE_Kōura", "CPUE")
+
+# BPUE raw plots
+p_raw_ph_bpue    <- make_raw_plot(Bpos, "pH",              "Weighted_BPUE_Kōura", "BPUE")
+p_raw_emerg_bpue <- make_raw_plot(Bpos, "Emergent_Native", "Weighted_BPUE_Kōura", "BPUE")
+
+raw_plots <- (p_raw_temp_cpue + p_raw_ph_cpue + p_raw_emerg_cpue) /
+             (plot_spacer() + p_raw_ph_bpue + p_raw_emerg_bpue)
+
+ggsave(file.path(fig_dir, "Raw_data_plots.png"), raw_plots,
+       width = 180, height = 120, units = "mm", dpi = 1200)
+
+raw_plots
+```
+
 ## Model tables (exports)
 ```{r}
 #| label: model-tables
+
+gam.check(final_occ)
+k.check(final_occ)
+concurvity(final_occ, full = FALSE)
+
+gam.check(final_cpue_pos) 
+k.check(final_cpue_pos)
+concurvity(final_cpue_pos, full = FALSE)
+
+gam.check(final_BPUE_pos)
+k.check(final_BPUE_pos)
+concurvity(final_BPUE_pos, full = FALSE)
+
 
 gam_results_table <- function(model, model_name = deparse(substitute(model)), digits = 3) {
 sm <- summary(model)
@@ -1704,3 +1752,34 @@ dplyr::filter(complete.cases(.))
 habitat_pca <- prcomp(habitat_vars, center = TRUE, scale. = TRUE)
 
 ```
+
+# Koura catfish interaction
+```{r}
+# 1. Catfish distribution across habitat types
+M_C_data %>%
+  group_by(Habitat_Type) %>%
+  summarise(n_sites = n(),
+            catfish_present = sum(Presence_Catfish, na.rm = TRUE),
+            koura_present = sum(Presence_Kōura, na.rm = TRUE),
+            mean_CPUE = mean(Weighted_CPUE_Kōura, na.rm = TRUE))
+
+# 2. Kōura metrics: catfish-present vs absent sites
+M_C_data %>%
+  group_by(Presence_Catfish) %>%
+  summarise(n = n(),
+            koura_presence_rate = mean(Presence_Kōura, na.rm = TRUE),
+            mean_CPUE = mean(Weighted_CPUE_Kōura, na.rm = TRUE),
+            mean_BPUE = mean(Weighted_BPUE_Kōura, na.rm = TRUE))
+
+# 3. Kōura metrics: catfish-invaded vs catfish-free lakes
+M_C_data %>%
+  mutate(catfish_lake = if_else(Lake %in% c("Rotorua", "Rotoiti"),
+                                "Catfish present", "Catfish absent")) %>%
+  group_by(catfish_lake) %>%
+  summarise(n_sites = n(),
+            koura_presence_rate = mean(Presence_Kōura, na.rm = TRUE),
+            mean_CPUE = mean(Weighted_CPUE_Kōura, na.rm = TRUE),
+            mean_BPUE = mean(Weighted_BPUE_Kōura, na.rm = TRUE))
+
+```
+
