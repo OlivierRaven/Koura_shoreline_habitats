@@ -1,20 +1,12 @@
-.Rproj.user
 .Rproj.user/
-.git/
 .Rhistory
 .RData
 .Ruserdata
-*.R
-*.Rproj
-*.quarto
-*.png
 
-manuscript/
-images/
-data/raw/
-outputs/
-.RData
-.Rhistory
+# Quarto temporary files
 .quarto/
 _freeze/
 docs/
+
+# Images folder 
+images/

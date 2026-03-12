@@ -1,0 +1,5 @@
+"model","component","term","estimate","std_error","edf","ref_df","statistic","p_value","sig"
+"BPUE (pos)","parametric","(Intercept)",3.702,0.169,NA,NA,21.943,0,"***"
+"BPUE (pos)","smooth","s(pH)",NA,NA,0.967,9,1.238,0.002,"**"
+"BPUE (pos)","smooth","s(Emergent_Native)",NA,NA,0.761,3,1.154,0.041,"*"
+"BPUE (pos)","smooth","s(LID)",NA,NA,0,4,0,0.607,""

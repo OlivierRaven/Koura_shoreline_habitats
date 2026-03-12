@@ -91,6 +91,20 @@ write.csv(Macroinvertebrates, file.path(der_data_dir, "Macroinvertebrates.csv"),
 
 ```
 
+```{r}
+#| label: load-data II
+# Reproducibility note 
+# The sections above require data/raw/Natural_habitat.xlsx (not tracked).
+# To reproduce analyses and figures without the raw Excel file,
+# run from here using the derived CSVs in data/derived/:
+
+Site_info          <- read.csv(file.path(der_data_dir, "Site_info.csv"))
+Monitoring_data    <- read.csv(file.path(der_data_dir, "Monitoring_data.csv"))
+Weed_data          <- read.csv(file.path(der_data_dir, "Weed_data.csv"))
+Fish_data          <- read.csv(file.path(der_data_dir, "Fish_data.csv"))
+Macroinvertebrates <- read.csv(file.path(der_data_dir, "Macroinvertebrates.csv"))
+```
+
 # CPUE and BPUE derivation
 ## Length–weight model and predicted weights
 ```{r}
@@ -1306,7 +1320,7 @@ final_plot_occupancy
 #| results: hide
 #| warning: false
 #| message: false
-#| fig-cap: "Fig. 4 Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native vegetation, shown with partial effects and 95% confidence intervals. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
+#| fig-cap: "Fig. 4 Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 CData <- prepare_block(Modeling_data, "Weighted_CPUE_Kōura", vars_common) %>%
 dplyr::mutate(CPUE_pos = as.integer(Weighted_CPUE_Kōura > 0))
@@ -1458,7 +1472,7 @@ CPUE_panel_positives
 #| results: hide
 #| warning: false
 #| message: false
-#| fig-cap: "Fig. 5 Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
+#| fig-cap: "Fig. 5 Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 BData <- prepare_block(Modeling_data, "Weighted_BPUE_Kōura", vars_common) %>%
 dplyr::mutate(BPUE_pos = as.integer(Weighted_BPUE_Kōura > 0))
@@ -1593,7 +1607,7 @@ BPUE_panel_positives
 #| fig-width: 7
 #| fig-height: 4
 #| dpi: 300
-#| fig-cap: "Fig. S2 Raw relationships between kōura CPUE and BPUE and significant habitat predictors. Points show observed values at individual sites."
+#| fig-cap: "Fig. S2 Raw relationships between significant habitat predictors and kōura CPUE (upper panels) and BPUE (lower panels) at sites where kōura were present. Points represent observed values at individual sites. Temperature, pH, and emergent native vegetation cover are shown for CPUE; pH and emergent native vegetation cover are shown for BPUE."
 
 make_raw_plot <- function(data, x_var, y_var, y_label) {
   ggplot(data, aes(x = .data[[x_var]], y = .data[[y_var]])) +
@@ -1745,11 +1759,17 @@ Substrate_index,
 Wood_cover,
 Overhanging_trees,
 Emergent_Native,
-Submerged_Native
+Submerged_Native,
+Submerged_Non_Native
 ) %>%
 dplyr::filter(complete.cases(.))
 
 habitat_pca <- prcomp(habitat_vars, center = TRUE, scale. = TRUE)
+
+summary(habitat_pca)
+biplot(habitat_pca)
+habitat_pca$rotation
+
 
 ```
 
