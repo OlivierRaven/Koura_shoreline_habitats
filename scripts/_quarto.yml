@@ -1,9 +1,9 @@
 ﻿project:
   type: website
-  output-dir: docs
+  output-dir: ../docs
 
 website:
-  title: "Kōura and their shoreline habitats"
+  title: "Littoral habitat structure drives freshwater crayfish populations"
   navbar:
     left:
       - href: index.qmd
