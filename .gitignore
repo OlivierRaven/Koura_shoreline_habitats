@@ -8,5 +8,7 @@
 _freeze/
 docs/
 
-# Images folder 
+# Hidden folders
 images/
+manuscript/
+data/raw
