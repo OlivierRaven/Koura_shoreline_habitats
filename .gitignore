@@ -6,7 +6,7 @@
 # Quarto temporary files
 .quarto/
 _freeze/
-docs/
+
 
 # Hidden folders
 images/
