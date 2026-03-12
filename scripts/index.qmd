@@ -66,9 +66,9 @@ clean_smooth_title <- function(x) {
 ```{r}
 #| label: load-data
 
-exc_file_dir <- "data/raw/Natural_habitat.xlsx"
-der_data_dir <- "data/derived"
-fig_dir      <- "outputs"
+exc_file_dir <- "../data/raw/Natural_habitat.xlsx"
+der_data_dir <- "../data/derived"
+fig_dir      <- "../outputs"
 
 Site_info          <- read_excel(exc_file_dir, sheet = "Site_info")
 Monitoring_data    <- read_excel(exc_file_dir, sheet = "Monitoring_data")
@@ -302,7 +302,7 @@ Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
     ),
     Monitoring     = sub(".*?_", "", Monitoring_ID),
     Date           = as.Date(Date_Time),
-    Time           = format(Date_Time, "%H:%M:%S"),
+    Time           = format(as.POSIXct(Date_Time), "%H:%M:%S"),
     Year           = lubridate::year(Date_Time),
     Month          = lubridate::month(Date_Time, label = TRUE),
     Day            = lubridate::day(Date_Time),
