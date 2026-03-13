@@ -1,5 +1,5 @@
 ---
-title: "Complex littoral habitats enhance freshwater crayfish populations"
+title: "Littoral habitat structure drives freshwater crayfish populations"
 author: "Olivier V. Raven"
 format:
   html:
@@ -16,12 +16,13 @@ execute:
 
 ## Overview
 
-This site accompanies the scientific work on: *Complex littoral habitats enhance freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand*.
+This site accompanies the scientific work on: *Littoral habitat structure drives freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand*.
 
-- **Code repository:** (add URL)
+- **Code repository:** https://github.com/OlivierRaven/Koura_shoreline_habitats.git
 - **Data DOI:** (add DOI link)
 - **Paper DOI:** (add DOI link)
-- **Title:** Complex littoral habitats enhance freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand
+- **Quartro manuscript** https://olivierraven.github.io/Koura_shoreline_habitats/
+- **Title:** Littoral habitat structure drives freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand
 
 ## Setup
 ```{r}
@@ -162,7 +163,7 @@ ggsave(filename = file.path(fig_dir, "length_weight_plot.png"),plot = length_wei
 length_weight_plot
 ```
 
-## CPUE and BPUE tables
+## CPUE and BPUE calculations
 ```{r}
 #| label: cpue-bpue
 
@@ -232,6 +233,7 @@ mutate(
 Richness  = rowSums(dplyr::select(., starts_with("Total_Individuals_")) > 0),
 Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_with(c("_Bullies", "_Common_smelt"))))
 )
+
 ```
 
 # Combined dataset and habitat classification
@@ -376,7 +378,7 @@ writexl::write_xlsx(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CP
 write.csv(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.csv"), row.names = FALSE)
 write.csv(habitat_classification, file.path(der_data_dir, "habitat_classification.csv"), row.names = FALSE)
 
-head(Monitoring_CPUE_data)
+#head(Monitoring_CPUE_data)
 
 ```
 
@@ -1607,7 +1609,7 @@ BPUE_panel_positives
 #| fig-width: 7
 #| fig-height: 4
 #| dpi: 300
-#| fig-cap: "Fig. S2 Raw relationships between significant habitat predictors and kōura CPUE (upper panels) and BPUE (lower panels) at sites where kōura were present. Points represent observed values at individual sites. Temperature, pH, and emergent native vegetation cover are shown for CPUE; pH and emergent native vegetation cover are shown for BPUE."
+#| fig-cap: "Fig. S2 Raw relationships between significant habitat predictors and kōura CPUE (upper panels) and BPUE (lower panels) at sites where kōura were present. Points represent observed values at individual sites. Temperature (°C), pH, and emergent native vegetation cover (%) are shown for CPUE; pH and emergent native vegetation cover (%) are shown for BPUE."
 
 make_raw_plot <- function(data, x_var, y_var, y_label) {
   ggplot(data, aes(x = .data[[x_var]], y = .data[[y_var]])) +
@@ -1781,15 +1783,15 @@ M_C_data %>%
   summarise(n_sites = n(),
             catfish_present = sum(Presence_Catfish, na.rm = TRUE),
             koura_present = sum(Presence_Kōura, na.rm = TRUE),
-            mean_CPUE = mean(Weighted_CPUE_Kōura, na.rm = TRUE))
+            mean_CPUE_koura = mean(Weighted_CPUE_Kōura, na.rm = TRUE))
 
 # 2. Kōura metrics: catfish-present vs absent sites
 M_C_data %>%
   group_by(Presence_Catfish) %>%
   summarise(n = n(),
             koura_presence_rate = mean(Presence_Kōura, na.rm = TRUE),
-            mean_CPUE = mean(Weighted_CPUE_Kōura, na.rm = TRUE),
-            mean_BPUE = mean(Weighted_BPUE_Kōura, na.rm = TRUE))
+            mean_CPUE_koura = mean(Weighted_CPUE_Kōura, na.rm = TRUE),
+            mean_BPUE_koura = mean(Weighted_BPUE_Kōura, na.rm = TRUE))
 
 # 3. Kōura metrics: catfish-invaded vs catfish-free lakes
 M_C_data %>%
@@ -1798,8 +1800,8 @@ M_C_data %>%
   group_by(catfish_lake) %>%
   summarise(n_sites = n(),
             koura_presence_rate = mean(Presence_Kōura, na.rm = TRUE),
-            mean_CPUE = mean(Weighted_CPUE_Kōura, na.rm = TRUE),
-            mean_BPUE = mean(Weighted_BPUE_Kōura, na.rm = TRUE))
+            mean_CPUE_koura = mean(Weighted_CPUE_Kōura, na.rm = TRUE),
+            mean_BPUE_koura = mean(Weighted_BPUE_Kōura, na.rm = TRUE))
 
 ```
 
