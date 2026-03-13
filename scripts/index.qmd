@@ -27,9 +27,10 @@ This site accompanies the scientific work on: *Littoral habitat structure drives
 ## Setup
 ```{r}
 #| label: setup
-
+knitr::opts_knit$set(root.dir = normalizePath(".."))
+options(warn = -1)
 packages <- c(
-  "emmeans","rstatix","multcompView","brglm2","patchwork","gratia","pROC","caret",
+  "here","kableExtra","emmeans","rstatix","multcompView","brglm2","patchwork","gratia","pROC","caret",
   "mgcv","tidyr","purrr","corrplot","glmmTMB","performance","tibble","tidyverse",
   "dplyr","writexl","readxl","lubridate")
 
@@ -42,6 +43,17 @@ quiet_load <- function(pkg) {
 }
 
 invisible(lapply(packages, quiet_load))
+
+# Path handling - works both interactively and during render
+if (interactive()) {
+  root_dir <- normalizePath(file.path(dirname(rstudioapi::getSourceEditorContext()$path), ".."))
+} else {
+  root_dir <- normalizePath(file.path(dirname(knitr::current_input(dir = TRUE)), ".."))
+}
+
+exc_file_dir <- file.path(root_dir, "data/raw/Natural_habitat.xlsx")
+der_data_dir <- file.path(root_dir, "data/derived")
+fig_dir      <- file.path(root_dir, "outputs")
 
 base_theme_bw <- theme_classic() +
   theme(
@@ -66,10 +78,6 @@ clean_smooth_title <- function(x) {
 # Data import
 ```{r}
 #| label: load-data
-
-exc_file_dir <- "../data/raw/Natural_habitat.xlsx"
-der_data_dir <- "../data/derived"
-fig_dir      <- "../outputs"
 
 Site_info          <- read_excel(exc_file_dir, sheet = "Site_info")
 Monitoring_data    <- read_excel(exc_file_dir, sheet = "Monitoring_data")
@@ -650,13 +658,11 @@ ggsave(file.path(fig_dir, "Koura_plots.png"), Koura_plots,
 Koura_plots
 ```
 
+# Lake differences glmm
 ```{r}
-# Exploratory lake-level differences among lakes (GLMMs)
-# Purpose: test whether kōura metrics differ among lakes (overall + pairwise contrasts)
-
 #| label: lake_differences_glmm
 #| code-fold: true
-#| code-summary: "Show exploratory lake-level GLMM tests"
+
 
 fit_presence_glmm <- function(data, response, lake_var = "Lake", random_effect = "Habitat_Type") {
   form <- as.formula(paste0(response, " ~ ", lake_var, " + (1|", random_effect, ")"))
@@ -1742,10 +1748,10 @@ write.csv(all_models_table, file = file.path(fig_dir, "table_gam_all_models.csv"
 
 all_models_table |>
   mutate(
-    term = gsub("s\\(|\\)", "", term),  # clean up smooth term names
+    term = gsub("s\\(|\\)", "", term),
     p_value = ifelse(!is.na(p_value), format.pval(p_value, digits = 3, eps = 0.001), NA)
   ) |>
-  select(-model) |>  # model shown as group header instead
+  select(-model) |>
   kable(
     caption = "GAM model results for kōura occupancy, CPUE, and BPUE models. Significance codes: *** p < 0.001, ** p < 0.01, * p < 0.05, . p < 0.1",
     col.names = c("Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
@@ -1755,10 +1761,9 @@ all_models_table |>
     bootstrap_options = c("striped", "hover", "condensed"),
     full_width = FALSE
   ) |>
-  pack_rows("Occupancy", 1, nrow(occ_table)) |>
-  pack_rows("CPUE (positive sites)", nrow(occ_table) + 1, nrow(occ_table) + nrow(cpue_table)) |>
-  pack_rows("BPUE (positive sites)", nrow(occ_table) + nrow(cpue_table) + 1, nrow(all_models_table))
-
+  kableExtra::group_rows("Occupancy", 1, nrow(occ_table)) |>
+  kableExtra::group_rows("CPUE (positive sites)", nrow(occ_table) + 1, nrow(occ_table) + nrow(cpue_table)) |>
+  kableExtra::group_rows("BPUE (positive sites)", nrow(occ_table) + nrow(cpue_table) + 1, nrow(all_models_table))
 ```
 
 # PCA (habitat complexity)
