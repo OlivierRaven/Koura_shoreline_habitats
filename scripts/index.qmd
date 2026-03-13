@@ -1311,6 +1311,9 @@ final_plot_occupancy <- (top_row / bottom_row)+
 ggsave(filename = file.path(fig_dir, "Occupancy_panels.png"), plot = final_plot_occupancy,  width = 180, height = 120, units = "mm", dpi = 1200)
 
 final_plot_occupancy
+
+gam.check(final_occ)
+concurvity(final_occ, full = FALSE)
 ```
 
 ## CPUE hurdle model
@@ -1463,6 +1466,10 @@ patchwork::plot_layout(heights = c(1, 2))
 ggsave(filename = file.path(fig_dir, "CPUE_panel_positives.png"),plot = CPUE_panel_positives,width = 130, height = 120, units = "mm", dpi = 1200)
 
 CPUE_panel_positives
+
+gam.check(final_cpue_pos) 
+concurvity(final_cpue_pos, full = FALSE)
+
 ```
 
 ## BPUE hurdle model
@@ -1601,6 +1608,9 @@ ggsave(filename = file.path(fig_dir, "BPUE_panel_positives.png"),plot = BPUE_pan
 
 BPUE_panel_positives
 
+gam.check(final_BPUE_pos)
+concurvity(final_BPUE_pos, full = FALSE)
+
 ```
 
 ## Raw-data-plots CPUE & BPUE
@@ -1639,19 +1649,6 @@ raw_plots
 ## Model tables (exports)
 ```{r}
 #| label: model-tables
-
-gam.check(final_occ)
-k.check(final_occ)
-concurvity(final_occ, full = FALSE)
-
-gam.check(final_cpue_pos) 
-k.check(final_cpue_pos)
-concurvity(final_cpue_pos, full = FALSE)
-
-gam.check(final_BPUE_pos)
-k.check(final_BPUE_pos)
-concurvity(final_BPUE_pos, full = FALSE)
-
 
 gam_results_table <- function(model, model_name = deparse(substitute(model)), digits = 3) {
 sm <- summary(model)
@@ -1743,7 +1740,24 @@ write.csv(bpue_table, file = file.path(fig_dir, "table_gam_bpue_pos.csv"),  row.
 all_models_table <- bind_rows(occ_table, cpue_table, bpue_table)
 write.csv(all_models_table, file = file.path(fig_dir, "table_gam_all_models.csv"), row.names = FALSE)
 
-print(all_models_table)
+all_models_table |>
+  mutate(
+    term = gsub("s\\(|\\)", "", term),  # clean up smooth term names
+    p_value = ifelse(!is.na(p_value), format.pval(p_value, digits = 3, eps = 0.001), NA)
+  ) |>
+  select(-model) |>  # model shown as group header instead
+  kable(
+    caption = "GAM model results for kōura occupancy, CPUE, and BPUE models. Significance codes: *** p < 0.001, ** p < 0.01, * p < 0.05, . p < 0.1",
+    col.names = c("Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
+    align = c("l","l","r","r","r","r","r","r","l")
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  ) |>
+  pack_rows("Occupancy", 1, nrow(occ_table)) |>
+  pack_rows("CPUE (positive sites)", nrow(occ_table) + 1, nrow(occ_table) + nrow(cpue_table)) |>
+  pack_rows("BPUE (positive sites)", nrow(occ_table) + nrow(cpue_table) + 1, nrow(all_models_table))
 
 ```
 
