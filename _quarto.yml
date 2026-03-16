@@ -3,7 +3,7 @@
   output-dir: ../docs
 
 website:
-  title: "Littoral habitat structure drives freshwater crayfish populations"
+  title: "Littoral habitat structure influences freshwater crayfish populations"
   navbar:
     left:
       - href: index.qmd
