@@ -12,3 +12,5 @@ _freeze/
 images/
 manuscript/
 data/raw
+/.quarto/
+**/*.quarto_ipynb

@@ -1,21 +1,34 @@
 ﻿project:
-  type: website
-  output-dir: ../docs
+  type: manuscript
+  output-dir: docs
+  post-render: deploy.R
 
-website:
-  title: "Littoral habitat structure influences freshwater crayfish populations"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
+execute:
+  freeze: false
+  cache: false
+
+manuscript:
+  article: index.qmd
+  notebooks:
+    - notebook: analysis.qmd
+      title: "Analysis Notebook"
 
 format:
   html:
-    toc: true
+    theme: cosmo
+  pdf:
+    includes:
+      in-header: references/header.tex
+    latex-engine: xelatex
     number-sections: true
+    toc: true
+    colorlinks: true
+    link-citations: true
+    header-includes: |
+      \usepackage[left]{lineno}
+      \linenumbers
+  docx:
+    reference-doc: references/reference.docx
 
-execute:
-  freeze: auto
-  warning: false
-  message: false
-
+bibliography: references/references.bib
+csl: references/apa.csl
