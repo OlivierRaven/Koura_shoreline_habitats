@@ -2,7 +2,7 @@
 
 This repository contains the full reproducible workflow supporting the manuscript:
 
-**"Littoral habitat structure drives freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand."**
+**"Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand"**
 
 The repository includes all code used for data processing, statistical analyses, and figure generation, derived datasets, generated figures, and peer review documents. Raw field data are not tracked in this repository and will be archived in an open-access data repository upon acceptance.
 
@@ -19,11 +19,11 @@ The repository includes all code used for data processing, statistical analyses,
 │   ├── raw/                   # Raw field data (tracked)
 │   └── derived/               # Processed datasets used in analysis (tracked)
 ├── outputs/                   # Generated figures and tables (tracked)
-├── peer_review/               # Cover letter and reviewer responses (tracked)
 ├── manuscript/                # Manuscript versions (tracked)
 │   ├── Cover_letter.docx
 │   ├── Manuscript_v1_preprint.docx  # Before peer review
 │   ├── Manuscript_v2_revised.docx   # After peer review
+│   ├── Manuscript_v2_revised_track_changes
 │   └── Response_to_reviewers.docx              
 └── README.md                        # This file
 ```

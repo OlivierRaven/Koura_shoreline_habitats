@@ -9,8 +9,6 @@ _freeze/
 
 
 # Hidden folders
-images/
-manuscript/
 data/raw
 /.quarto/
 **/*.quarto_ipynb
