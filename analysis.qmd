@@ -155,7 +155,7 @@ scale_shape_manual(values = c("measured" = 16, "predicted" = 1)) +
 labs(x = "OCL length (mm)", y = "Weight (g)", shape = "Weight source") +
 annotate("text", x = Inf, y = Inf, label = formula_text, hjust = 1.1, vjust = 1.3, size = 3) 
 
-ggsave(filename = file.path(out_dir, "length_weight_plot.png"), plot = length_weight_plot, width = 170, height = 120, units = "mm", dpi = 1200, create.dir = TRUE)
+ggsave(filename = file.path(out_dir, "fig-length-weight.png"), plot = length_weight_plot, width = 170, height = 120, units = "mm", dpi = 1200, create.dir = TRUE)
 
 length_weight_plot
 ```
@@ -677,8 +677,7 @@ write.csv(
   row.names = FALSE
 )
 
-knitr::kable(EnvBio_summary_table, caption = "Table S1 Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand.",
-  digits = 2, align = c("l","l","l","r","r","r","r","r","r","r"))
+knitr::kable(EnvBio_summary_table, digits = 2, align = c("l","l","l","r","r","r","r","r","r","r"))
 ```
 
 # Kōura presence, CPUE, and BPUE across lakes
@@ -741,7 +740,7 @@ KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura", "Kōura BPUE", 
 
 Koura_plots <- KPRES_plot / KCPUE_plot / KBPUE_plot
 
-ggsave(file.path(out_dir, "Koura_plots.png"), Koura_plots, 
+ggsave(file.path(out_dir, "fig-koura-by-lake.png"), Koura_plots, 
        width = 80, height = 120, units = "mm", dpi = 1200)
 
 Koura_plots
@@ -1409,7 +1408,7 @@ bottom_row <- (p_pres_roc + Calibration_plot_occ) + patchwork::plot_layout(ncol 
 final_plot_occupancy <- (top_row / bottom_row)+
   patchwork::plot_layout(heights = c(1, 2))
 
-ggsave(filename = file.path(out_dir, "Occupancy_panels.png"), plot = final_plot_occupancy,  width = 180, height = 120, units = "mm", dpi = 1200)
+ggsave(filename = file.path(out_dir, "fig-occupancy-model.png"), plot = final_plot_occupancy,  width = 180, height = 120, units = "mm", dpi = 1200)
 
 final_plot_occupancy
 
@@ -1571,7 +1570,7 @@ base_theme_bw
 CPUE_panel_positives <- (p_cpue_pos_smooths / p_cpue_pos_scatter) +
 patchwork::plot_layout(heights = c(1, 2))
 
-ggsave(filename = file.path(out_dir, "CPUE_panel_positives.png"),plot = CPUE_panel_positives,width = 130, height = 120, units = "mm", dpi = 1200)
+ggsave(filename = file.path(out_dir, "fig-cpue-hurdle.png"),plot = CPUE_panel_positives,width = 130, height = 120, units = "mm", dpi = 1200)
 
 CPUE_panel_positives
 
@@ -1718,7 +1717,7 @@ base_theme_bw
 BPUE_panel_positives <- (p_BPUE_pos_smooths / p_BPUE_pos_scatter) +
 patchwork::plot_layout(heights = c(1, 2))
 
-ggsave(filename = file.path(out_dir, "BPUE_panel_positives.png"),plot = BPUE_panel_positives,width = 100, height = 120, units = "mm", dpi = 1200)
+ggsave(filename = file.path(out_dir, "fig-bpue-hurdle.png"),plot = BPUE_panel_positives,width = 100, height = 120, units = "mm", dpi = 1200)
 
 BPUE_panel_positives
 
@@ -1749,7 +1748,7 @@ p_raw_emerg_bpue <- make_raw_plot(Bpos, "Emergent_Native", "Weighted_BPUE_Kōura
 raw_plots <- (p_raw_temp_cpue + p_raw_ph_cpue + p_raw_emerg_cpue) /
              (plot_spacer() + p_raw_ph_bpue + p_raw_emerg_bpue)
 
-ggsave(file.path(out_dir, "Raw_data_plots.png"), raw_plots,
+ggsave(file.path(out_dir, "fig-raw-data-plots.png"), raw_plots,
        width = 180, height = 120, units = "mm", dpi = 1200)
 
 raw_plots

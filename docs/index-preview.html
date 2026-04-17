@@ -453,7 +453,7 @@
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run analysis notebook to make all variables available</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">knit</span>(<span class="st">"analysis.qmd"</span>, <span class="at">output =</span> <span class="fu">tempfile</span>(), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "C:\\Users\\or81\\AppData\\Local\\Temp\\RtmpSqjU2P\\file2300457c4b00"</code></pre>
+<pre><code>[1] "C:\\Users\\or81\\AppData\\Local\\Temp\\RtmpIzsyIF\\file21f86e89a99"</code></pre>
 </div>
 </div></div>
 <section id="introduction" class="level1">
@@ -922,7 +922,7 @@ Figure&nbsp;1: Map of the sampling locations with different dominant littoral ha
 <span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>Koura_plots <span class="op">&lt;-</span> KPRES_plot <span class="op">/</span> KCPUE_plot <span class="op">/</span> KBPUE_plot</span>
 <span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>ggsave(<span class="bu">file</span>.path(out_dir, <span class="st">"Koura_plots.png"</span>), Koura_plots, </span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>ggsave(<span class="bu">file</span>.path(out_dir, <span class="st">"fig-koura-by-lake.png"</span>), Koura_plots, </span>
 <span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>       width <span class="op">=</span> <span class="dv">80</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>)</span>
 <span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>Koura_plots</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1025,7 +1025,7 @@ Figure&nbsp;3: Kōura occupancy GAMM results and model performance. a) Estimated
 <span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>CPUE_panel_positives <span class="op">&lt;-</span> (p_cpue_pos_smooths <span class="op">/</span> p_cpue_pos_scatter) <span class="op">+</span></span>
 <span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>patchwork::plot_layout(heights <span class="op">=</span> c(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>ggsave(filename <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"CPUE_panel_positives.png"</span>),plot <span class="op">=</span> CPUE_panel_positives,width <span class="op">=</span> <span class="dv">130</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>ggsave(filename <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"fig-cpue-hurdle.png"</span>),plot <span class="op">=</span> CPUE_panel_positives,width <span class="op">=</span> <span class="dv">130</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>)</span>
 <span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>CPUE_panel_positives</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -1078,7 +1078,7 @@ Figure&nbsp;4: Kōura CPUE GAMM results and model performance. a) Estimated smoo
 <span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>BPUE_panel_positives <span class="op">&lt;-</span> (p_BPUE_pos_smooths <span class="op">/</span> p_BPUE_pos_scatter) <span class="op">+</span></span>
 <span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>patchwork::plot_layout(heights <span class="op">=</span> c(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>ggsave(filename <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"BPUE_panel_positives.png"</span>),plot <span class="op">=</span> BPUE_panel_positives,width <span class="op">=</span> <span class="dv">100</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>)</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>ggsave(filename <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"fig-bpue-hurdle.png"</span>),plot <span class="op">=</span> BPUE_panel_positives,width <span class="op">=</span> <span class="dv">100</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>)</span>
 <span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>BPUE_panel_positives</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -1143,7 +1143,7 @@ Figure&nbsp;5: Kōura BPUE GAMM results and model performance. a) Estimated smoo
 <span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>labs(x <span class="op">=</span> <span class="st">"OCL length (mm)"</span>, y <span class="op">=</span> <span class="st">"Weight (g)"</span>, shape <span class="op">=</span> <span class="st">"Weight source"</span>) <span class="op">+</span></span>
 <span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>annotate(<span class="st">"text"</span>, x <span class="op">=</span> Inf, y <span class="op">=</span> Inf, label <span class="op">=</span> formula_text, hjust <span class="op">=</span> <span class="fl">1.1</span>, vjust <span class="op">=</span> <span class="fl">1.3</span>, size <span class="op">=</span> <span class="dv">3</span>) </span>
 <span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>ggsave(filename <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"length_weight_plot.png"</span>), plot <span class="op">=</span> length_weight_plot, width <span class="op">=</span> <span class="dv">170</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>, create.<span class="bu">dir</span> <span class="op">=</span> TRUE)</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>ggsave(filename <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"fig-length-weight.png"</span>), plot <span class="op">=</span> length_weight_plot, width <span class="op">=</span> <span class="dv">170</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>, create.<span class="bu">dir</span> <span class="op">=</span> TRUE)</span>
 <span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>length_weight_plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
@@ -1181,7 +1181,7 @@ Figure&nbsp;6: Length–weight relationship used to estimate missing kōura weig
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>raw_plots <span class="op">&lt;-</span> (p_raw_temp_cpue <span class="op">+</span> p_raw_ph_cpue <span class="op">+</span> p_raw_emerg_cpue) <span class="op">/</span></span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>             (plot_spacer() <span class="op">+</span> p_raw_ph_bpue <span class="op">+</span> p_raw_emerg_bpue)</span>
 <span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>ggsave(<span class="bu">file</span>.path(out_dir, <span class="st">"Raw_data_plots.png"</span>), raw_plots,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>ggsave(<span class="bu">file</span>.path(out_dir, <span class="st">"fig-raw-data-plots.png"</span>), raw_plots,</span>
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>       width <span class="op">=</span> <span class="dv">180</span>, height <span class="op">=</span> <span class="dv">120</span>, units <span class="op">=</span> <span class="st">"mm"</span>, dpi <span class="op">=</span> <span class="dv">1200</span>)</span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>raw_plots</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -1384,8 +1384,7 @@ Figure&nbsp;7: Raw relationships between significant habitat predictors and kōu
 <span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a>  row.names <span class="op">=</span> FALSE</span>
 <span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>knitr::kable(EnvBio_summary_table, caption <span class="op">=</span> <span class="st">"Table S1 Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."</span>,</span>
-<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a>  digits <span class="op">=</span> <span class="dv">2</span>, align <span class="op">=</span> c(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>knitr::kable(EnvBio_summary_table, digits <span class="op">=</span> <span class="dv">2</span>, align <span class="op">=</span> c(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div id="tbl-env-fish-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-env-fish-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1394,7 +1393,6 @@ Table&nbsp;3: Distribution of environmental and biotic variables measured at lit
 <div aria-describedby="tbl-env-fish-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="cell caption-top table table-sm table-striped small">
-<caption>Table S1 Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand.</caption>
 <colgroup>
 <col style="width: 10%">
 <col style="width: 18%">
