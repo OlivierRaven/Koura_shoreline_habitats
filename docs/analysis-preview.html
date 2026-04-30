@@ -716,17 +716,16 @@ Length–weight relationship used to estimate missing kōura weights. Observed (
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Trophic state</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Eutrophic"</span>, <span class="st">"Mesotrophic"</span>, <span class="st">"Eutrophic"</span>, <span class="st">"Oligotrophic"</span>, <span class="st">"Mesotrophic"</span>)</span>
 <span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(lake_data, <span class="at">caption =</span> <span class="st">"Table 1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(lake_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div id="tbl-lake-overview" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lake-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from the Land, Air, Water Aotearoa (LAWA) database (<span class="citation" data-cites="LAWA2025">Land, Air, Water Aotearoa (LAWA) (<a href="#ref-LAWA2025" role="doc-biblioref">2025</a>)</span>).
+Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from (<span class="citation" data-cites="LAWA2025">Land, Air, Water Aotearoa (LAWA) (<a href="#ref-LAWA2025" role="doc-biblioref">2025</a>)</span>) database.
 </figcaption>
 <div aria-describedby="tbl-lake-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="cell caption-top table table-sm table-striped small">
-<caption>Table 1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed.</caption>
 <colgroup>
 <col style="width: 5%">
 <col style="width: 17%">
@@ -887,17 +886,16 @@ Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa
 <span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(biotic_vars, <span class="at">caption =</span> <span class="st">"Table 2: Overview of environmental and biotic variables measured at littoral sampling sites."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(biotic_vars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="tbl-environmental-biotic-overview" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-environmental-biotic-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (Paranephrops planifrons). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones.
+Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura. Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones.
 </figcaption>
 <div aria-describedby="tbl-environmental-biotic-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
 <table class="cell caption-top table table-sm table-striped small">
-<caption>Table 2: Overview of environmental and biotic variables measured at littoral sampling sites.</caption>
 <colgroup>
 <col style="width: 9%">
 <col style="width: 25%">
@@ -3135,10 +3133,10 @@ Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
 indicate that k is too low, especially if edf is close to k'.
 
                                k'      edf k-index p-value
-s(Riparian_vegetation)   6.00e+00 8.49e-01    1.20    0.91
-s(Substrate_index)       9.00e+00 9.80e-01    0.99    0.38
-s(Temperature)           9.00e+00 1.16e+00    1.00    0.40
-s(Specific_conductivity) 9.00e+00 9.37e-01    0.95    0.28
+s(Riparian_vegetation)   6.00e+00 8.49e-01    1.20    0.90
+s(Substrate_index)       9.00e+00 9.80e-01    0.99    0.44
+s(Temperature)           9.00e+00 1.16e+00    1.00    0.38
+s(Specific_conductivity) 9.00e+00 9.37e-01    0.95    0.31
 s(LID)                   5.00e+00 5.93e-06      NA      NA</code></pre>
 </div>
 <details class="code-fold">
@@ -5193,7 +5191,7 @@ Land, Air, Water Aotearoa (LAWA). (2025). <em>Lakes data for the <span class="no
 <span id="cb55-404"><a href="#cb55-404" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb55-405"><a href="#cb55-405" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-lake-overview</span></span>
 <span id="cb55-406"><a href="#cb55-406" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: FALSE</span></span>
-<span id="cb55-407"><a href="#cb55-407" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from the Land, Air, Water Aotearoa (LAWA) database (@LAWA2025)."</span></span>
+<span id="cb55-407"><a href="#cb55-407" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from (@LAWA2025) database."</span></span>
 <span id="cb55-408"><a href="#cb55-408" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-409"><a href="#cb55-409" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-410"><a href="#cb55-410" aria-hidden="true" tabindex="-1"></a>lake_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -5209,7 +5207,7 @@ Land, Air, Water Aotearoa (LAWA). (2025). <em>Lakes data for the <span class="no
 <span id="cb55-420"><a href="#cb55-420" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Trophic state</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Eutrophic"</span>, <span class="st">"Mesotrophic"</span>, <span class="st">"Eutrophic"</span>, <span class="st">"Oligotrophic"</span>, <span class="st">"Mesotrophic"</span>)</span>
 <span id="cb55-421"><a href="#cb55-421" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb55-422"><a href="#cb55-422" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-423"><a href="#cb55-423" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(lake_data, <span class="at">caption =</span> <span class="st">"Table 1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed."</span>)</span>
+<span id="cb55-423"><a href="#cb55-423" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(lake_data)</span>
 <span id="cb55-424"><a href="#cb55-424" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-425"><a href="#cb55-425" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb55-426"><a href="#cb55-426" aria-hidden="true" tabindex="-1"></a></span>
@@ -5218,7 +5216,7 @@ Land, Air, Water Aotearoa (LAWA). (2025). <em>Lakes data for the <span class="no
 <span id="cb55-431"><a href="#cb55-431" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb55-432"><a href="#cb55-432" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-environmental-biotic-overview</span></span>
 <span id="cb55-433"><a href="#cb55-433" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: FALSE</span></span>
-<span id="cb55-434"><a href="#cb55-434" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (Paranephrops planifrons). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."</span></span>
+<span id="cb55-434"><a href="#cb55-434" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura. Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."</span></span>
 <span id="cb55-435"><a href="#cb55-435" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-436"><a href="#cb55-436" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-437"><a href="#cb55-437" aria-hidden="true" tabindex="-1"></a>biotic_vars <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -5280,7 +5278,7 @@ Land, Air, Water Aotearoa (LAWA). (2025). <em>Lakes data for the <span class="no
 <span id="cb55-493"><a href="#cb55-493" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb55-494"><a href="#cb55-494" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb55-495"><a href="#cb55-495" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-496"><a href="#cb55-496" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(biotic_vars, <span class="at">caption =</span> <span class="st">"Table 2: Overview of environmental and biotic variables measured at littoral sampling sites."</span>)</span>
+<span id="cb55-496"><a href="#cb55-496" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(biotic_vars)</span>
 <span id="cb55-497"><a href="#cb55-497" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-498"><a href="#cb55-498" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb55-499"><a href="#cb55-499" aria-hidden="true" tabindex="-1"></a></span>

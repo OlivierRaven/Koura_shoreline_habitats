@@ -392,7 +392,7 @@ use = "complete.obs")
 ```{r}
 #| label: tbl-lake-overview
 #| echo: FALSE
-#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from the Land, Air, Water Aotearoa (LAWA) database (@LAWA2025)."
+#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from (@LAWA2025) database."
 
 
 lake_data <- data.frame(
@@ -408,7 +408,7 @@ lake_data <- data.frame(
   `Trophic state` = c("Eutrophic", "Mesotrophic", "Eutrophic", "Oligotrophic", "Mesotrophic")
 )
 
-kable(lake_data, caption = "Table 1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed.")
+kable(lake_data)
 
 ```
 
@@ -417,7 +417,7 @@ kable(lake_data, caption = "Table 1: Physical, morphometric, and trophic charact
 ```{r}
 #| label: tbl-environmental-biotic-overview
 #| echo: FALSE
-#| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (Paranephrops planifrons). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
+#| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura. Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
 
 
 biotic_vars <- data.frame(
@@ -479,7 +479,7 @@ biotic_vars <- data.frame(
   )
 )
 
-kable(biotic_vars, caption = "Table 2: Overview of environmental and biotic variables measured at littoral sampling sites.")
+kable(biotic_vars)
 
 ```
 
