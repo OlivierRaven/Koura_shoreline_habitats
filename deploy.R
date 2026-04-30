@@ -10,6 +10,11 @@ system("powershell -Command \"Copy-Item -Force '.quarto\\_freeze\\analysis\\figu
 system("powershell -Command \"Copy-Item -Force 'analysis_files\\figure-html\\*' 'docs\\index_files\\figure-html\\' -ErrorAction SilentlyContinue\"")
 system("powershell -Command \"Copy-Item -Force 'analysis_files\\figure-ipynb\\*' 'docs\\index_files\\figure-html\\' -ErrorAction SilentlyContinue\"")
 
+# Copy figures for analysis-preview.html
+system("powershell -Command \"New-Item -ItemType Directory -Force 'docs\\analysis_files\\figure-html' | Out-Null\"")
+system("powershell -Command \"Copy-Item -Force '.quarto\\_freeze\\analysis\\figure-html\\*' 'docs\\analysis_files\\figure-html\\' -ErrorAction SilentlyContinue\"")
+system("powershell -Command \"Copy-Item -Force 'analysis_files\\figure-html\\*' 'docs\\analysis_files\\figure-html\\' -ErrorAction SilentlyContinue\"")
+
 # Copy site libraries if they exist
 system("powershell -Command \"if (Test-Path 'site_libs') { Copy-Item -Recurse -Force 'site_libs' 'docs\\' }\"")
 
