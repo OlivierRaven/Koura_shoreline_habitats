@@ -2,7 +2,6 @@
 title: "Analysis Notebook"
 format:
   html:
-    fig-path: "analysis_files/figure-html/"
     code-fold: true
     code-tools: true
     code-summary: "View Code"

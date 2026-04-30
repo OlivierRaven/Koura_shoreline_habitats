@@ -12,3 +12,4 @@ _freeze/
 data/raw
 /.quarto/
 **/*.quarto_ipynb
+*.ipynb
