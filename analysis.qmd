@@ -408,6 +408,9 @@ lake_data <- data.frame(
   `Trophic state` = c("Eutrophic", "Mesotrophic", "Eutrophic", "Oligotrophic", "Mesotrophic")
 )
 
+write.csv(lake_data,file = file.path(out_dir, "tbl-lake-overview.csv"),
+  row.names = FALSE)
+
 kable(lake_data)
 
 ```
@@ -478,6 +481,9 @@ biotic_vars <- data.frame(
     "Shave et al., (1994); Barnes, (1996); Usio & Townsend, (2000); Barnes & Hicks, (2003)"
   )
 )
+
+write.csv(biotic_vars,file = file.path(out_dir, "tbl-environmental-biotic-overview.csv"),
+  row.names = FALSE)
 
 kable(biotic_vars)
 
@@ -667,10 +673,10 @@ EnvBio_summary_table <- EnvBio_summary_table %>%
     Variable = as.character(Variable)
   )
 
-# Save if you still want the CSV
+# Save
 write.csv(
   EnvBio_summary_table,
-  file = file.path(out_dir, "EnvBio_summary_table.csv"),
+  file = file.path(out_dir, "tbl-env-fish-summary.csv"),
   row.names = FALSE
 )
 
@@ -747,10 +753,8 @@ Koura_plots
 
 # Lake differences glmm
 ```{r}
-#| label: tbl-lake-glmm
-#| include: true
-#| tbl-cap: ""
-
+#| label: lake-glmm
+#| include: false
 
 fit_presence_glmm <- function(data, response, lake_var = "Lake", random_effect = "Habitat_Type") {
   form <- as.formula(paste0(response, " ~ ", lake_var, " + (1|", random_effect, ")"))
@@ -1761,10 +1765,11 @@ ggsave(file.path(out_dir, "fig-raw-data-plots.png"), raw_plots,
 raw_plots
 ```
 
-## Model tables (exports)
+## GAM Model outputs
 ```{r}
-#| label: tbl-model-tables
+#| label: tbl-gam-models
 #| include: true
+#| tbl-cap: "GAM model results for kōura occupancy, CPUE, and BPUE models. Significance codes: *** p < 0.001, ** p < 0.01, * p < 0.05, . p < 0.1"
 
 gam_results_table <- function(model, model_name = deparse(substitute(model)), digits = 3) {
 sm <- summary(model)
@@ -1849,12 +1854,9 @@ occ_table  <- add_sig(occ_tabs$combined)
 cpue_table <- add_sig(cpue_tabs$combined)
 bpue_table <- add_sig(bpue_tabs$combined)
 
-write.csv(occ_table,  file = file.path(out_dir, "table_gam_occupancy.csv"), row.names = FALSE)
-write.csv(cpue_table, file = file.path(out_dir, "table_gam_cpue_pos.csv"),  row.names = FALSE)
-write.csv(bpue_table, file = file.path(out_dir, "table_gam_bpue_pos.csv"),  row.names = FALSE)
 
 all_models_table <- bind_rows(occ_table, cpue_table, bpue_table)
-write.csv(all_models_table, file = file.path(out_dir, "table_gam_all_models.csv"), row.names = FALSE)
+write.csv(all_models_table, file = file.path(out_dir, "tbl-gam-models.csv"), row.names = FALSE)
 
 all_models_table |>
   mutate(
@@ -1862,15 +1864,11 @@ all_models_table |>
     p_value = ifelse(!is.na(p_value), format.pval(p_value, digits = 3, eps = 0.001), NA)
   ) |>
   select(-model) |>
-  kable(
-    caption = "GAM model results for kōura occupancy, CPUE, and BPUE models. Significance codes: *** p < 0.001, ** p < 0.01, * p < 0.05, . p < 0.1",
-    col.names = c("Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
-    align = c("l","l","r","r","r","r","r","r","l")
-  ) |>
+  kable(col.names = c("Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
+    align = c("l","l","r","r","r","r","r","r","l")  ) |>
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed"),
-    full_width = FALSE
-  ) |>
+    full_width = FALSE  ) |>
   kableExtra::group_rows("Occupancy", 1, nrow(occ_table)) |>
   kableExtra::group_rows("CPUE (positive sites)", nrow(occ_table) + 1, nrow(occ_table) + nrow(cpue_table)) |>
   kableExtra::group_rows("BPUE (positive sites)", nrow(occ_table) + nrow(cpue_table) + 1, nrow(all_models_table))
