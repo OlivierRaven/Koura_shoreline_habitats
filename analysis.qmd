@@ -3,9 +3,6 @@ title: "Analysis Notebook"
 format:
   html:
     fig-path: "analysis_files/figure-html/"
-    theme:
-      light: flatly
-      dark: darkly
     code-fold: true
     code-tools: true
     code-summary: "View Code"
@@ -18,7 +15,6 @@ fig-height: 6
 execute:
   freeze: false
   cache: false
-
 ---
 
 # Setup

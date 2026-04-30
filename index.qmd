@@ -85,7 +85,7 @@ format:
 #| include: false
 
 # run analysis notebook to make all variables available
-knitr::knit("analysis.qmd", output = tempfile(), quiet = TRUE)
+knitr::knit(here::here("analysis.qmd"), output = tempfile(), quiet = TRUE)
 ```
 
 
