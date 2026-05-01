@@ -16,11 +16,15 @@ execute:
   cache: false
 ---
 
+This notebook contains all data processing, model fitting, and figure 
+generation code supporting the manuscript. All analyses can be reproduced 
+from the five CSV files in `data/derived/`. The rendered version of the 
+manuscript is available at the [project page](https://olivierraven.github.io/Koura_shoreline_habitats/).
+
 # Setup
 ```{r}
 #| label: setup
 #| include: false
-
 
 knitr::opts_knit$set(root.dir = normalizePath(".."))
 options(warn = -1)
@@ -381,7 +385,7 @@ left_join(habitat_classification, by = "Monitoring_ID")
 ## habitat-correlation
 ```{r}
 #| label: habitat-correlation
-#| include: true
+#| include: false
 
 cor(habitat_classification$Substrate_index,
 habitat_classification$Substrate_CV,
@@ -787,7 +791,7 @@ bpue_lrt
 ```
 
 # GAM modelling
-## Helpers
+### Helpers
 ```{r}
 #| label: GAM-helpers
 #| include: false
@@ -1186,10 +1190,15 @@ patchwork::wrap_plots(plots, ncol = 1)
 ```
 
 ## Occupancy model (presence/absence)
-### model run
+
+Binomial GAMM with logit link. Stepwise backward elimination using ML 
+estimation (α = 0.05), refitted with REML. Lake identity (LID) included 
+as a random effect throughout and protected from removal.
+
+### Model fitting
 ```{r}
 #| label: occupancy-model
-#| include: true
+#| include: false
 
 PData <- prepare_block(Modeling_data, "Presence_Kōura", vars_common)
 
@@ -1282,11 +1291,28 @@ method = "REML",
 select = TRUE
 )
 
+```
+
+### Model diagnostics
+```{r}
+#| label: occ-diagnostics
+#| include: true
+#| fig-width: 7
+#| fig-height: 6
+
+# Basis dimension check and residual diagnostics
 gam.check(final_occ)
+```
+
+```{r}
+#| label: occ-concurvity
+#| include: true
+
+# Concurvity — values approaching 1 indicate potential instability
 concurvity(final_occ, full = FALSE)
 ```
 
-### occupancy model figure
+### Model figure
 ```{r}
 #| label: fig-occupancy-model
 #| include: true
@@ -1420,11 +1446,10 @@ final_plot_occupancy
 ```
 
 ## CPUE hurdle model
-### model run
+### Model fitting
 ```{r}
 #| label: cpue-hurdle
-#| include: true
-
+#| include: false
 
 CData <- prepare_block(Modeling_data, "Weighted_CPUE_Kōura", vars_common) %>%
 dplyr::mutate(CPUE_pos = as.integer(Weighted_CPUE_Kōura > 0))
@@ -1528,13 +1553,28 @@ method = "REML",
 select = TRUE
 )
 
-
-gam.check(final_cpue_pos) 
-concurvity(final_cpue_pos, full = FALSE)
-
 ```
 
-### fig-cpue-hurdle
+### Model diagnostics
+```{r}
+#| label: cpue-pos-diagnostics
+#| include: true
+#| fig-width: 7
+#| fig-height: 6
+
+# Basis dimension check and residual diagnostics
+gam.check(final_cpue_pos)
+```
+
+```{r}
+#| label: cpue-pos-concurvity
+#| include: true
+
+# Concurvity — values approaching 1 indicate potential instability
+concurvity(final_cpue_pos, full = FALSE)
+```
+
+### Model figure
 ```{r}
 #| label: fig-cpue-hurdle
 #| include: true
@@ -1586,10 +1626,10 @@ CPUE_panel_positives
 
 
 ## BPUE hurdle model
-### model run
+### Model fitting
 ```{r}
 #| label: bpue-hurdle
-#| inluce: true
+#| include: false
 
 BData <- prepare_block(Modeling_data, "Weighted_BPUE_Kōura", vars_common) %>%
 dplyr::mutate(BPUE_pos = as.integer(Weighted_BPUE_Kōura > 0))
@@ -1670,7 +1710,7 @@ remaining_BPUE_pos <- setdiff(remaining_BPUE_pos, remove_v)
 if (!length(remaining_BPUE_pos)) { red_ml_BPUE_pos <- m_now; break }
 }
 
-final_BPUE_pos <- mgcv::gam(
+final_bpue_pos <- mgcv::gam(
 formula(red_ml_BPUE_pos),
 data   = Bpos,
 family = Gamma(link = "log"),
@@ -1678,24 +1718,39 @@ method = "REML",
 select = TRUE
 )
 
-gam.check(final_BPUE_pos)
-concurvity(final_BPUE_pos, full = FALSE)
-
 ```
 
+### Model diagnostics
+```{r}
+#| label: bpue-pos-diagnostics
+#| include: true
+#| fig-width: 7
+#| fig-height: 6
+
+# Basis dimension check and residual diagnostics
+gam.check(final_bpue_pos)
+```
+
+```{r}
+#| label: bpue-pos-concurvity
+#| include: true
+
+# Concurvity — values approaching 1 indicate potential instability
+concurvity(final_bpue_pos, full = FALSE)
+```
 
 ### fig-bpue-hurdle
 ```{r}
 #| label: fig-bpue-hurdle
-#| inluce: true
+#| include: true
 #| fig-width: 4
 #| fig-height: 5
 #| fig-cap: "Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
-sm_bpue <- smooth_estimates(final_BPUE_pos)
+sm_bpue <- smooth_estimates(final_bpue_pos)
 bpue_smooth_names <- setdiff(unique(sm_bpue$.smooth), "s(LID)")
 bpue_smooth_plots <- lapply(bpue_smooth_names, function(s) {
-gratia::draw(final_BPUE_pos, select = s, scales = "fixed", se = FALSE) +
+gratia::draw(final_bpue_pos, select = s, scales = "fixed", se = FALSE) +
 labs(title = clean_smooth_title(s), x = NULL, y = "Partial effect") +
 base_theme_bw
 })
@@ -1703,8 +1758,8 @@ base_theme_bw
 p_BPUE_pos_smooths <- patchwork::wrap_plots(bpue_smooth_plots, ncol = length(bpue_smooth_plots)) +
 patchwork::plot_annotation(tag_levels = "a")
 
-pred_pos_b <- predict(final_BPUE_pos, type = "response")
-obs_pos_b  <- final_BPUE_pos$y
+pred_pos_b <- predict(final_bpue_pos, type = "response")
+obs_pos_b  <- final_bpue_pos$y
 R2_b   <- cor(pred_pos_b, obs_pos_b, use = "complete.obs")^2
 RMSE_b <- sqrt(mean((pred_pos_b - obs_pos_b)^2, na.rm = TRUE))
 
@@ -1765,7 +1820,7 @@ ggsave(file.path(out_dir, "fig-raw-data-plots.png"), raw_plots,
 raw_plots
 ```
 
-## GAM Model outputs
+## GAM model summary table
 ```{r}
 #| label: tbl-gam-models
 #| include: true
@@ -1814,8 +1869,7 @@ rename(
 edf = all_of(edf_col),
 ref_df = all_of(refdf_col),
 statistic = all_of(stat_col2),
-p_value = all_of(pval_col)
-) |>
+p_value = all_of(pval_col)) |>
 mutate(component = "smooth", model = model_name) |>
 select(model, component, term, edf, ref_df, statistic, p_value) |>
 mutate(across(where(is.numeric), ~ round(.x, digits)))
@@ -1834,7 +1888,7 @@ list(parametric = param_tbl, smooth = smooth_tbl, combined = combined_tbl)
 
 occ_tabs  <- gam_results_table(final_occ,      "Occupancy", digits = 3)
 cpue_tabs <- gam_results_table(final_cpue_pos, "CPUE (pos)", digits = 3)
-bpue_tabs <- gam_results_table(final_BPUE_pos, "BPUE (pos)", digits = 3)
+bpue_tabs <- gam_results_table(final_bpue_pos, "BPUE (pos)", digits = 3)
 
 add_sig <- function(df) {
 df |>
