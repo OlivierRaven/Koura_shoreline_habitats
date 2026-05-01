@@ -395,27 +395,26 @@ use = "complete.obs")
 # Lake overview table
 ```{r}
 #| label: tbl-lake-overview
-#| echo: FALSE
-#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from (@LAWA2025) database."
-
+#| echo: false
+#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database."
 
 lake_data <- data.frame(
-  `Lake name` = c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka"),
-  `Sampling date (number of sites)` = c("20/02/2025 (12)", "15/01/2025 (12)", "10/12/2024 (12)", "6/11/2024 (12)", "31/10/2024 (10), 22/01/2025 (2)"),
-  `Surface area (km²)` = c(81, 34, 8, 11, 3),
-  `Perimeter length (km)` = c(45, 61, 40, 24, 11),
-  `Catchment area size (km²)` = c(508, 123.7, 49.2, 27.8, 19.6),
-  `Mean depth (m)` = c(11, 31.5, 8, 36.9, 20),
-  `Maximum depth (m)` = c(45, 124, 13.5, 83, 33.5),
-  `Elevation (m)` = c(280, 279, 295, 316, 355),
-  `Mixing regime` = c("Polymictic", "Stratified", "Polymictic", "Stratified", "Stratified"),
-  `Trophic state` = c("Eutrophic", "Mesotrophic", "Eutrophic", "Oligotrophic", "Mesotrophic")
+  `Lake name`                      = c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka"),
+  `Sampling date (number of sites)`= c("20/02/2025 (12)", "15/01/2025 (12)", "10/12/2024 (12)", "6/11/2024 (12)", "31/10/2024 (10), 22/01/2025 (2)"),
+  `Surface area (km²)`             = c(81, 34, 8, 11, 3),
+  `Perimeter length (km)`          = c(45, 61, 40, 24, 11),
+  `Catchment area (km²)`           = c(508, 123.7, 49.2, 27.8, 19.6),
+  `Mean depth (m)`                 = c(11, 31.5, 8, 36.9, 20),
+  `Maximum depth (m)`              = c(45, 124, 13.5, 83, 33.5),
+  `Elevation (m)`                  = c(280, 279, 295, 316, 355),
+  `Mixing regime`                  = c("Polymictic", "Stratified", "Polymictic", "Stratified", "Stratified"),
+  `Trophic state`                  = c("Eutrophic", "Mesotrophic", "Eutrophic", "Oligotrophic", "Mesotrophic"),
+  check.names = FALSE
 )
 
-write.csv(lake_data,file = file.path(out_dir, "tbl-lake-overview.csv"),
-  row.names = FALSE)
+write.csv(lake_data, file = file.path(out_dir, "tbl-lake-overview.csv"), row.names = FALSE)
 
-kable(lake_data)
+knitr::kable(lake_data)
 
 ```
 
@@ -423,78 +422,25 @@ kable(lake_data)
 # Overview of environmental and biotic variables 
 ```{r}
 #| label: tbl-environmental-biotic-overview
-#| echo: FALSE
-#| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura. Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
-
+#| echo: false
+#| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (*Paranephrops planifrons*). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
 
 biotic_vars <- data.frame(
-  Variable = c(
-    "Lake identity (LID)",
-    "Substrate index",
-    "Slope",
-    "Riparian vegetation",
-    "Overhanging trees",
-    "Wood cover",
-    "Emergent and submerged vegetation",
-    "Temperature",
-    "Dissolved oxygen",
-    "Specific conductivity",
-    "pH",
-    "Fish presence"
-  ),
-  `Description / Unit` = c(
-    "Categorical variable identifying lake",
-    "Index based on % cover of bedrock, boulders, cobble, gravel, sand, mud, and organic matter",
-    "Slope from shoreline to the 5 m depth contour",
-    "Percentage cover of vegetation growing in the riparian zone",
-    "Percentage cover of trees hanging over the shoreline",
-    "Cover of wooden logs and tree branches in the sample site",
-    "Percentage cover of vegetation divided over emergent/submerged and native/non-native species",
-    "Temperature of surface water in °C",
-    "Dissolved oxygen concentration in mg L⁻¹",
-    "Electrical conductivity of the water in µS cm⁻¹",
-    "Acidity or alkalinity of the water",
-    "Presence/absence of selected native and non-native fish species"
-  ),
-  `Hypothesised importance for kōura` = c(
-    "Captures unmeasured lake specific differences in water chemistry, productivity, and catchment characteristics.",
-    "Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices.",
-    "Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates.",
-    "Contributes detrital inputs, bank stability, and shading at the water’s edge.",
-    "Provides direct shading and structural inputs into littoral habitats.",
-    "Provides physical structure creating refuge spaces and supports macroinvertebrate prey availability.",
-    "Native vegetation provides cover and food source; non-native may alter movement and habitat conditions.",
-    "Influences metabolic rate, activity, physiological stress, and habitat suitability.",
-    "Essential for respiration; reduced oxygen may constrain activity and habitat use.",
-    "Reflects overall lake productivity, supporting food availability.",
-    "Influences moulting success and exoskeleton strength, affected by acidity or calcium levels.",
-    "Fish act as predators, competitors, or indirectly modify habitat structure."
-  ),
-  References = c(
-    "Zuur et al., (2009)",
-    "Usio & Townsend, (2000); Kusabs et al., (2015b)",
-    "Devcich, (1979); Kusabs et al., (2015b)",
-    "Parkyn et al., (2002)",
-    "Smith et al., (1996); Vedia et al., (2017)",
-    "Parkyn et al., (2009)",
-    "Coffey & Clayton, (1988); Kusabs & Quinn, (2009)",
-    "Devcich, (1979); Hammond et al., (2006); Parkyn et al., (2002); Parkyn & Collier, (2002); Angilletta et al., (2004)",
-    "Hammond et al., (2006); Broughton et al., (2017)",
-    "Devcich, (1979)",
-    "Olsson et al., (2006)",
-    "Shave et al., (1994); Barnes, (1996); Usio & Townsend, (2000); Barnes & Hicks, (2003)"
-  )
+  `Variable`= c("Lake identity (LID)", "Substrate index", "Slope", "Riparian vegetation", "Overhanging trees", "Wood cover", "Emergent and submerged vegetation", "Temperature", "Dissolved oxygen", "Specific conductivity", "pH", "Fish presence"),
+  `Description / Unit`= c("Categorical variable identifying lake", "Index based on % cover of bedrock, boulders, cobble, gravel, sand, mud, and organic matter", "Slope from shoreline to the 5 m depth contour", "Percentage cover of vegetation growing in the riparian zone", "Percentage cover of trees hanging over the shoreline", "Cover of wooden logs and tree branches in the sample site", "Percentage cover of vegetation divided over emergent/submerged and native/non-native species", "Temperature of surface water in °C", "Dissolved oxygen concentration in mg L⁻¹", "Electrical conductivity of the water in µS cm⁻¹", "Acidity or alkalinity of the water", "Presence/absence of selected native and non-native fish species"),
+  `Hypothesised importance for kōura` = c("Captures unmeasured lake-specific differences in water chemistry, productivity, and catchment characteristics.", "Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices.", "Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates.", "Contributes detrital inputs, bank stability, and shading at the water's edge.", "Provides direct shading and structural inputs into littoral habitats.", "Provides physical structure creating refuge spaces and supports macroinvertebrate prey availability.", "Native vegetation provides cover and food source; non-native may alter movement and habitat conditions.", "Influences metabolic rate, activity, physiological stress, and habitat suitability.", "Essential for respiration; reduced oxygen may constrain activity and habitat use.", "Reflects overall lake productivity, supporting food availability.", "Influences moulting success and exoskeleton strength, affected by acidity or calcium levels.", "Fish act as predators, competitors, or indirectly modify habitat structure."),
+  `References` = c("Zuur et al., (2009)", "Usio & Townsend, (2000); Kusabs et al., (2015b)", "Devcich, (1979); Kusabs et al., (2015b)", "Parkyn et al., (2002)", "Smith et al., (1996); Vedia et al., (2017)", "Parkyn et al., (2009)", "Coffey & Clayton, (1988); Kusabs & Quinn, (2009)", "Devcich, (1979); Hammond et al., (2006); Parkyn & Collier, (2002); Angilletta et al., (2004)", "Hammond et al., (2006); Broughton et al., (2017)", "Devcich, (1979)", "Olsson et al., (2006)", "Shave et al., (1994); Barnes, (1996); Usio & Townsend, (2000); Barnes & Hicks, (2003)"),
+  check.names = FALSE
 )
 
-write.csv(biotic_vars,file = file.path(out_dir, "tbl-environmental-biotic-overview.csv"),
-  row.names = FALSE)
+write.csv(biotic_vars, file = file.path(out_dir, "tbl-environmental-biotic-overview.csv"), row.names = FALSE)
 
-kable(biotic_vars)
+knitr::kable(biotic_vars)
 
 ```
 
 
-# Environmental and fish summaries (tables)
+# Environmental and fish summaries
 ```{r}
 #| label: tbl-env-fish-summary
 #| include: true

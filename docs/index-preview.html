@@ -433,7 +433,7 @@
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run analysis notebook to make all variables available</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">knit</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"analysis.qmd"</span>), <span class="at">output =</span> <span class="fu">tempfile</span>(), <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "C:\\Users\\or81\\AppData\\Local\\Temp\\Rtmpcpcc7b\\file77ac16f47334"</code></pre>
+<pre><code>[1] "C:\\Users\\or81\\AppData\\Local\\Temp\\RtmpM1Hf38\\file16082ea0596f"</code></pre>
 </div>
 </div></div>
 <section id="introduction" class="level1">
@@ -550,57 +550,59 @@
 <div class="quarto-embed-nb-cell" data-notebook="C:\Users\or81\OneDrive - The University of Waikato\Documents\PhD\01_thesis_chapters\03_natural_habitat_monitoring\analysis.qmd" data-notebook-title="Analysis Notebook" data-notebook-cellid="cell-tbl-lake-overview">
 <div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lake_data <span class="op">&lt;-</span> data.frame(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  `Lake name` <span class="op">=</span> c(<span class="st">"Rotorua"</span>, <span class="st">"Rotoiti"</span>, <span class="st">"Rotoehu"</span>, <span class="st">"Rotomā"</span>, <span class="st">"Ōkāreka"</span>),</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  `Sampling date (number of sites)` <span class="op">=</span> c(<span class="st">"20/02/2025 (12)"</span>, <span class="st">"15/01/2025 (12)"</span>, <span class="st">"10/12/2024 (12)"</span>, <span class="st">"6/11/2024 (12)"</span>, <span class="st">"31/10/2024 (10), 22/01/2025 (2)"</span>),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  `Surface area (km²)` <span class="op">=</span> c(<span class="dv">81</span>, <span class="dv">34</span>, <span class="dv">8</span>, <span class="dv">11</span>, <span class="dv">3</span>),</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  `Perimeter length (km)` <span class="op">=</span> c(<span class="dv">45</span>, <span class="dv">61</span>, <span class="dv">40</span>, <span class="dv">24</span>, <span class="dv">11</span>),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  `Catchment area size (km²)` <span class="op">=</span> c(<span class="dv">508</span>, <span class="fl">123.7</span>, <span class="fl">49.2</span>, <span class="fl">27.8</span>, <span class="fl">19.6</span>),</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  `Mean depth (m)` <span class="op">=</span> c(<span class="dv">11</span>, <span class="fl">31.5</span>, <span class="dv">8</span>, <span class="fl">36.9</span>, <span class="dv">20</span>),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  `Maximum depth (m)` <span class="op">=</span> c(<span class="dv">45</span>, <span class="dv">124</span>, <span class="fl">13.5</span>, <span class="dv">83</span>, <span class="fl">33.5</span>),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  `Elevation (m)` <span class="op">=</span> c(<span class="dv">280</span>, <span class="dv">279</span>, <span class="dv">295</span>, <span class="dv">316</span>, <span class="dv">355</span>),</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  `Mixing regime` <span class="op">=</span> c(<span class="st">"Polymictic"</span>, <span class="st">"Stratified"</span>, <span class="st">"Polymictic"</span>, <span class="st">"Stratified"</span>, <span class="st">"Stratified"</span>),</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  `Trophic state` <span class="op">=</span> c(<span class="st">"Eutrophic"</span>, <span class="st">"Mesotrophic"</span>, <span class="st">"Eutrophic"</span>, <span class="st">"Oligotrophic"</span>, <span class="st">"Mesotrophic"</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>kable(lake_data, caption <span class="op">=</span> <span class="st">"Table 1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  `Lake name`                      <span class="op">=</span> c(<span class="st">"Rotorua"</span>, <span class="st">"Rotoiti"</span>, <span class="st">"Rotoehu"</span>, <span class="st">"Rotomā"</span>, <span class="st">"Ōkāreka"</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  `Sampling date (number of sites)`<span class="op">=</span> c(<span class="st">"20/02/2025 (12)"</span>, <span class="st">"15/01/2025 (12)"</span>, <span class="st">"10/12/2024 (12)"</span>, <span class="st">"6/11/2024 (12)"</span>, <span class="st">"31/10/2024 (10), 22/01/2025 (2)"</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  `Surface area (km²)`             <span class="op">=</span> c(<span class="dv">81</span>, <span class="dv">34</span>, <span class="dv">8</span>, <span class="dv">11</span>, <span class="dv">3</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  `Perimeter length (km)`          <span class="op">=</span> c(<span class="dv">45</span>, <span class="dv">61</span>, <span class="dv">40</span>, <span class="dv">24</span>, <span class="dv">11</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  `Catchment area (km²)`           <span class="op">=</span> c(<span class="dv">508</span>, <span class="fl">123.7</span>, <span class="fl">49.2</span>, <span class="fl">27.8</span>, <span class="fl">19.6</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  `Mean depth (m)`                 <span class="op">=</span> c(<span class="dv">11</span>, <span class="fl">31.5</span>, <span class="dv">8</span>, <span class="fl">36.9</span>, <span class="dv">20</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  `Maximum depth (m)`              <span class="op">=</span> c(<span class="dv">45</span>, <span class="dv">124</span>, <span class="fl">13.5</span>, <span class="dv">83</span>, <span class="fl">33.5</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  `Elevation (m)`                  <span class="op">=</span> c(<span class="dv">280</span>, <span class="dv">279</span>, <span class="dv">295</span>, <span class="dv">316</span>, <span class="dv">355</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  `Mixing regime`                  <span class="op">=</span> c(<span class="st">"Polymictic"</span>, <span class="st">"Stratified"</span>, <span class="st">"Polymictic"</span>, <span class="st">"Stratified"</span>, <span class="st">"Stratified"</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  `Trophic state`                  <span class="op">=</span> c(<span class="st">"Eutrophic"</span>, <span class="st">"Mesotrophic"</span>, <span class="st">"Eutrophic"</span>, <span class="st">"Oligotrophic"</span>, <span class="st">"Mesotrophic"</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  check.names <span class="op">=</span> FALSE</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>write.csv(lake_data, <span class="bu">file</span> <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"tbl-lake-overview.csv"</span>), row.names <span class="op">=</span> FALSE)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>knitr::kable(lake_data)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div id="tbl-lake-overview" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-lake-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024, values are derived from the Land, Air, Water Aotearoa (LAWA) database (<span class="citation" data-cites="LAWA2025">Land, Air, Water Aotearoa (LAWA) (<a href="#ref-LAWA2025" role="doc-biblioref">2025</a>)</span>).
+Table&nbsp;1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the <span class="citation" data-cites="LAWA2025">Land, Air, Water Aotearoa (LAWA) (<a href="#ref-LAWA2025" role="doc-biblioref">2025</a>)</span> database.
 </figcaption>
 <div aria-describedby="tbl-lake-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="cell caption-top table table-sm table-striped small">
-<caption>Table 1: Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed.</caption>
 <colgroup>
-<col style="width: 5%">
-<col style="width: 16%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 6%">
+<col style="width: 8%">
 <col style="width: 10%">
 <col style="width: 11%">
-<col style="width: 13%">
-<col style="width: 8%">
-<col style="width: 9%">
-<col style="width: 7%">
-<col style="width: 7%">
-<col style="width: 7%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Lake.name</th>
-<th style="text-align: left;">Sampling.date..number.of.sites.</th>
-<th style="text-align: right;">Surface.area..km..</th>
-<th style="text-align: right;">Perimeter.length..km.</th>
-<th style="text-align: right;">Catchment.area.size..km..</th>
-<th style="text-align: right;">Mean.depth..m.</th>
-<th style="text-align: right;">Maximum.depth..m.</th>
-<th style="text-align: right;">Elevation..m.</th>
-<th style="text-align: left;">Mixing.regime</th>
-<th style="text-align: left;">Trophic.state</th>
+<th>Lake name</th>
+<th style="text-align: left;">Sampling date (number of sites)</th>
+<th style="text-align: right;">Surface area (km²)</th>
+<th style="text-align: right;">Perimeter length (km)</th>
+<th style="text-align: right;">Catchment area (km²)</th>
+<th style="text-align: right;">Mean depth (m)</th>
+<th style="text-align: right;">Maximum depth (m)</th>
+<th style="text-align: right;">Elevation (m)</th>
+<th style="text-align: left;">Mixing regime</th>
+<th style="text-align: left;">Trophic state</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Rotorua</td>
+<td>Rotorua</td>
 <td style="text-align: left;">20/02/2025 (12)</td>
 <td style="text-align: right;">81</td>
 <td style="text-align: right;">45</td>
@@ -612,7 +614,7 @@ Table&nbsp;1: Physical, morphometric, and trophic characteristics of the five Ro
 <td style="text-align: left;">Eutrophic</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Rotoiti</td>
+<td>Rotoiti</td>
 <td style="text-align: left;">15/01/2025 (12)</td>
 <td style="text-align: right;">34</td>
 <td style="text-align: right;">61</td>
@@ -624,7 +626,7 @@ Table&nbsp;1: Physical, morphometric, and trophic characteristics of the five Ro
 <td style="text-align: left;">Mesotrophic</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Rotoehu</td>
+<td>Rotoehu</td>
 <td style="text-align: left;">10/12/2024 (12)</td>
 <td style="text-align: right;">8</td>
 <td style="text-align: right;">40</td>
@@ -636,7 +638,7 @@ Table&nbsp;1: Physical, morphometric, and trophic characteristics of the five Ro
 <td style="text-align: left;">Eutrophic</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Rotomā</td>
+<td>Rotomā</td>
 <td style="text-align: left;">6/11/2024 (12)</td>
 <td style="text-align: right;">11</td>
 <td style="text-align: right;">24</td>
@@ -648,7 +650,7 @@ Table&nbsp;1: Physical, morphometric, and trophic characteristics of the five Ro
 <td style="text-align: left;">Oligotrophic</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Ōkāreka</td>
+<td>Ōkāreka</td>
 <td style="text-align: left;">31/10/2024 (10), 22/01/2025 (2)</td>
 <td style="text-align: right;">3</td>
 <td style="text-align: right;">11</td>
@@ -670,85 +672,35 @@ Table&nbsp;1: Physical, morphometric, and trophic characteristics of the five Ro
 <div class="quarto-embed-nb-cell" data-notebook="C:\Users\or81\OneDrive - The University of Waikato\Documents\PhD\01_thesis_chapters\03_natural_habitat_monitoring\analysis.qmd" data-notebook-title="Analysis Notebook" data-notebook-cellid="cell-tbl-environmental-biotic-overview">
 <div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>biotic_vars <span class="op">&lt;-</span> data.frame(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  Variable <span class="op">=</span> c(</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Lake identity (LID)"</span>,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Substrate index"</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Slope"</span>,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Riparian vegetation"</span>,</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Overhanging trees"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Wood cover"</span>,</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Emergent and submerged vegetation"</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Temperature"</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Dissolved oxygen"</span>,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Specific conductivity"</span>,</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pH"</span>,</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fish presence"</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  `Description <span class="op">/</span> Unit` <span class="op">=</span> c(</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Categorical variable identifying lake"</span>,</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Index based on </span><span class="sc">% c</span><span class="st">over of bedrock, boulders, cobble, gravel, sand, mud, and organic matter"</span>,</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Slope from shoreline to the 5 m depth contour"</span>,</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Percentage cover of vegetation growing in the riparian zone"</span>,</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Percentage cover of trees hanging over the shoreline"</span>,</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Cover of wooden logs and tree branches in the sample site"</span>,</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Percentage cover of vegetation divided over emergent/submerged and native/non-native species"</span>,</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Temperature of surface water in °C"</span>,</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Dissolved oxygen concentration in mg L⁻¹"</span>,</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Electrical conductivity of the water in µS cm⁻¹"</span>,</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Acidity or alkalinity of the water"</span>,</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Presence/absence of selected native and non-native fish species"</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  `Hypothesised importance <span class="cf">for</span> kōura` <span class="op">=</span> c(</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Captures unmeasured lake specific differences in water chemistry, productivity, and catchment characteristics."</span>,</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices."</span>,</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates."</span>,</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Contributes detrital inputs, bank stability, and shading at the water’s edge."</span>,</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Provides direct shading and structural inputs into littoral habitats."</span>,</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Provides physical structure creating refuge spaces and supports macroinvertebrate prey availability."</span>,</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Native vegetation provides cover and food source; non-native may alter movement and habitat conditions."</span>,</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Influences metabolic rate, activity, physiological stress, and habitat suitability."</span>,</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Essential for respiration; reduced oxygen may constrain activity and habitat use."</span>,</span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Reflects overall lake productivity, supporting food availability."</span>,</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Influences moulting success and exoskeleton strength, affected by acidity or calcium levels."</span>,</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fish act as predators, competitors, or indirectly modify habitat structure."</span></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>  References <span class="op">=</span> c(</span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Zuur et al., (2009)"</span>,</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Usio &amp; Townsend, (2000); Kusabs et al., (2015b)"</span>,</span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Devcich, (1979); Kusabs et al., (2015b)"</span>,</span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Parkyn et al., (2002)"</span>,</span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Smith et al., (1996); Vedia et al., (2017)"</span>,</span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Parkyn et al., (2009)"</span>,</span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Coffey &amp; Clayton, (1988); Kusabs &amp; Quinn, (2009)"</span>,</span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Devcich, (1979); Hammond et al., (2006); Parkyn et al., (2002); Parkyn &amp; Collier, (2002); Angilletta et al., (2004)"</span>,</span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Hammond et al., (2006); Broughton et al., (2017)"</span>,</span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Devcich, (1979)"</span>,</span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Olsson et al., (2006)"</span>,</span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Shave et al., (1994); Barnes, (1996); Usio &amp; Townsend, (2000); Barnes &amp; Hicks, (2003)"</span></span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>kable(biotic_vars, caption <span class="op">=</span> <span class="st">"Table 2: Overview of environmental and biotic variables measured at littoral sampling sites."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  `Variable`<span class="op">=</span> c(<span class="st">"Lake identity (LID)"</span>, <span class="st">"Substrate index"</span>, <span class="st">"Slope"</span>, <span class="st">"Riparian vegetation"</span>, <span class="st">"Overhanging trees"</span>, <span class="st">"Wood cover"</span>, <span class="st">"Emergent and submerged vegetation"</span>, <span class="st">"Temperature"</span>, <span class="st">"Dissolved oxygen"</span>, <span class="st">"Specific conductivity"</span>, <span class="st">"pH"</span>, <span class="st">"Fish presence"</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  `Description <span class="op">/</span> Unit`<span class="op">=</span> c(<span class="st">"Categorical variable identifying lake"</span>, <span class="st">"Index based on </span><span class="sc">% c</span><span class="st">over of bedrock, boulders, cobble, gravel, sand, mud, and organic matter"</span>, <span class="st">"Slope from shoreline to the 5 m depth contour"</span>, <span class="st">"Percentage cover of vegetation growing in the riparian zone"</span>, <span class="st">"Percentage cover of trees hanging over the shoreline"</span>, <span class="st">"Cover of wooden logs and tree branches in the sample site"</span>, <span class="st">"Percentage cover of vegetation divided over emergent/submerged and native/non-native species"</span>, <span class="st">"Temperature of surface water in °C"</span>, <span class="st">"Dissolved oxygen concentration in mg L⁻¹"</span>, <span class="st">"Electrical conductivity of the water in µS cm⁻¹"</span>, <span class="st">"Acidity or alkalinity of the water"</span>, <span class="st">"Presence/absence of selected native and non-native fish species"</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  `Hypothesised importance <span class="cf">for</span> kōura` <span class="op">=</span> c(<span class="st">"Captures unmeasured lake-specific differences in water chemistry, productivity, and catchment characteristics."</span>, <span class="st">"Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices."</span>, <span class="st">"Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates."</span>, <span class="st">"Contributes detrital inputs, bank stability, and shading at the water's edge."</span>, <span class="st">"Provides direct shading and structural inputs into littoral habitats."</span>, <span class="st">"Provides physical structure creating refuge spaces and supports macroinvertebrate prey availability."</span>, <span class="st">"Native vegetation provides cover and food source; non-native may alter movement and habitat conditions."</span>, <span class="st">"Influences metabolic rate, activity, physiological stress, and habitat suitability."</span>, <span class="st">"Essential for respiration; reduced oxygen may constrain activity and habitat use."</span>, <span class="st">"Reflects overall lake productivity, supporting food availability."</span>, <span class="st">"Influences moulting success and exoskeleton strength, affected by acidity or calcium levels."</span>, <span class="st">"Fish act as predators, competitors, or indirectly modify habitat structure."</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  `References` <span class="op">=</span> c(<span class="st">"Zuur et al., (2009)"</span>, <span class="st">"Usio &amp; Townsend, (2000); Kusabs et al., (2015b)"</span>, <span class="st">"Devcich, (1979); Kusabs et al., (2015b)"</span>, <span class="st">"Parkyn et al., (2002)"</span>, <span class="st">"Smith et al., (1996); Vedia et al., (2017)"</span>, <span class="st">"Parkyn et al., (2009)"</span>, <span class="st">"Coffey &amp; Clayton, (1988); Kusabs &amp; Quinn, (2009)"</span>, <span class="st">"Devcich, (1979); Hammond et al., (2006); Parkyn &amp; Collier, (2002); Angilletta et al., (2004)"</span>, <span class="st">"Hammond et al., (2006); Broughton et al., (2017)"</span>, <span class="st">"Devcich, (1979)"</span>, <span class="st">"Olsson et al., (2006)"</span>, <span class="st">"Shave et al., (1994); Barnes, (1996); Usio &amp; Townsend, (2000); Barnes &amp; Hicks, (2003)"</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  check.names <span class="op">=</span> FALSE</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>write.csv(biotic_vars, <span class="bu">file</span> <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"tbl-environmental-biotic-overview.csv"</span>), row.names <span class="op">=</span> FALSE)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>knitr::kable(biotic_vars)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div id="tbl-environmental-biotic-overview" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-environmental-biotic-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (Paranephrops planifrons). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones.
+Table&nbsp;2: Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (<em>Paranephrops planifrons</em>). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones.
 </figcaption>
 <div aria-describedby="tbl-environmental-biotic-overview-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display cell-output-markdown">
 <table class="cell caption-top table table-sm table-striped small">
-<caption>Table 2: Overview of environmental and biotic variables measured at littoral sampling sites.</caption>
 <colgroup>
-<col style="width: 15%">
-<col style="width: 21%">
-<col style="width: 37%">
+<col style="width: 17%">
+<col style="width: 25%">
+<col style="width: 30%">
 <col style="width: 23%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Variable</th>
-<th style="text-align: left;">Description…Unit</th>
-<th style="text-align: left;">Hypothesised.importance.for.kōura</th>
+<th style="text-align: left;">Description / Unit</th>
+<th style="text-align: left;">Hypothesised importance for kōura</th>
 <th style="text-align: left;">References</th>
 </tr>
 </thead>
@@ -756,7 +708,7 @@ Table&nbsp;2: Overview of environmental and biotic variables measured at littora
 <tr class="odd">
 <td style="text-align: left;">Lake identity (LID)</td>
 <td style="text-align: left;">Categorical variable identifying lake</td>
-<td style="text-align: left;">Captures unmeasured lake specific differences in water chemistry, productivity, and catchment characteristics.</td>
+<td style="text-align: left;">Captures unmeasured lake-specific differences in water chemistry, productivity, and catchment characteristics.</td>
 <td style="text-align: left;">Zuur et al., (2009)</td>
 </tr>
 <tr class="even">
@@ -799,7 +751,7 @@ Table&nbsp;2: Overview of environmental and biotic variables measured at littora
 <td style="text-align: left;">Temperature</td>
 <td style="text-align: left;">Temperature of surface water in °C</td>
 <td style="text-align: left;">Influences metabolic rate, activity, physiological stress, and habitat suitability.</td>
-<td style="text-align: left;">Devcich, (1979); Hammond et al., (2006); Parkyn et al., (2002); Parkyn &amp; Collier, (2002); Angilletta et al., (2004)</td>
+<td style="text-align: left;">Devcich, (1979); Hammond et al., (2006); Parkyn &amp; Collier, (2002); Angilletta et al., (2004)</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Dissolved oxygen</td>
@@ -910,7 +862,7 @@ Figure&nbsp;1: Map of the sampling locations with different dominant littoral ha
 <div id="fig-koura-by-lake" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-koura-by-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
-<a href="index_files/figure-html/analysis-fig-koura-by-lake-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Fig. 2 Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range)."><img src="index_files/figure-html/analysis-fig-koura-by-lake-output-1.png" class="img-fluid figure-img"></a>
+<a href="index_files/figure-html/analysis-fig-koura-by-lake-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: Fig. 2 Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range)."><img src="index_files/figure-html/analysis-fig-koura-by-lake-output-1.png" width="288" height="480" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-koura-by-lake-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Fig. 2 Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range).
@@ -958,7 +910,7 @@ Figure&nbsp;2: Fig. 2 Kōura presence, CPUE, and BPUE across lakes. The upper pa
 <div id="fig-occupancy-model" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-occupancy-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
-<a href="index_files/figure-html/analysis-fig-occupancy-model-output-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Kōura occupancy GAMM results and model performance. a) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. b) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. c) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration."><img src="index_files/figure-html/analysis-fig-occupancy-model-output-2.png" class="img-fluid figure-img"></a>
+<a href="index_files/figure-html/analysis-fig-occupancy-model-output-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: Kōura occupancy GAMM results and model performance. a) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. b) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. c) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration."><img src="index_files/figure-html/analysis-fig-occupancy-model-output-2.png" width="672" height="480" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-occupancy-model-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Kōura occupancy GAMM results and model performance. a) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. b) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. c) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration.
@@ -1012,7 +964,7 @@ Figure&nbsp;3: Kōura occupancy GAMM results and model performance. a) Estimated
 <div id="fig-cpue-hurdle" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-cpue-hurdle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
-<a href="index_files/figure-html/analysis-fig-cpue-hurdle-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."><img src="index_files/figure-html/analysis-fig-cpue-hurdle-output-1.png" class="img-fluid figure-img"></a>
+<a href="index_files/figure-html/analysis-fig-cpue-hurdle-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."><img src="index_files/figure-html/analysis-fig-cpue-hurdle-output-1.png" width="528" height="480" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cpue-hurdle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit.
@@ -1023,11 +975,11 @@ Figure&nbsp;4: Kōura CPUE GAMM results and model performance. a) Estimated smoo
 </div></div>
 </div>
 <div class="quarto-embed-nb-cell" data-notebook="C:\Users\or81\OneDrive - The University of Waikato\Documents\PhD\01_thesis_chapters\03_natural_habitat_monitoring\analysis.qmd" data-notebook-title="Analysis Notebook" data-notebook-cellid="cell-fig-bpue-hurdle">
-<div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="cell-fig-bpue-hurdle" class="cell" data-inluce="true" data-fig-width="4" data-fig-height="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sm_bpue <span class="op">&lt;-</span> smooth_estimates(final_BPUE_pos)</span>
+<div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="cell-fig-bpue-hurdle" class="cell" data-fig-width="4" data-fig-height="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sm_bpue <span class="op">&lt;-</span> smooth_estimates(final_bpue_pos)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bpue_smooth_names <span class="op">&lt;-</span> setdiff(unique(sm_bpue$.smooth), <span class="st">"s(LID)"</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>bpue_smooth_plots <span class="op">&lt;-</span> lapply(bpue_smooth_names, function(s) {</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>gratia::draw(final_BPUE_pos, select <span class="op">=</span> s, scales <span class="op">=</span> <span class="st">"fixed"</span>, se <span class="op">=</span> FALSE) <span class="op">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>gratia::draw(final_bpue_pos, select <span class="op">=</span> s, scales <span class="op">=</span> <span class="st">"fixed"</span>, se <span class="op">=</span> FALSE) <span class="op">+</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>labs(title <span class="op">=</span> clean_smooth_title(s), x <span class="op">=</span> NULL, y <span class="op">=</span> <span class="st">"Partial effect"</span>) <span class="op">+</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>base_theme_bw</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>})</span>
@@ -1035,8 +987,8 @@ Figure&nbsp;4: Kōura CPUE GAMM results and model performance. a) Estimated smoo
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>p_BPUE_pos_smooths <span class="op">&lt;-</span> patchwork::wrap_plots(bpue_smooth_plots, ncol <span class="op">=</span> length(bpue_smooth_plots)) <span class="op">+</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>patchwork::plot_annotation(tag_levels <span class="op">=</span> <span class="st">"a"</span>)</span>
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>pred_pos_b <span class="op">&lt;-</span> predict(final_BPUE_pos, <span class="bu">type</span> <span class="op">=</span> <span class="st">"response"</span>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>obs_pos_b  <span class="op">&lt;-</span> final_BPUE_pos$y</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>pred_pos_b <span class="op">&lt;-</span> predict(final_bpue_pos, <span class="bu">type</span> <span class="op">=</span> <span class="st">"response"</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>obs_pos_b  <span class="op">&lt;-</span> final_bpue_pos$y</span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>R2_b   <span class="op">&lt;-</span> cor(pred_pos_b, obs_pos_b, use <span class="op">=</span> <span class="st">"complete.obs"</span>)<span class="op">^</span><span class="dv">2</span></span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>RMSE_b <span class="op">&lt;-</span> sqrt(mean((pred_pos_b <span class="op">-</span> obs_pos_b)<span class="op">^</span><span class="dv">2</span>, na.rm <span class="op">=</span> TRUE))</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
@@ -1065,7 +1017,7 @@ Figure&nbsp;4: Kōura CPUE GAMM results and model performance. a) Estimated smoo
 <div id="fig-bpue-hurdle" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bpue-hurdle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
-<a href="index_files/figure-html/analysis-fig-bpue-hurdle-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."><img src="index_files/figure-html/analysis-fig-bpue-hurdle-output-1.png" class="img-fluid figure-img"></a>
+<a href="index_files/figure-html/analysis-fig-bpue-hurdle-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."><img src="index_files/figure-html/analysis-fig-bpue-hurdle-output-1.png" width="384" height="480" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bpue-hurdle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;5: Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit.
@@ -1130,7 +1082,7 @@ Figure&nbsp;5: Kōura BPUE GAMM results and model performance. a) Estimated smoo
 <div id="fig-length-weight" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-length-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
-<a href="index_files/figure-html/analysis-fig-length-weight-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot."><img src="index_files/figure-html/analysis-fig-length-weight-output-1.png" class="img-fluid figure-img"></a>
+<a href="index_files/figure-html/analysis-fig-length-weight-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot."><img src="index_files/figure-html/analysis-fig-length-weight-output-1.png" width="672" height="480" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-length-weight-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;6: Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot.
@@ -1169,7 +1121,7 @@ Figure&nbsp;6: Length–weight relationship used to estimate missing kōura weig
 <div id="fig-raw-data-plots" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-raw-data-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
-<a href="index_files/figure-html/analysis-fig-raw-data-plots-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: Raw relationships between significant habitat predictors and kōura CPUE (upper panels) and BPUE (lower panels) at sites where kōura were present. Points represent observed values at individual sites. Temperature (°C), pH, and emergent native vegetation cover (%) are shown for CPUE; pH and emergent native vegetation cover (%) are shown for BPUE."><img src="index_files/figure-html/analysis-fig-raw-data-plots-output-1.png" class="img-fluid figure-img"></a>
+<a href="index_files/figure-html/analysis-fig-raw-data-plots-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: Raw relationships between significant habitat predictors and kōura CPUE (upper panels) and BPUE (lower panels) at sites where kōura were present. Points represent observed values at individual sites. Temperature (°C), pH, and emergent native vegetation cover (%) are shown for CPUE; pH and emergent native vegetation cover (%) are shown for BPUE."><img src="index_files/figure-html/analysis-fig-raw-data-plots-output-1.png" width="576" height="384" class="figure-img"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-raw-data-plots-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;7: Raw relationships between significant habitat predictors and kōura CPUE (upper panels) and BPUE (lower panels) at sites where kōura were present. Points represent observed values at individual sites. Temperature (°C), pH, and emergent native vegetation cover (%) are shown for CPUE; pH and emergent native vegetation cover (%) are shown for BPUE.
@@ -1357,10 +1309,10 @@ Figure&nbsp;7: Raw relationships between significant habitat predictors and kōu
 <span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a>    Variable <span class="op">=</span> <span class="im">as</span>.character(Variable)</span>
 <span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a><span class="co"># Save if you still want the CSV</span></span>
+<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a><span class="co"># Save</span></span>
 <span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a>write.csv(</span>
 <span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a>  EnvBio_summary_table,</span>
-<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>  <span class="bu">file</span> <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"EnvBio_summary_table.csv"</span>),</span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>  <span class="bu">file</span> <span class="op">=</span> <span class="bu">file</span>.path(out_dir, <span class="st">"tbl-env-fish-summary.csv"</span>),</span>
 <span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a>  row.names <span class="op">=</span> FALSE</span>
 <span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a></span>
