@@ -1281,6 +1281,7 @@ plots_4 <- lapply(smooth_4_names, function(s) {
 # Combine without forcing wrap_dims assumptions about panel counts
 final_p_occ_smooths <- patchwork::wrap_plots(plots_4, ncol = length(plots_4))
 
+
 # Parametric panel (unchanged call)
 p_occ_param <- parametric_panel(
   final_occ,
@@ -1389,6 +1390,40 @@ ggsave(filename = file.path(out_dir, "fig-occupancy-model.png"), plot = final_pl
 
 final_plot_occupancy
 
+```
+
+```{r}
+smooth_4_names_reordered <- c(
+  "s(Temperature)",
+  "s(Riparian_vegetation)",
+  "s(Substrate_index)",
+  "s(Specific_conductivity)"
+)
+
+plots_4 <- lapply(seq_along(smooth_4_names_reordered), function(i) {
+  s <- smooth_4_names_reordered[i]
+  p <- gratia::draw(final_occ, select = s, scales = "fixed", se = FALSE) +
+    labs(title = clean_smooth_title(s), x = NULL, y = "Partial effect") +
+    base_theme_bw
+  
+  # Make middle two plots (2 & 3) have bold, larger titles
+  if (i %in% c(2, 3)) {
+    p <- p + theme(plot.title = element_text(face = "bold", size = 12))
+  }
+  
+  p
+})
+
+# Combine plots
+final_p_occ_smooths <- patchwork::wrap_plots(plots_4, ncol = length(plots_4))
+
+ggsave(
+  filename = file.path(out_dir, "fig-final_p_occ_smooths.png"), 
+  plot = final_p_occ_smooths,  
+  width = 10, 
+  height = 3, 
+  dpi = 300
+)
 ```
 
 ## CPUE hurdle model
