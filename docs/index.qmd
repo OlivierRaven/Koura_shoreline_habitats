@@ -3,7 +3,7 @@ title: "Littoral habitat structure influences freshwater crayfish populations in
 subtitle: ""
 
 execute:
-  freeze: false
+  freeze: auto
   cache: false
 
 

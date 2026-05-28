@@ -1972,4 +1972,10 @@ M_C_data %>%
 
 ```
 
-
+# Session info
+```{r}
+#| label: session-info
+#| include: true
+#| code-fold: true
+sessionInfo()
+```
