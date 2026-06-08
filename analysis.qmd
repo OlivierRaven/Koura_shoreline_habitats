@@ -1801,6 +1801,104 @@ ggsave(file.path(out_dir, "fig-raw-data-plots.png"), raw_plots,
 raw_plots
 ```
 
+## 
+```{r}
+#| label: fig-raw-data-all-predictors
+#| fig-width: 8
+#| fig-height: 10
+#| fig-cap: "Fig. S2 Raw relationships between all environmental predictors examined and kōura occurrence, CPUE, and BPUE across all 60 surveyed littoral sites. Each panel shows observed values at individual sites (n = 60 for occurrence; n = 33 for CPUE and BPUE). Points are jittered slightly for occurrence data to reduce overplotting. Predictors highlighted in bold were retained in final GAM models."
+
+# Variables examined across all models
+all_pred_vars <- c(
+  "Substrate_index", "Riparian_vegetation", "Temperature", "pH",
+  "Specific_conductivity", "DO_mgl", "Slope_5m",
+  "Overhanging_trees", "Wood_cover",
+  "Emergent_Native", "Submerged_Non_Native", "Submerged_Native"
+)
+
+# Clean labels
+pred_labels <- c(
+  Substrate_index      = "Substrate index",
+  Riparian_vegetation  = "Riparian vegetation (%)",
+  Temperature          = "Temperature (°C)",
+  pH                   = "pH",
+  Specific_conductivity = "Specific conductivity (µS/cm)",
+  DO_mgl               = "Dissolved oxygen (mg/L)",
+  Slope_5m             = "Slope to 5 m depth",
+  Overhanging_trees    = "Overhanging trees (%)",
+  Wood_cover           = "Wood cover (%)",
+  Emergent_Native      = "Emergent native vegetation (%)",
+  Submerged_Non_Native = "Submerged non-native vegetation (%)",
+  Submerged_Native     = "Submerged native vegetation (%)"
+)
+
+# Retained predictors (bold in strips)
+retained_vars <- c("Substrate_index", "Riparian_vegetation", "Temperature",
+                   "pH", "Specific_conductivity", "Emergent_Native")
+
+# Build long-format data for all three responses
+raw_long <- Monitoring_CPUE_data %>%
+  dplyr::select(all_of(c(all_pred_vars,
+                          "Presence_Kōura",
+                          "Weighted_CPUE_Kōura",
+                          "Weighted_BPUE_Kōura"))) %>%
+  tidyr::pivot_longer(
+    cols      = all_of(all_pred_vars),
+    names_to  = "Predictor",
+    values_to = "Predictor_value"
+  ) %>%
+  tidyr::pivot_longer(
+    cols      = c("Presence_Kōura", "Weighted_CPUE_Kōura", "Weighted_BPUE_Kōura"),
+    names_to  = "Response",
+    values_to = "Response_value"
+  ) %>%
+  dplyr::mutate(
+    Predictor_label = factor(pred_labels[Predictor], levels = pred_labels),
+    Response        = dplyr::recode(Response,
+      "Presence_Kōura"        = "Presence (0/1)",
+      "Weighted_CPUE_Kōura"   = "CPUE",
+      "Weighted_BPUE_Kōura"   = "BPUE"
+    ),
+    Response = factor(Response, levels = c("Presence (0/1)", "CPUE", "BPUE")),
+    is_retained = Predictor %in% retained_vars
+  )
+
+# Strip label face: bold for retained predictors
+strip_faces <- ifelse(levels(raw_long$Predictor_label) %in% pred_labels[retained_vars],
+                      "bold", "plain")
+
+fig_raw_all <- ggplot(raw_long, aes(x = Predictor_value, y = Response_value)) +
+  geom_jitter(
+    data   = ~ dplyr::filter(.x, Response == "Presence (0/1)"),
+    height = 0.05, width = 0, size = 0.8, alpha = 0.6, colour = "black"
+  ) +
+  geom_point(
+    data   = ~ dplyr::filter(.x, Response != "Presence (0/1)"),
+    size   = 0.8, alpha = 0.6, colour = "black"
+  ) +
+  facet_grid(Response ~ Predictor_label, scales = "free", switch = "y") +
+  labs(x = NULL, y = NULL) +
+  base_theme_bw +
+  theme(
+    strip.text.x      = element_text(size = 6,
+                                     face = strip_faces[match(
+                                       levels(raw_long$Predictor_label),
+                                       levels(raw_long$Predictor_label))]),
+    strip.text.y      = element_text(size = 7),
+    strip.placement   = "outside",
+    axis.text         = element_text(size = 5),
+    panel.spacing     = unit(0.3, "lines")
+  )
+
+fig_raw_all
+
+ggsave(file.path(out_dir, "fig-raw-data-all-predictors.png"),
+       fig_raw_all, width = 8, height = 10, dpi = 300)
+
+
+```
+
+
 ## GAM model summary table
 ```{r}
 #| label: tbl-gam-models
@@ -1893,20 +1991,29 @@ bpue_table <- add_sig(bpue_tabs$combined)
 all_models_table <- bind_rows(occ_table, cpue_table, bpue_table)
 write.csv(all_models_table, file = file.path(out_dir, "tbl-gam-models.csv"), row.names = FALSE)
 
-all_models_table |>
+gam_models_table <- all_models_table |>
   mutate(
     term = gsub("s\\(|\\)", "", term),
     p_value = ifelse(!is.na(p_value), format.pval(p_value, digits = 3, eps = 0.001), NA)
   ) |>
   select(-model) |>
   kable(col.names = c("Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
-    align = c("l","l","r","r","r","r","r","r","l")  ) |>
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed"),
-    full_width = FALSE  ) |>
-  kableExtra::group_rows("Occupancy", 1, nrow(occ_table)) |>
-  kableExtra::group_rows("CPUE (positive sites)", nrow(occ_table) + 1, nrow(occ_table) + nrow(cpue_table)) |>
-  kableExtra::group_rows("BPUE (positive sites)", nrow(occ_table) + nrow(cpue_table) + 1, nrow(all_models_table))
+    align = c("l","l","r","r","r","r","r","r","l")  )
+
+# kable_styling()/group_rows() emit HTML (bootstrap) markup, which trips
+# Quarto's "HTML output found in document targeting docx/pdf output" check
+# when this notebook is knitted from index.qmd's [start] chunk for non-HTML formats.
+if (knitr::is_html_output()) {
+  gam_models_table <- gam_models_table |>
+    kable_styling(
+      bootstrap_options = c("striped", "hover", "condensed"),
+      full_width = FALSE  ) |>
+    kableExtra::group_rows("Occupancy", 1, nrow(occ_table)) |>
+    kableExtra::group_rows("CPUE (positive sites)", nrow(occ_table) + 1, nrow(occ_table) + nrow(cpue_table)) |>
+    kableExtra::group_rows("BPUE (positive sites)", nrow(occ_table) + nrow(cpue_table) + 1, nrow(all_models_table))
+}
+
+gam_models_table
 ```
 
 # PCA (habitat complexity)

@@ -3096,10 +3096,10 @@ Basis dimension (k) checking results. Low p-value (k-index&lt;1) may
 indicate that k is too low, especially if edf is close to k'.
 
                                k'      edf k-index p-value
-s(Riparian_vegetation)   6.00e+00 8.49e-01    1.20    0.92
-s(Substrate_index)       9.00e+00 9.80e-01    0.99    0.44
-s(Temperature)           9.00e+00 1.16e+00    1.00    0.37
-s(Specific_conductivity) 9.00e+00 9.37e-01    0.95    0.34
+s(Riparian_vegetation)   6.00e+00 8.49e-01    1.20    0.94
+s(Substrate_index)       9.00e+00 9.80e-01    0.99    0.41
+s(Temperature)           9.00e+00 1.16e+00    1.00    0.43
+s(Specific_conductivity) 9.00e+00 9.37e-01    0.95    0.24
 s(LID)                   5.00e+00 5.93e-06      NA      NA</code></pre>
 </div>
 </div></div>
@@ -3970,20 +3970,29 @@ Raw relationships between significant habitat predictors and kōura CPUE (upper 
 <span id="cb47-85"><a href="#cb47-85" aria-hidden="true" tabindex="-1"></a>all_models_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(occ_table, cpue_table, bpue_table)</span>
 <span id="cb47-86"><a href="#cb47-86" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all_models_table, <span class="at">file =</span> <span class="fu">file.path</span>(out_dir, <span class="st">"tbl-gam-models.csv"</span>), <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb47-87"><a href="#cb47-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-88"><a href="#cb47-88" aria-hidden="true" tabindex="-1"></a>all_models_table <span class="sc">|&gt;</span></span>
+<span id="cb47-88"><a href="#cb47-88" aria-hidden="true" tabindex="-1"></a>gam_models_table <span class="ot">&lt;-</span> all_models_table <span class="sc">|&gt;</span></span>
 <span id="cb47-89"><a href="#cb47-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb47-90"><a href="#cb47-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">"s</span><span class="sc">\\</span><span class="st">(|</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>, term),</span>
 <span id="cb47-91"><a href="#cb47-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_value =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(p_value), <span class="fu">format.pval</span>(p_value, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">eps =</span> <span class="fl">0.001</span>), <span class="cn">NA</span>)</span>
 <span id="cb47-92"><a href="#cb47-92" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb47-93"><a href="#cb47-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>model) <span class="sc">|&gt;</span></span>
 <span id="cb47-94"><a href="#cb47-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Component"</span>, <span class="st">"Term"</span>, <span class="st">"Estimate"</span>, <span class="st">"SE"</span>, <span class="st">"EDF"</span>, <span class="st">"Ref.df"</span>, <span class="st">"Statistic"</span>, <span class="st">"p-value"</span>, <span class="st">""</span>),</span>
-<span id="cb47-95"><a href="#cb47-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"l"</span>)  ) <span class="sc">|&gt;</span></span>
-<span id="cb47-96"><a href="#cb47-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb47-97"><a href="#cb47-97" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),</span>
-<span id="cb47-98"><a href="#cb47-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>  ) <span class="sc">|&gt;</span></span>
-<span id="cb47-99"><a href="#cb47-99" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"Occupancy"</span>, <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table)) <span class="sc">|&gt;</span></span>
-<span id="cb47-100"><a href="#cb47-100" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"CPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table)) <span class="sc">|&gt;</span></span>
-<span id="cb47-101"><a href="#cb47-101" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"BPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(all_models_table))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb47-95"><a href="#cb47-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"l"</span>)  )</span>
+<span id="cb47-96"><a href="#cb47-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-97"><a href="#cb47-97" aria-hidden="true" tabindex="-1"></a><span class="co"># kable_styling()/group_rows() emit HTML (bootstrap) markup, which trips</span></span>
+<span id="cb47-98"><a href="#cb47-98" aria-hidden="true" tabindex="-1"></a><span class="co"># Quarto's "HTML output found in document targeting docx/pdf output" check</span></span>
+<span id="cb47-99"><a href="#cb47-99" aria-hidden="true" tabindex="-1"></a><span class="co"># when this notebook is knitted from index.qmd's [start] chunk for non-HTML formats.</span></span>
+<span id="cb47-100"><a href="#cb47-100" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (knitr<span class="sc">::</span><span class="fu">is_html_output</span>()) {</span>
+<span id="cb47-101"><a href="#cb47-101" aria-hidden="true" tabindex="-1"></a>  gam_models_table <span class="ot">&lt;-</span> gam_models_table <span class="sc">|&gt;</span></span>
+<span id="cb47-102"><a href="#cb47-102" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(</span>
+<span id="cb47-103"><a href="#cb47-103" aria-hidden="true" tabindex="-1"></a>      <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),</span>
+<span id="cb47-104"><a href="#cb47-104" aria-hidden="true" tabindex="-1"></a>      <span class="at">full_width =</span> <span class="cn">FALSE</span>  ) <span class="sc">|&gt;</span></span>
+<span id="cb47-105"><a href="#cb47-105" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"Occupancy"</span>, <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table)) <span class="sc">|&gt;</span></span>
+<span id="cb47-106"><a href="#cb47-106" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"CPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table)) <span class="sc">|&gt;</span></span>
+<span id="cb47-107"><a href="#cb47-107" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"BPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(all_models_table))</span>
+<span id="cb47-108"><a href="#cb47-108" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb47-109"><a href="#cb47-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-110"><a href="#cb47-110" aria-hidden="true" tabindex="-1"></a>gam_models_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-container"><div class="cell-decorator"><pre>In [30]:</pre></div><div id="tbl-gam-models" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -6788,92 +6797,101 @@ Land, Air, Water Aotearoa (LAWA). (2025). <em>Lakes data for the <span class="no
 <span id="cb61-1945"><a href="#cb61-1945" aria-hidden="true" tabindex="-1"></a>all_models_table <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(occ_table, cpue_table, bpue_table)</span>
 <span id="cb61-1946"><a href="#cb61-1946" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(all_models_table, <span class="at">file =</span> <span class="fu">file.path</span>(out_dir, <span class="st">"tbl-gam-models.csv"</span>), <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb61-1947"><a href="#cb61-1947" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1948"><a href="#cb61-1948" aria-hidden="true" tabindex="-1"></a>all_models_table <span class="sc">|&gt;</span></span>
+<span id="cb61-1948"><a href="#cb61-1948" aria-hidden="true" tabindex="-1"></a>gam_models_table <span class="ot">&lt;-</span> all_models_table <span class="sc">|&gt;</span></span>
 <span id="cb61-1949"><a href="#cb61-1949" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb61-1950"><a href="#cb61-1950" aria-hidden="true" tabindex="-1"></a>    <span class="at">term =</span> <span class="fu">gsub</span>(<span class="st">"s</span><span class="sc">\\</span><span class="st">(|</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>, term),</span>
 <span id="cb61-1951"><a href="#cb61-1951" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_value =</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(p_value), <span class="fu">format.pval</span>(p_value, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">eps =</span> <span class="fl">0.001</span>), <span class="cn">NA</span>)</span>
 <span id="cb61-1952"><a href="#cb61-1952" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb61-1953"><a href="#cb61-1953" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>model) <span class="sc">|&gt;</span></span>
 <span id="cb61-1954"><a href="#cb61-1954" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Component"</span>, <span class="st">"Term"</span>, <span class="st">"Estimate"</span>, <span class="st">"SE"</span>, <span class="st">"EDF"</span>, <span class="st">"Ref.df"</span>, <span class="st">"Statistic"</span>, <span class="st">"p-value"</span>, <span class="st">""</span>),</span>
-<span id="cb61-1955"><a href="#cb61-1955" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"l"</span>)  ) <span class="sc">|&gt;</span></span>
-<span id="cb61-1956"><a href="#cb61-1956" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb61-1957"><a href="#cb61-1957" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),</span>
-<span id="cb61-1958"><a href="#cb61-1958" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>  ) <span class="sc">|&gt;</span></span>
-<span id="cb61-1959"><a href="#cb61-1959" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"Occupancy"</span>, <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table)) <span class="sc">|&gt;</span></span>
-<span id="cb61-1960"><a href="#cb61-1960" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"CPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table)) <span class="sc">|&gt;</span></span>
-<span id="cb61-1961"><a href="#cb61-1961" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"BPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(all_models_table))</span>
-<span id="cb61-1962"><a href="#cb61-1962" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb61-1963"><a href="#cb61-1963" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1964"><a href="#cb61-1964" aria-hidden="true" tabindex="-1"></a><span class="fu"># PCA (habitat complexity)</span></span>
-<span id="cb61-1967"><a href="#cb61-1967" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb61-1968"><a href="#cb61-1968" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: pca</span></span>
-<span id="cb61-1969"><a href="#cb61-1969" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb61-1970"><a href="#cb61-1970" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1971"><a href="#cb61-1971" aria-hidden="true" tabindex="-1"></a><span class="co"># Comment Frank about the modeling:</span></span>
-<span id="cb61-1972"><a href="#cb61-1972" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If you centered (on the mean) and standardized (scaled to unit variance) the predictors you could use the parameter estimates as an effect size to say something about the importance of the predictors (i.e. weak vs strong effects).</span></span>
-<span id="cb61-1973"><a href="#cb61-1973" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1974"><a href="#cb61-1974" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1975"><a href="#cb61-1975" aria-hidden="true" tabindex="-1"></a>habitat_vars <span class="ot">&lt;-</span> M_C_data <span class="sc">%&gt;%</span></span>
-<span id="cb61-1976"><a href="#cb61-1976" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
-<span id="cb61-1977"><a href="#cb61-1977" aria-hidden="true" tabindex="-1"></a>Riparian_vegetation,</span>
-<span id="cb61-1978"><a href="#cb61-1978" aria-hidden="true" tabindex="-1"></a>Substrate_index,</span>
-<span id="cb61-1979"><a href="#cb61-1979" aria-hidden="true" tabindex="-1"></a>Wood_cover,</span>
-<span id="cb61-1980"><a href="#cb61-1980" aria-hidden="true" tabindex="-1"></a>Overhanging_trees,</span>
-<span id="cb61-1981"><a href="#cb61-1981" aria-hidden="true" tabindex="-1"></a>Emergent_Native,</span>
-<span id="cb61-1982"><a href="#cb61-1982" aria-hidden="true" tabindex="-1"></a>Submerged_Native,</span>
-<span id="cb61-1983"><a href="#cb61-1983" aria-hidden="true" tabindex="-1"></a>Submerged_Non_Native</span>
-<span id="cb61-1984"><a href="#cb61-1984" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb61-1985"><a href="#cb61-1985" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">complete.cases</span>(.))</span>
-<span id="cb61-1986"><a href="#cb61-1986" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1987"><a href="#cb61-1987" aria-hidden="true" tabindex="-1"></a>habitat_pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(habitat_vars, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb61-1988"><a href="#cb61-1988" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1989"><a href="#cb61-1989" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(habitat_pca)</span>
-<span id="cb61-1990"><a href="#cb61-1990" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(habitat_pca)</span>
-<span id="cb61-1991"><a href="#cb61-1991" aria-hidden="true" tabindex="-1"></a>habitat_pca<span class="sc">$</span>rotation</span>
-<span id="cb61-1992"><a href="#cb61-1992" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1993"><a href="#cb61-1993" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1994"><a href="#cb61-1994" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb61-1955"><a href="#cb61-1955" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"l"</span>)  )</span>
+<span id="cb61-1956"><a href="#cb61-1956" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-1957"><a href="#cb61-1957" aria-hidden="true" tabindex="-1"></a><span class="co"># kable_styling()/group_rows() emit HTML (bootstrap) markup, which trips</span></span>
+<span id="cb61-1958"><a href="#cb61-1958" aria-hidden="true" tabindex="-1"></a><span class="co"># Quarto's "HTML output found in document targeting docx/pdf output" check</span></span>
+<span id="cb61-1959"><a href="#cb61-1959" aria-hidden="true" tabindex="-1"></a><span class="co"># when this notebook is knitted from index.qmd's [start] chunk for non-HTML formats.</span></span>
+<span id="cb61-1960"><a href="#cb61-1960" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (knitr<span class="sc">::</span><span class="fu">is_html_output</span>()) {</span>
+<span id="cb61-1961"><a href="#cb61-1961" aria-hidden="true" tabindex="-1"></a>  gam_models_table <span class="ot">&lt;-</span> gam_models_table <span class="sc">|&gt;</span></span>
+<span id="cb61-1962"><a href="#cb61-1962" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_styling</span>(</span>
+<span id="cb61-1963"><a href="#cb61-1963" aria-hidden="true" tabindex="-1"></a>      <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),</span>
+<span id="cb61-1964"><a href="#cb61-1964" aria-hidden="true" tabindex="-1"></a>      <span class="at">full_width =</span> <span class="cn">FALSE</span>  ) <span class="sc">|&gt;</span></span>
+<span id="cb61-1965"><a href="#cb61-1965" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"Occupancy"</span>, <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table)) <span class="sc">|&gt;</span></span>
+<span id="cb61-1966"><a href="#cb61-1966" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"CPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table)) <span class="sc">|&gt;</span></span>
+<span id="cb61-1967"><a href="#cb61-1967" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">group_rows</span>(<span class="st">"BPUE (positive sites)"</span>, <span class="fu">nrow</span>(occ_table) <span class="sc">+</span> <span class="fu">nrow</span>(cpue_table) <span class="sc">+</span> <span class="dv">1</span>, <span class="fu">nrow</span>(all_models_table))</span>
+<span id="cb61-1968"><a href="#cb61-1968" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb61-1969"><a href="#cb61-1969" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-1970"><a href="#cb61-1970" aria-hidden="true" tabindex="-1"></a>gam_models_table</span>
+<span id="cb61-1971"><a href="#cb61-1971" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb61-1972"><a href="#cb61-1972" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-1973"><a href="#cb61-1973" aria-hidden="true" tabindex="-1"></a><span class="fu"># PCA (habitat complexity)</span></span>
+<span id="cb61-1976"><a href="#cb61-1976" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb61-1977"><a href="#cb61-1977" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: pca</span></span>
+<span id="cb61-1978"><a href="#cb61-1978" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb61-1979"><a href="#cb61-1979" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-1980"><a href="#cb61-1980" aria-hidden="true" tabindex="-1"></a><span class="co"># Comment Frank about the modeling:</span></span>
+<span id="cb61-1981"><a href="#cb61-1981" aria-hidden="true" tabindex="-1"></a>  <span class="co"># If you centered (on the mean) and standardized (scaled to unit variance) the predictors you could use the parameter estimates as an effect size to say something about the importance of the predictors (i.e. weak vs strong effects).</span></span>
+<span id="cb61-1982"><a href="#cb61-1982" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-1983"><a href="#cb61-1983" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-1984"><a href="#cb61-1984" aria-hidden="true" tabindex="-1"></a>habitat_vars <span class="ot">&lt;-</span> M_C_data <span class="sc">%&gt;%</span></span>
+<span id="cb61-1985"><a href="#cb61-1985" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
+<span id="cb61-1986"><a href="#cb61-1986" aria-hidden="true" tabindex="-1"></a>Riparian_vegetation,</span>
+<span id="cb61-1987"><a href="#cb61-1987" aria-hidden="true" tabindex="-1"></a>Substrate_index,</span>
+<span id="cb61-1988"><a href="#cb61-1988" aria-hidden="true" tabindex="-1"></a>Wood_cover,</span>
+<span id="cb61-1989"><a href="#cb61-1989" aria-hidden="true" tabindex="-1"></a>Overhanging_trees,</span>
+<span id="cb61-1990"><a href="#cb61-1990" aria-hidden="true" tabindex="-1"></a>Emergent_Native,</span>
+<span id="cb61-1991"><a href="#cb61-1991" aria-hidden="true" tabindex="-1"></a>Submerged_Native,</span>
+<span id="cb61-1992"><a href="#cb61-1992" aria-hidden="true" tabindex="-1"></a>Submerged_Non_Native</span>
+<span id="cb61-1993"><a href="#cb61-1993" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb61-1994"><a href="#cb61-1994" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="fu">complete.cases</span>(.))</span>
 <span id="cb61-1995"><a href="#cb61-1995" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-1996"><a href="#cb61-1996" aria-hidden="true" tabindex="-1"></a><span class="fu"># Koura catfish interaction</span></span>
-<span id="cb61-1999"><a href="#cb61-1999" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb61-2000"><a href="#cb61-2000" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: koura-catfish-interaction</span></span>
-<span id="cb61-2001"><a href="#cb61-2001" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb61-1996"><a href="#cb61-1996" aria-hidden="true" tabindex="-1"></a>habitat_pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(habitat_vars, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb61-1997"><a href="#cb61-1997" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-1998"><a href="#cb61-1998" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(habitat_pca)</span>
+<span id="cb61-1999"><a href="#cb61-1999" aria-hidden="true" tabindex="-1"></a><span class="fu">biplot</span>(habitat_pca)</span>
+<span id="cb61-2000"><a href="#cb61-2000" aria-hidden="true" tabindex="-1"></a>habitat_pca<span class="sc">$</span>rotation</span>
+<span id="cb61-2001"><a href="#cb61-2001" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb61-2002"><a href="#cb61-2002" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-2003"><a href="#cb61-2003" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Catfish distribution across habitat types</span></span>
-<span id="cb61-2004"><a href="#cb61-2004" aria-hidden="true" tabindex="-1"></a>M_C_data <span class="sc">%&gt;%</span></span>
-<span id="cb61-2005"><a href="#cb61-2005" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Habitat_Type) <span class="sc">%&gt;%</span></span>
-<span id="cb61-2006"><a href="#cb61-2006" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_sites =</span> <span class="fu">n</span>(),</span>
-<span id="cb61-2007"><a href="#cb61-2007" aria-hidden="true" tabindex="-1"></a>            <span class="at">catfish_present =</span> <span class="fu">sum</span>(Presence_Catfish, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb61-2008"><a href="#cb61-2008" aria-hidden="true" tabindex="-1"></a>            <span class="at">koura_present =</span> <span class="fu">sum</span>(Presence_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb61-2009"><a href="#cb61-2009" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_CPUE_koura =</span> <span class="fu">mean</span>(Weighted_CPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb61-2010"><a href="#cb61-2010" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-2011"><a href="#cb61-2011" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Kōura metrics: catfish-present vs absent sites</span></span>
-<span id="cb61-2012"><a href="#cb61-2012" aria-hidden="true" tabindex="-1"></a>M_C_data <span class="sc">%&gt;%</span></span>
-<span id="cb61-2013"><a href="#cb61-2013" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Presence_Catfish) <span class="sc">%&gt;%</span></span>
-<span id="cb61-2014"><a href="#cb61-2014" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb61-2015"><a href="#cb61-2015" aria-hidden="true" tabindex="-1"></a>            <span class="at">koura_presence_rate =</span> <span class="fu">mean</span>(Presence_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb61-2016"><a href="#cb61-2016" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_CPUE_koura =</span> <span class="fu">mean</span>(Weighted_CPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb61-2017"><a href="#cb61-2017" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_BPUE_koura =</span> <span class="fu">mean</span>(Weighted_BPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb61-2018"><a href="#cb61-2018" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-2019"><a href="#cb61-2019" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Kōura metrics: catfish-invaded vs catfish-free lakes</span></span>
-<span id="cb61-2020"><a href="#cb61-2020" aria-hidden="true" tabindex="-1"></a>M_C_data <span class="sc">%&gt;%</span></span>
-<span id="cb61-2021"><a href="#cb61-2021" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">catfish_lake =</span> <span class="fu">if_else</span>(Lake <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Rotorua"</span>, <span class="st">"Rotoiti"</span>),</span>
-<span id="cb61-2022"><a href="#cb61-2022" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Catfish present"</span>, <span class="st">"Catfish absent"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb61-2023"><a href="#cb61-2023" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(catfish_lake) <span class="sc">%&gt;%</span></span>
-<span id="cb61-2024"><a href="#cb61-2024" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_sites =</span> <span class="fu">n</span>(),</span>
-<span id="cb61-2025"><a href="#cb61-2025" aria-hidden="true" tabindex="-1"></a>            <span class="at">koura_presence_rate =</span> <span class="fu">mean</span>(Presence_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb61-2026"><a href="#cb61-2026" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_CPUE_koura =</span> <span class="fu">mean</span>(Weighted_CPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb61-2027"><a href="#cb61-2027" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_BPUE_koura =</span> <span class="fu">mean</span>(Weighted_BPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb61-2028"><a href="#cb61-2028" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-2029"><a href="#cb61-2029" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb61-2030"><a href="#cb61-2030" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb61-2031"><a href="#cb61-2031" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
-<span id="cb61-2034"><a href="#cb61-2034" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb61-2035"><a href="#cb61-2035" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: session-info</span></span>
-<span id="cb61-2036"><a href="#cb61-2036" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: true</span></span>
-<span id="cb61-2037"><a href="#cb61-2037" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb61-2038"><a href="#cb61-2038" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb61-2039"><a href="#cb61-2039" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb61-2003"><a href="#cb61-2003" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb61-2004"><a href="#cb61-2004" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-2005"><a href="#cb61-2005" aria-hidden="true" tabindex="-1"></a><span class="fu"># Koura catfish interaction</span></span>
+<span id="cb61-2008"><a href="#cb61-2008" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb61-2009"><a href="#cb61-2009" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: koura-catfish-interaction</span></span>
+<span id="cb61-2010"><a href="#cb61-2010" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb61-2011"><a href="#cb61-2011" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-2012"><a href="#cb61-2012" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Catfish distribution across habitat types</span></span>
+<span id="cb61-2013"><a href="#cb61-2013" aria-hidden="true" tabindex="-1"></a>M_C_data <span class="sc">%&gt;%</span></span>
+<span id="cb61-2014"><a href="#cb61-2014" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Habitat_Type) <span class="sc">%&gt;%</span></span>
+<span id="cb61-2015"><a href="#cb61-2015" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_sites =</span> <span class="fu">n</span>(),</span>
+<span id="cb61-2016"><a href="#cb61-2016" aria-hidden="true" tabindex="-1"></a>            <span class="at">catfish_present =</span> <span class="fu">sum</span>(Presence_Catfish, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb61-2017"><a href="#cb61-2017" aria-hidden="true" tabindex="-1"></a>            <span class="at">koura_present =</span> <span class="fu">sum</span>(Presence_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb61-2018"><a href="#cb61-2018" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_CPUE_koura =</span> <span class="fu">mean</span>(Weighted_CPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb61-2019"><a href="#cb61-2019" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-2020"><a href="#cb61-2020" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Kōura metrics: catfish-present vs absent sites</span></span>
+<span id="cb61-2021"><a href="#cb61-2021" aria-hidden="true" tabindex="-1"></a>M_C_data <span class="sc">%&gt;%</span></span>
+<span id="cb61-2022"><a href="#cb61-2022" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Presence_Catfish) <span class="sc">%&gt;%</span></span>
+<span id="cb61-2023"><a href="#cb61-2023" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb61-2024"><a href="#cb61-2024" aria-hidden="true" tabindex="-1"></a>            <span class="at">koura_presence_rate =</span> <span class="fu">mean</span>(Presence_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb61-2025"><a href="#cb61-2025" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_CPUE_koura =</span> <span class="fu">mean</span>(Weighted_CPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb61-2026"><a href="#cb61-2026" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_BPUE_koura =</span> <span class="fu">mean</span>(Weighted_BPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb61-2027"><a href="#cb61-2027" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-2028"><a href="#cb61-2028" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Kōura metrics: catfish-invaded vs catfish-free lakes</span></span>
+<span id="cb61-2029"><a href="#cb61-2029" aria-hidden="true" tabindex="-1"></a>M_C_data <span class="sc">%&gt;%</span></span>
+<span id="cb61-2030"><a href="#cb61-2030" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">catfish_lake =</span> <span class="fu">if_else</span>(Lake <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Rotorua"</span>, <span class="st">"Rotoiti"</span>),</span>
+<span id="cb61-2031"><a href="#cb61-2031" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Catfish present"</span>, <span class="st">"Catfish absent"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb61-2032"><a href="#cb61-2032" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(catfish_lake) <span class="sc">%&gt;%</span></span>
+<span id="cb61-2033"><a href="#cb61-2033" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n_sites =</span> <span class="fu">n</span>(),</span>
+<span id="cb61-2034"><a href="#cb61-2034" aria-hidden="true" tabindex="-1"></a>            <span class="at">koura_presence_rate =</span> <span class="fu">mean</span>(Presence_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb61-2035"><a href="#cb61-2035" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_CPUE_koura =</span> <span class="fu">mean</span>(Weighted_CPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb61-2036"><a href="#cb61-2036" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_BPUE_koura =</span> <span class="fu">mean</span>(Weighted_BPUE_Kōura, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb61-2037"><a href="#cb61-2037" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-2038"><a href="#cb61-2038" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb61-2039"><a href="#cb61-2039" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-2040"><a href="#cb61-2040" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session info</span></span>
+<span id="cb61-2043"><a href="#cb61-2043" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb61-2044"><a href="#cb61-2044" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: session-info</span></span>
+<span id="cb61-2045"><a href="#cb61-2045" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: true</span></span>
+<span id="cb61-2046"><a href="#cb61-2046" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb61-2047"><a href="#cb61-2047" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb61-2048"><a href="#cb61-2048" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {
