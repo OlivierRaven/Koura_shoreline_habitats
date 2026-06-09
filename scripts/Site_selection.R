@@ -15,11 +15,11 @@ lapply(packages, function(pkg) {
 custom_colors <- c("Muddy" = "tan", "Sandy" = "orange","Rocky" = "gray", "Raupo" = "green", "AR"= "red",  "Cliff"= "black", "Geo"= "blue") 
 
 # Import the data sets ---------------------------------------------------------
-Rotorua_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotorua/DHT_rotorua_disolved.gpkg")
-Rotoiti_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotoiti/DHT_Rotoiti_Dissolve.gpkg")
-Rotoehu_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotoehu/DHT_Rotoehu_Dissolved.gpkg")
-Rotomā_DHT  <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotomā/DHT_Rotoma_Dissolved.gpkg")
-Ōkāreka_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Ōkāreka/DHT_Okaroka_Dissolve.gpkg")
+Rotorua_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotorua/DHT_rotorua_disolved.gpkg")
+Rotoiti_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotoiti/DHT_Rotoiti_Dissolve.gpkg")
+Rotoehu_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotoehu/DHT_Rotoehu_Dissolved.gpkg")
+Rotomā_DHT  <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotomā/DHT_Rotoma_Dissolved.gpkg")
+Ōkāreka_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Ōkāreka/DHT_Okaroka_Dissolve.gpkg")
 
 # Start with lake  ------------------------------------------------------
 Lake_DHT <- Rotoehu_DHT %>% select(-id)
@@ -92,7 +92,7 @@ coords_wgs84 <- st_transform(coords_sf, crs = 4326)
 
 
 # Rotomā_DHT ------------------------------------------------------------------
-Rotomā_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotomā/DHT_RotomaII.gpkg")
+Rotomā_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotomā/DHT_RotomaII.gpkg")
 
 # Reproject to a suitable projected CRS
 DHT_proj <- st_transform(Rotomā_DHT, crs = 2193) 
@@ -137,7 +137,7 @@ coords_dht
 
 ################################################################################
 # Rororua DHT ----------------------------------------------------------------------
-Rotorua_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotorua/DHT_rotorua.gpkg")
+Rotorua_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotorua/DHT_rotorua.gpkg")
 
 # Calculate centroids with correct column names
 Rotorua_DHT_centroids <- st_centroid(Rotorua_DHT)
@@ -153,8 +153,16 @@ ggplot() +
   ylim(-38.15, -38.10)  
 
 
+DHT_length_Rotorua <- Rotorua_DHT %>%
+  group_by(DHT) %>%
+  summarize(total_length = sum(st_length(geom)))
+total_length_Rotorua <- sum(DHT_length_Rotorua$total_length)
+DHT_length_Rotorua
+total_length_Rotorua
+
+
 # Rotoiti DHT ----------------------------------------------------------------------
-Rotoiti_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotoiti/DHT_RotoitiIII.gpkg")
+Rotoiti_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotoiti/DHT_RotoitiIII.gpkg")
 
 Rotoiti_DHT_centroids <- st_centroid(Rotoiti_DHT)
 Rotoiti_DHT_centroids <- cbind(Rotoiti_DHT_centroids, st_coordinates(Rotoiti_DHT_centroids))
@@ -224,7 +232,7 @@ plot_Rotoiti
 
 #
 # Rotoehu DHT ------------------------------------------------------------------
-Rotoehu_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotoehu/DHT_RotoehuII.gpkg")
+Rotoehu_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotoehu/DHT_RotoehuII.gpkg")
 
 Rotoehu_DHT_centroids <- st_centroid(Rotoehu_DHT)
 Rotoehu_DHT_centroids <- cbind(Rotoehu_DHT_centroids, st_coordinates(Rotoehu_DHT_centroids))
@@ -290,7 +298,7 @@ plot_Rotoehu = ggplot() +
 plot_Rotoehu
 
 # Rotomā DHT -------------------------------------------------------------------
-Rotomā_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Rotomā/DHT_RotomaII.gpkg")
+Rotomā_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Rotomā/DHT_RotomaII.gpkg")
 
 Rotomā_DHT_centroids <- st_centroid(Rotomā_DHT)
 Rotomā_DHT_centroids <- cbind(Rotomā_DHT_centroids, st_coordinates(Rotomā_DHT_centroids))
@@ -384,7 +392,7 @@ plot_Rotomā = ggplot() +
 plot_Rotomā
 
 # Ōkāreka DHT ------------------------------------------------------------------
-Ōkāreka_DHT <- st_read("~/PhD/Pictures_Figures/Maps/Layers/Dominant_habitat_types/Ōkāreka/Okaroka_DHT.gpkg")
+Ōkāreka_DHT <- st_read("~/PhD/gis/Layers/Dominant_habitat_types/Ōkāreka/Okaroka_DHT.gpkg")
 
 Ōkāreka_DHT_centroids <- st_centroid(Ōkāreka_DHT)
 Ōkāreka_DHT_centroids <- cbind(Ōkāreka_DHT_centroids, st_coordinates(Ōkāreka_DHT_centroids))
@@ -458,19 +466,33 @@ combined_DHT_centroids <- st_centroid(combined_DHT)
 combined_DHT_centroids <- cbind(combined_DHT_centroids, st_coordinates(combined_DHT_centroids))
 
 
-# Combine all data frames into one
-combined_DHT_length <- bind_rows(
-  DHT_length_Rotoiti %>% mutate(Lake = "Rotoiti"),
-  DHT_length_Rotoehu %>% mutate(Lake = "Rotoehu"),
-  DHT_length_Rotomā %>% mutate(Lake = "Rotomā"),
-  DHT_length_Ōkāreka %>% mutate(Lake = "Ōkāreka"))
+to_nztm <- function(x) st_transform(x, crs = 2193)
 
-# Select and rename columns
-combined_DHT_length <- combined_DHT_length %>%
-  select(Lake, DHT, total_length_m = total_length)
+combined_DHT_length <- bind_rows(
+  st_drop_geometry(to_nztm(DHT_length_Rotorua)) %>% mutate(Lake = "Rotorua"),
+  st_drop_geometry(to_nztm(DHT_length_Rotoiti)) %>% mutate(Lake = "Rotoiti"),
+  st_drop_geometry(to_nztm(DHT_length_Rotoehu)) %>% mutate(Lake = "Rotoehu"),
+  st_drop_geometry(to_nztm(DHT_length_Rotomā))  %>% mutate(Lake = "Rotomā"),
+  st_drop_geometry(to_nztm(DHT_length_Ōkāreka)) %>% mutate(Lake = "Ōkāreka")
+) %>%
+  rename(total_length_m = total_length) %>%
+  group_by(Lake) %>%
+  mutate(relative_length = total_length_m / sum(total_length_m)) %>%
+  ungroup()
 
 # Print the combined data frame
 print(combined_DHT_length)
+
+combined_DHT_length %>%
+  mutate(total_length_m = as.numeric(total_length_m)) %>%
+  filter(!DHT %in% c("AR", "Cliff", "Geo")) %>%
+  group_by(Lake) %>%
+  mutate(pct = round(total_length_m / sum(total_length_m) * 100, 1)) %>%
+  ungroup() %>%
+  select(Lake, DHT, pct) %>%
+  pivot_wider(names_from = DHT, values_from = pct, values_fill = 0) %>%
+  select(Lake, Muddy, Sandy, Rocky, Raupo)
+
 
 #custom_colors <- c("Sandy" = "orange", "Raupo" = "green", "Rocky" = "brown", "Mud/sand" = "tan", "?" = "gray", "? clif"= "black", "AR"= "red", "Geo"= "blue")
 
