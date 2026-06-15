@@ -12,6 +12,10 @@ system("powershell -Command \"Copy-Item -Force 'analysis_files\\figure-ipynb\\*'
 # Mirror into docs/index_files/ so index.html figure links resolve
 system("powershell -Command \"Copy-Item -Force 'docs\\analysis_files\\figure-html\\*' 'docs\\index_files\\figure-html\\' -ErrorAction SilentlyContinue\"")
 
+# Copy figures embedded directly into index.html (named analysis-<label>-output-N.png)
+# from index's own freeze cache, which deploy.R does not otherwise touch
+system("powershell -Command \"Copy-Item -Force '.quarto\\_freeze\\index\\figure-html\\*' 'docs\\index_files\\figure-html\\' -ErrorAction SilentlyContinue\"")
+
 # Copy site libraries
 system("powershell -Command \"if (Test-Path 'site_libs') { Copy-Item -Recurse -Force 'site_libs' 'docs\\' }\"")
 
