@@ -101,6 +101,16 @@ clean_smooth_title <- function(x) {
   x
 }
 
+# Format of p values in text
+format_pval <- function(p) {
+  if (p < 0.001) {
+    return("<0.001")
+  } else {
+    return(format(round(p, 3), nsmall = 3))
+  }
+}
+
+
 ```
 
 
@@ -396,25 +406,42 @@ use = "complete.obs")
 ```{r}
 #| label: tbl-lake-overview
 #| echo: false
-#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database."
+#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database. Shoreline composition percentages are calculated from useable shoreline only, excluding geothermal and cliff sections."
 
-lake_data <- data.frame(
-  `Lake name`                      = c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka"),
-  `Sampling date (number of sites)`= c("20/02/2025 (12)", "15/01/2025 (12)", "10/12/2024 (12)", "6/11/2024 (12)", "31/10/2024 (10), 22/01/2025 (2)"),
-  `Surface area (km²)`             = c(81, 34, 8, 11, 3),
-  `Perimeter length (km)`          = c(45, 61, 40, 24, 11),
-  `Catchment area (km²)`           = c(508, 123.7, 49.2, 27.8, 19.6),
-  `Mean depth (m)`                 = c(11, 31.5, 8, 36.9, 20),
-  `Maximum depth (m)`              = c(45, 124, 13.5, 83, 33.5),
-  `Elevation (m)`                  = c(280, 279, 295, 316, 355),
-  `Mixing regime`                  = c("Polymictic", "Stratified", "Polymictic", "Stratified", "Stratified"),
-  `Trophic state`                  = c("Eutrophic", "Mesotrophic", "Eutrophic", "Oligotrophic", "Mesotrophic"),
+shoreline_comp <- data.frame(
+  `Lake name`                   = c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka"),
+  `Muddy (%)`                   = c(0, 0, 3.3, 0, 8.9),
+  `Sandy (%)`                   = c(82.8, 68.5, 91.2, 62.0, 45.1),
+  `Rocky (%)`                   = c(17.2, 21.8, 1.7, 17.7, 20.2),
+  `Emergent macrophytes (%)`    = c(0, 9.7, 3.8, 20.4, 25.8),
   check.names = FALSE
 )
 
+lake_data <- data.frame(
+  `Lake name`                       = c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka"),
+  `Sampling date (n sites)`         = c("20/02/2025 (12)", "15/01/2025 (12)", "10/12/2024 (12)", "6/11/2024 (12)", "31/10/2024 (10), 22/01/2025 (2)"),
+  `Surface area (km²)`              = c(81, 34, 8, 11, 3),
+  `Perimeter length (km)`           = c(45, 61, 40, 24, 11),
+  `Catchment area (km²)`            = c(508, 123.7, 49.2, 27.8, 19.6),
+  `Mean depth (m)`                  = c(11, 31.5, 8, 36.9, 20),
+  `Maximum depth (m)`               = c(45, 124, 13.5, 83, 33.5),
+  `Elevation (m)`                   = c(280, 279, 295, 316, 355),
+  `Mixing regime`                   = c("Polymictic", "Stratified", "Polymictic", "Stratified", "Stratified"),
+  `Trophic state`                   = c("Eutrophic", "Mesotrophic", "Eutrophic", "Oligotrophic", "Mesotrophic"),
+  check.names = FALSE
+) %>%
+  dplyr::left_join(shoreline_comp, by = "Lake name")
+
 write.csv(lake_data, file = file.path(out_dir, "tbl-lake-overview.csv"), row.names = FALSE)
 
-knitr::kable(lake_data)
+if (knitr::is_latex_output()) {
+  knitr::kable(lake_data, booktabs = TRUE) %>%
+    kableExtra::kable_styling(latex_options = c("scale_down", "hold_position")) %>%
+    kableExtra::add_header_above(c(" " = 10, "Shoreline composition" = 4)) %>%
+    kableExtra::landscape()
+} else {
+  knitr::kable(lake_data)
+}
 
 ```
 
@@ -426,9 +453,9 @@ knitr::kable(lake_data)
 #| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (*Paranephrops planifrons*). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
 
 biotic_vars <- data.frame(
-  `Variable`= c("Lake identity (LID)", "Substrate index", "Slope", "Riparian vegetation", "Overhanging trees", "Wood cover", "Emergent and submerged vegetation", "Temperature", "Dissolved oxygen", "Specific conductivity", "pH", "Fish presence"),
-  `Description / Unit`= c("Categorical variable identifying lake", "Index based on % cover of bedrock, boulders, cobble, gravel, sand, mud, and organic matter", "Slope from shoreline to the 5 m depth contour", "Percentage cover of vegetation growing in the riparian zone", "Percentage cover of trees hanging over the shoreline", "Cover of wooden logs and tree branches in the sample site", "Percentage cover of vegetation divided over emergent/submerged and native/non-native species", "Temperature of surface water in °C", "Dissolved oxygen concentration in mg L⁻¹", "Electrical conductivity of the water in µS cm⁻¹", "Acidity or alkalinity of the water", "Presence/absence of selected native and non-native fish species"),
-  `Hypothesised importance for kōura` = c("Captures unmeasured lake-specific differences in water chemistry, productivity, and catchment characteristics.", "Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices.", "Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates.", "Contributes detrital inputs, bank stability, and shading at the water's edge.", "Provides direct shading and structural inputs into littoral habitats.", "Provides physical structure creating refuge spaces and supports macroinvertebrate prey availability.", "Native vegetation provides cover and food source; non-native may alter movement and habitat conditions.", "Influences metabolic rate, activity, physiological stress, and habitat suitability.", "Essential for respiration; reduced oxygen may constrain activity and habitat use.", "Reflects overall lake productivity, supporting food availability.", "Influences moulting success and exoskeleton strength, affected by acidity or calcium levels.", "Fish act as predators, competitors, or indirectly modify habitat structure."),
+  `Variable`= c("Lake identity (LID)", "Substrate index", "Slope", "Riparian vegetation", "Overhanging trees", "Wood cover", "Emergent and submerged macrophytes", "Temperature", "Dissolved oxygen", "Specific conductivity", "pH", "Fish presence"),
+  `Description / Unit`= c("Categorical variable identifying lake", "Index based on % cover of bedrock, boulders, cobble, gravel, sand, mud, and organic matter", "Slope from shoreline to the 5 m depth contour", "Percentage cover of vegetation growing in the riparian zone", "Percentage cover of trees hanging over the shoreline", "Cover of wooden logs and tree branches in the sample site", "Percentage cover of macrophytes in the sample site divided over emergent and submerged and native and non-native species", "Temperature of surface water in °C", "Dissolved oxygen concentration in mg L⁻¹", "Electrical conductivity of the water in µS cm⁻¹", "Acidity or alkalinity of the water", "Presence/absence of selected native and non-native fish species"),
+  `Hypothesised importance for kōura` = c("Captures unmeasured lake-specific differences in water chemistry, productivity, and catchment characteristics.", "Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices.", "Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates.", "Contributes detrital inputs, bank stability, and shading at the water's edge.", "Provides direct shading and structural inputs into littoral habitats.", "Provides physical structure creating refuge spaces and supports macroinvertebrate prey availability.", "Native macrophytes can provide cover and serve as a food source. Non-native macrophytes may alter movement pathways and modify local habitat and water quality conditions.", "Influences metabolic rate, activity, physiological stress, and habitat suitability.", "Essential for respiration; reduced oxygen may constrain activity and habitat use.", "Reflects overall lake productivity, supporting food availability.", "Influences moulting success and exoskeleton strength, affected by acidity or calcium levels.", "Fish act as predators, competitors, or indirectly modify habitat structure."),
   `References` = c("Zuur et al., (2009)", "Usio & Townsend, (2000); Kusabs et al., (2015b)", "Devcich, (1979); Kusabs et al., (2015b)", "Parkyn et al., (2002)", "Smith et al., (1996); Vedia et al., (2017)", "Parkyn et al., (2009)", "Coffey & Clayton, (1988); Kusabs & Quinn, (2009)", "Devcich, (1979); Hammond et al., (2006); Parkyn & Collier, (2002); Angilletta et al., (2004)", "Hammond et al., (2006); Broughton et al., (2017)", "Devcich, (1979)", "Olsson et al., (2006)", "Shave et al., (1994); Barnes, (1996); Usio & Townsend, (2000); Barnes & Hicks, (2003)"),
   check.names = FALSE
 )
@@ -591,8 +618,8 @@ EnvBio_summary_table <- dplyr::bind_rows(Env_summary_table, Fish_summary_table) 
       Riparian_vegetation   = "Riparian vegetation",
       Overhanging_trees     = "Overhanging trees",
       Wood_cover            = "Wood cover",
-      Emergent_vegetation   = "Emergent vegetation",
-      Submerged_vegetation  = "Submerged vegetation",
+      Emergent_vegetation   = "Emergent macrophytes",
+      Submerged_vegetation  = "Submerged macrophytes",
       Temperature           = "Temperature",
       DO_mgl                = "Dissolved oxygen",
       Specific_conductivity = "Specific conductivity",
@@ -609,7 +636,7 @@ EnvBio_summary_table <- dplyr::bind_rows(Env_summary_table, Fish_summary_table) 
 
 lake_order_exact <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka", "All lakes")
 
-var_order_exact <- c("Substrate index","Slope 5m","Riparian vegetation","Overhanging trees","Wood cover","Emergent vegetation", "Submerged vegetation", "Temperature", "Dissolved oxygen", "Specific conductivity","pH", "Presence Catfish", "Presence Eel", "Presence Goldfish", "Presence Common smelt", "Presence Kōaro", "Presence Trout")
+var_order_exact <- c("Substrate index","Slope 5m","Riparian vegetation","Overhanging trees","Wood cover","Emergent macrophytes", "Submerged macrophytes", "Temperature", "Dissolved oxygen", "Specific conductivity","pH", "Presence Catfish", "Presence Eel", "Presence Goldfish", "Presence Common smelt", "Presence Kōaro", "Presence Trout")
 
 EnvBio_summary_table <- EnvBio_summary_table %>%
   dplyr::mutate(
@@ -724,6 +751,14 @@ m_koura_bpue <- fit_tweedie_glmm( M_C_data, response = "Weighted_BPUE_Kōura",  
 pres_lrt <- drop1(m_koura_pres, test = "Chisq")
 cpue_lrt <- drop1(m_koura_cpue, test = "Chisq")
 bpue_lrt <- drop1(m_koura_bpue, test = "Chisq")
+
+# Helper to report a drop1 LRT inline, e.g. "chi^2_4 = 13.76, p = 0.008"
+report_lrt <- function(lrt_obj, term = "Lake") {
+  subscript_digits <- chartr("0123456789", "₀₁₂₃₄₅₆₇₈₉", as.character(lrt_obj[term, "Df"]))
+  chisq <- formatC(lrt_obj[term, "LRT"], format = "f", digits = 2)
+  p_val <- formatC(lrt_obj[term, "Pr(>Chi)"], format = "f", digits = 3)
+  sprintf("χ²%s = %s, *p* = %s", subscript_digits, chisq, p_val)
+}
 
 # Pairwise lake comparisons (BH-adjusted)
 pres_pairs <- pairs(emmeans(m_koura_pres, ~ Lake, type = "response"), adjust = "BH")
@@ -1171,12 +1206,13 @@ collapse = " + "
 )
 form_full_occ <- as.formula(paste("Presence_Kōura ~", rhs_full_occ))
 
+
 full_ml_occ <- mgcv::gam(
-form_full_occ,
-data   = PData,
-family = binomial(link = "logit"),
-method = "ML",
-select = TRUE
+  form_full_occ,
+  data   = PData,
+  family = binomial(link = "logit"),
+  method = "ML",
+  select = TRUE
 )
 
 remaining_occ <- vars_step_occ
@@ -1243,8 +1279,6 @@ select = TRUE
 ```{r}
 #| label: occ-diagnostics
 #| include: true
-#| fig-width: 7
-#| fig-height: 6
 
 # Basis dimension check and residual diagnostics
 gam.check(final_occ)
@@ -1264,7 +1298,7 @@ concurvity(final_occ, full = FALSE)
 #| include: true
 #| fig-width: 7
 #| fig-height: 5
-#| fig-cap: "Kōura occupancy GAMM results and model performance. a) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. b) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. c) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration."
+#| fig-cap: "Kōura occupancy GAMM results and model performance. a) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. c) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration."
 
 # Smooth plots: keep draw() outputs as-is (they may be ggplot OR patchwork)
 sm <- gratia::smooth_estimates(final_occ)
@@ -1468,6 +1502,7 @@ character(1)
 collapse = " + "
 )
 
+
 full_ml_cpue_pos <- mgcv::gam(
 as.formula(paste("Weighted_CPUE_Kōura ~", rhs_cpue_pos)),
 data   = Cpos,
@@ -1561,7 +1596,7 @@ concurvity(final_cpue_pos, full = FALSE)
 #| include: true
 #| fig-width: 5.5
 #| fig-height: 5
-#| fig-cap: "Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
+#| fig-cap: "Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native macrophytes, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 # make plot
 sm_cpue <- smooth_estimates(final_cpue_pos)
@@ -1726,7 +1761,7 @@ concurvity(final_bpue_pos, full = FALSE)
 #| include: true
 #| fig-width: 4
 #| fig-height: 5
-#| fig-cap: "Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native vegetation, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
+#| fig-cap: "Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native macrophytes, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 sm_bpue <- smooth_estimates(final_bpue_pos)
 bpue_smooth_names <- setdiff(unique(sm_bpue$.smooth), "s(LID)")
@@ -1768,38 +1803,151 @@ BPUE_panel_positives
 
 ```
 
-
-## Raw data plots CPUE & BPUE
+## Raw data plots all predictors
 ```{r}
-#| label: fig-raw-data-plots
-#| fig-width: 6
-#| fig-height: 4
-#| fig-cap: "Raw relationships between significant habitat predictors and kōura CPUE (upper panels) and BPUE (lower panels) at sites where kōura were present. Points represent observed values at individual sites. Temperature (°C), pH, and emergent native vegetation cover (%) are shown for CPUE; pH and emergent native vegetation cover (%) are shown for BPUE."
+#| label: fig-raw-data-all-predictors
+#| fig-width: 8
+#| fig-height: 10
+#| fig-cap: "Raw relationships between all environmental predictors examined and kōura occurrence, CPUE, and BPUE across all 60 surveyed littoral sites. Each panel shows observed values at individual sites (n = 60 for occurrence; n = 33 for CPUE and BPUE). Points are jittered slightly for occurrence data to reduce overplotting. Predictors highlighted in bold were retained in final GAM models."
 
-make_raw_plot <- function(data, x_var, y_var, y_label) {
-  ggplot(data, aes(x = .data[[x_var]], y = .data[[y_var]])) +
-    geom_point(size = 1.8, colour = "black") +
-    labs(x = gsub("_", " ", x_var), y = y_label) +
-    base_theme_bw
+# Variables examined across all models
+all_pred_vars <- c(
+  "Substrate_index", "Riparian_vegetation", "Temperature", "pH",
+  "Specific_conductivity", "DO_mgl", "Slope_5m",
+  "Overhanging_trees", "Wood_cover",
+  "Emergent_Native", "Submerged_Non_Native", "Submerged_Native"
+)
+
+# Clean labels
+pred_labels <- c(
+  Substrate_index       = "Substrate\nindex",
+  Slope_5m              = "Slope to\n5 m depth", 
+  Riparian_vegetation   = "Riparian\nvegetation\n(%)",
+  Overhanging_trees     = "Overhanging\ntrees\n(%)",    
+  Wood_cover            = "Wood cover\n(%)",
+  Emergent_Native       = "Emergent\nnative\nmacrophytes\n(%)",
+  Submerged_Non_Native  = "Submerged\nnon-native\nmacrophytes\n(%)",
+  Submerged_Native      = "Submerged\nnative\nmacrophytes\n(%)",
+  Temperature           = "Temperature\n(°C)",  
+  DO_mgl                = "Dissolved\noxygen\n(mg/L)",  
+  Specific_conductivity = "Specific\nconductivity\n(µS/cm)",
+  pH                    = "pH")
+
+# Retained predictors (bold in strips)
+retained_vars <- c("Substrate_index", "Riparian_vegetation", "Temperature",
+                   "pH", "Specific_conductivity", "Emergent_Native")
+
+# Build long-format data for all three responses
+raw_long <- Monitoring_CPUE_data %>%
+  dplyr::select(all_of(c(all_pred_vars,
+                          "Presence_Kōura",
+                          "Weighted_CPUE_Kōura",
+                          "Weighted_BPUE_Kōura"))) %>%
+  tidyr::pivot_longer(
+    cols      = all_of(all_pred_vars),
+    names_to  = "Predictor",
+    values_to = "Predictor_value"
+  ) %>%
+  tidyr::pivot_longer(
+    cols      = c("Presence_Kōura", "Weighted_CPUE_Kōura", "Weighted_BPUE_Kōura"),
+    names_to  = "Response",
+    values_to = "Response_value"
+  ) %>%
+  dplyr::mutate(
+    Predictor_label = factor(pred_labels[Predictor], levels = pred_labels),
+    Response        = dplyr::recode(Response,
+      "Presence_Kōura"        = "Kōura Presence",
+      "Weighted_CPUE_Kōura"   = "Kōura CPUE",
+      "Weighted_BPUE_Kōura"   = "Kōura BPUE"
+    ),
+    Response = factor(Response, levels = c("Kōura Presence", "Kōura CPUE", "Kōura BPUE")),
+    is_retained = Predictor %in% retained_vars
+  )
+
+# Strip label face: bold for retained predictors
+strip_faces <- ifelse(levels(raw_long$Predictor_label) %in% pred_labels[retained_vars],"bold", "plain")
+
+fig_raw_all <- ggplot(raw_long, aes(x = Predictor_value, y = Response_value)) +
+  geom_jitter(
+    data   = ~ dplyr::filter(.x, Response == "Kōura Presence"),
+    height = 0.05, width = 0, size = 0.8, alpha = 0.6, colour = "black"  ) +
+  geom_point(
+    data   = ~ dplyr::filter(.x, Response != "Kōura Presence"),
+    size   = 0.8, alpha = 0.6, colour = "black"  ) +
+  ggh4x::facet_grid2(
+    Predictor_label ~ Response,
+    scales      = "free",
+    independent = "all",
+    switch      = "y"  ) +
+  labs(x = "Predictor value", y = "Response") +
+  base_theme_bw +
+  theme(
+    strip.text.y.left = element_text(size = 6, lineheight = 0.9, face = strip_faces, angle = 0, hjust = 1), strip.text.x      = element_text(size = 7),
+    strip.placement   = "outside",
+    axis.text         = element_text(size = 5),
+    axis.title        = element_text(size = 7),
+    panel.spacing     = unit(0.3, "lines")  )
+
+fig_raw_all
+
+ggsave(file.path(out_dir, "fig-raw-data-all-predictors.png"),
+       fig_raw_all, width = 5, height = 10, dpi = 300)
+
+
+```
+
+
+## Full vs. reduced model comparison
+```{r}
+#| label: tbl-model-comparison
+#| include: true
+#| tbl-cap: "Comparison of full and stepwise-reduced (ML-fitted) models for kōura occupancy, CPUE, and BPUE, including AIC, likelihood ratio test (LRT) results, and the percentage deviance explained by the full, reduced, and final (REML-refitted) models."
+
+compare_full_reduced <- function(full_model, reduced_model, final_model, model_name) {
+  lrt <- anova(reduced_model, full_model, test = "LRT")
+
+  tibble::tibble(
+    model       = model_name,
+    aic_full    = AIC(full_model),
+    aic_reduced = AIC(reduced_model),
+    lrt_chisq   = lrt[["Deviance"]][2],
+    lrt_df      = lrt[["Df"]][2],
+    lrt_p       = lrt[["Pr(>Chi)"]][2],
+    dev_full    = summary(full_model)$dev.expl * 100,
+    dev_reduced = summary(reduced_model)$dev.expl * 100,
+    dev_final   = summary(final_model)$dev.expl * 100,
+    r2_full     = summary(full_model)$r.sq,
+    r2_reduced  = summary(reduced_model)$r.sq,
+    r2_final    = summary(final_model)$r.sq
+  )
 }
 
-# CPUE raw plots
-p_raw_temp_cpue  <- make_raw_plot(Cpos, "Temperature",     "Weighted_CPUE_Kōura", "CPUE")
-p_raw_ph_cpue    <- make_raw_plot(Cpos, "pH",              "Weighted_CPUE_Kōura", "CPUE")
-p_raw_emerg_cpue <- make_raw_plot(Cpos, "Emergent_Native", "Weighted_CPUE_Kōura", "CPUE")
+model_comparison <- bind_rows(
+  compare_full_reduced(full_ml_occ,      red_ml_occ,      final_occ,      "Occupancy"),
+  compare_full_reduced(full_ml_cpue_pos, red_ml_cpue_pos, final_cpue_pos, "CPUE (pos)"),
+  compare_full_reduced(full_ml_BPUE_pos, red_ml_BPUE_pos, final_bpue_pos, "BPUE (pos)")
+)
 
-# BPUE raw plots
-p_raw_ph_bpue    <- make_raw_plot(Bpos, "pH",              "Weighted_BPUE_Kōura", "BPUE")
-p_raw_emerg_bpue <- make_raw_plot(Bpos, "Emergent_Native", "Weighted_BPUE_Kōura", "BPUE")
+write.csv(model_comparison, file = file.path(out_dir, "tbl-model-comparison.csv"), row.names = FALSE)
 
-raw_plots <- (p_raw_temp_cpue + p_raw_ph_cpue + p_raw_emerg_cpue) /
-             (plot_spacer() + p_raw_ph_bpue + p_raw_emerg_bpue)
+# Pull a value from model_comparison for inline reporting, e.g. mc_val("CPUE (pos)", "dev_final")
+mc_val <- function(model_name, col) {
+  model_comparison[[col]][model_comparison$model == model_name]
+}
 
-ggsave(file.path(out_dir, "fig-raw-data-plots.png"), raw_plots,
-       width = 6, height = 4, dpi = 1200)
-
-raw_plots
+model_comparison |>
+  mutate(
+    across(c(aic_full, aic_reduced, lrt_chisq, lrt_df, dev_full, dev_reduced, dev_final, r2_full, r2_reduced, r2_final), ~ round(.x, 3)),
+    lrt_p = format.pval(lrt_p, digits = 3, eps = 0.001)
+  ) |>
+  kable(
+    col.names = c("Model", "AIC (full)", "AIC (reduced)", "LRT χ²", "LRT df", "LRT p-value",
+                   "Deviance expl. full (%)", "Deviance expl. reduced (%)", "Deviance expl. final (%)",
+                   "Adj. R² (full)", "Adj. R² (reduced)", "Adj. R² (final)"),
+    align = c("l","r","r","r","r","r","r","r","r","r","r","r")
+  )
 ```
+
 
 ## GAM model summary table
 ```{r}
@@ -1895,28 +2043,28 @@ write.csv(all_models_table, file = file.path(out_dir, "tbl-gam-models.csv"), row
 
 gam_models_table <- all_models_table |>
   mutate(
-    term = gsub("s\\(|\\)", "", term),
+    term    = gsub("^s\\((.+)\\)$", "\\1", term),
     p_value = ifelse(!is.na(p_value), format.pval(p_value, digits = 3, eps = 0.001), NA)
   ) |>
-  select(-model) |>
-  kable(col.names = c("Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
-    align = c("l","l","r","r","r","r","r","r","l")  )
+  kable(col.names = c("Model", "Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
+    align = c("l","l","l","r","r","r","r","r","r","l"))
 
-# kable_styling()/group_rows() emit HTML (bootstrap) markup, which trips
-# Quarto's "HTML output found in document targeting docx/pdf output" check
-# when this notebook is knitted from index.qmd's [start] chunk for non-HTML formats.
-if (knitr::is_html_output()) {
-  gam_models_table <- gam_models_table |>
-    kable_styling(
-      bootstrap_options = c("striped", "hover", "condensed"),
-      full_width = FALSE  ) |>
-    kableExtra::group_rows("Occupancy", 1, nrow(occ_table)) |>
-    kableExtra::group_rows("CPUE (positive sites)", nrow(occ_table) + 1, nrow(occ_table) + nrow(cpue_table)) |>
-    kableExtra::group_rows("BPUE (positive sites)", nrow(occ_table) + nrow(cpue_table) + 1, nrow(all_models_table))
+get_pval <- function(model_name, term_name, component = "smooth") {
+  all_models_table |>
+    dplyr::filter(
+      model     == model_name,
+      grepl(term_name, term, fixed = TRUE),
+      component == component
+    ) |>
+    dplyr::mutate(
+      p_fmt = format.pval(p_value, digits = 3, eps = 0.001)
+    ) |>
+    dplyr::pull(p_fmt)
 }
 
 gam_models_table
 ```
+
 
 # PCA (habitat complexity)
 ```{r}

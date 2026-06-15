@@ -28,4 +28,4 @@ format:
     reference-doc: references/reference.docx
 
 bibliography: references/references.bib
-csl: references/apa.csl
+csl: references/hydrobiologia.csl

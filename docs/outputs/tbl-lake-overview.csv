@@ -1,6 +1,6 @@
-"Lake name","Sampling date (number of sites)","Surface area (km²)","Perimeter length (km)","Catchment area (km²)","Mean depth (m)","Maximum depth (m)","Elevation (m)","Mixing regime","Trophic state"
-"Rotorua","20/02/2025 (12)",81,45,508,11,45,280,"Polymictic","Eutrophic"
-"Rotoiti","15/01/2025 (12)",34,61,123.7,31.5,124,279,"Stratified","Mesotrophic"
-"Rotoehu","10/12/2024 (12)",8,40,49.2,8,13.5,295,"Polymictic","Eutrophic"
-"Rotomā","6/11/2024 (12)",11,24,27.8,36.9,83,316,"Stratified","Oligotrophic"
-"Ōkāreka","31/10/2024 (10), 22/01/2025 (2)",3,11,19.6,20,33.5,355,"Stratified","Mesotrophic"
+"Lake name","Sampling date (n sites)","Surface area (km²)","Perimeter length (km)","Catchment area (km²)","Mean depth (m)","Maximum depth (m)","Elevation (m)","Mixing regime","Trophic state","Muddy (%)","Sandy (%)","Rocky (%)","Emergent macrophytes (%)"
+"Rotorua","20/02/2025 (12)",81,45,508,11,45,280,"Polymictic","Eutrophic",0,82.8,17.2,0
+"Rotoiti","15/01/2025 (12)",34,61,123.7,31.5,124,279,"Stratified","Mesotrophic",0,68.5,21.8,9.7
+"Rotoehu","10/12/2024 (12)",8,40,49.2,8,13.5,295,"Polymictic","Eutrophic",3.3,91.2,1.7,3.8
+"Rotomā","6/11/2024 (12)",11,24,27.8,36.9,83,316,"Stratified","Oligotrophic",0,62,17.7,20.4
+"Ōkāreka","31/10/2024 (10), 22/01/2025 (2)",3,11,19.6,20,33.5,355,"Stratified","Mesotrophic",8.9,45.1,20.2,25.8
