@@ -1806,7 +1806,7 @@ BPUE_panel_positives
 ## Raw data plots all predictors
 ```{r}
 #| label: fig-raw-data-all-predictors
-#| fig-width: 8
+#| fig-width: 5
 #| fig-height: 10
 #| fig-cap: "Raw relationships between all environmental predictors examined and kōura occurrence, CPUE, and BPUE across all 60 surveyed littoral sites. Each panel shows observed values at individual sites (n = 60 for occurrence; n = 33 for CPUE and BPUE). Points are jittered slightly for occurrence data to reduce overplotting. Predictors highlighted in bold were retained in final GAM models."
 
