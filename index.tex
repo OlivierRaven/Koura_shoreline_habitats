@@ -217,7 +217,7 @@ models, Paranephrops planifrons},
 populations in five volcanic lakes of Aotearoa New Zealand}
 \author{Olivier V. Raven \and Francis J. Burdon \and Ian A. K.
 Kusabs \and Robin Holmes \and Deniz Özkundakci}
-\date{2026-06-15}
+\date{2026-06-17}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -289,7 +289,7 @@ stressors, including declining water quality, deoxygenation and the
 introduction and consequent impacts of non-native species
 (\citeproc{ref-Kusabs2009}{Kusabs \& Quinn, 2009}). For example, in
 Lakes Rotorua and Rotoiti, located in the Bay of Plenty region of
-Aotearoa's North Island, kōura populations have declined by 76\% and 91
+Aotearoa's North Island, kōura populations have declined by 76 \% and 91
 \%, respectively, over the past two decades
 (\citeproc{ref-Kusabs2026}{Kusabs et al., 2026}).
 
@@ -382,8 +382,8 @@ lakes (Rotomā, maximum depth 83 m). Shorelines are characterised by a
 mix of native riparian vegetation, exotic pasture, and low-density
 residential development, with several lakes also supporting stands of
 emergent macrophytes. Detailed lake characteristics and shoreline
-composition are summarised in Table 1.All five lakes have populations of
-kōura, and brown bullhead catfish was present in Lakes Rotorua and
+composition are summarised in Table 1. All five lakes have populations
+of kōura, and brown bullhead catfish was present in Lakes Rotorua and
 Rotoiti at time of sampling (\citeproc{ref-Kusabs2026}{Kusabs et al.,
 2026}).
 
@@ -471,11 +471,11 @@ Catch data for kōura and fish were collected using two single-winged,
 double-throated fyke nets (600 mm high D-shaped entrance hoop) and two
 collapsible bait traps baited with trout flesh (480 × 250 mm; two 50 mm
 entrance openings). Fyke nets were placed perpendicular to the shoreline
-at 10 m intervals, with box traps positioned between them. All equipment
-was deployed simultaneously at each site for a 24-h period. The use of
-two fyke nets and two baited bait traps per site was intended to
-maximise detection probability across habitat types. Captured kōura were
-measured for orbital carapace length (OCL) using a digital calliper
+at 10 m intervals, with bait traps positioned between them. All
+equipment was deployed simultaneously at each site for a 24-h period.
+The use of two fyke nets and two baited bait traps per site was intended
+to maximise detection probability across habitat types. Captured kōura
+were measured for orbital carapace length (OCL) using a digital calliper
 (0.01 mm precision; 150 mm) and for wet mass using a digital scale (±1
 g; 5 kg capacity, Anko Brand, Kmart Group, Mulgrave, VIC, Australia).
 Catfish and other fish species, including eels (\emph{Anguilla} spp.),
@@ -522,11 +522,11 @@ ecological count and biomass data (\citeproc{ref-Shono2008}{Shono,
 (\citeproc{ref-Brooks2017}{Brooks et al., 2017}), with habitat type
 included as a random intercept. To identify environmental and biotic
 predictors associated with kōura distribution and abundance, GAMMs were
-implemented with the mgcv package in R (\citeproc{ref-Wood2004}{Wood,
-2004}, \citeproc{ref-Wood2017}{2017}). To reduce multicollinearity,
-predictors were screened using Variance Inflation Factors (VIFs)
-calculated from linear models fitted to the fixed-effect design matrix.
-A conservative threshold of VIF \textgreater{} 5 was applied
+implemented with the mgcv package (\citeproc{ref-Wood2004}{Wood, 2004},
+\citeproc{ref-Wood2017}{2017}). To reduce multicollinearity, predictors
+were screened using Variance Inflation Factors (VIFs) calculated from
+linear models fitted to the fixed-effect design matrix. A conservative
+threshold of VIF \textgreater{} 5 was applied
 (\citeproc{ref-Quinn2002}{Quinn \& Keough, 2002};
 \citeproc{ref-Kutner2005}{Kutner et al., 2005}). Across all model sets,
 dissolved oxygen expressed as percentage saturation (DO \%) exceeded
@@ -570,7 +570,7 @@ scores. Final selected models were refitted using restricted maximum
 likelihood (REML), which accounts for the degrees of freedom associated
 with fixed effects and provides less biased estimates of variance
 components, resulting in more stable smoothing parameter estimates in
-models with random effects. Lake identity (LID) was included as a random
+models with random effects. Lake identity was included as a random
 effect in all GAMMs to account for spatial clustering and
 non-independence among observations and was not subject to the variable
 selection procedure (\citeproc{ref-Zuur2009}{Zuur et al., 2009}).
@@ -699,7 +699,7 @@ The full Gamma GAMM for positive BPUE explained 97.4 \% of the deviance
 (AIC = 266; adj. R² = 0.76; n = 33). Stepwise ML selection (\emph{α} =
 0.05) retained pH, emergent native macrophytes, and the lake identity
 random effect. The resulting reduced model had a higher AIC (318) and
-explained 26 \% of the deviance (adj. R² = 0.141). As the full model is
+explained 26 \% of the deviance (adj. R² = 0.141). As the full model was
 overfitting the data the reduced model was chosen for inference. The
 final REML-fitted BPUE model explained 25.9 \% of the deviance (adj. R²
 = 0.14) and retained a positive influence of pH (\emph{p} = 0.002) and a
@@ -1149,7 +1149,7 @@ References
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-Lake identity (LID) & Categorical variable identifying lake & Captures
+Lake identity & Categorical variable identifying lake & Captures
 unmeasured lake-specific differences in water chemistry, productivity,
 and catchment characteristics. & Zuur et al., (2009) \\
 Substrate index & Index based on \% cover of bedrock, boulders, cobble,
