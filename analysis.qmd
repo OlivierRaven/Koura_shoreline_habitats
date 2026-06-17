@@ -26,12 +26,9 @@ manuscript is available at the [project page](https://olivierraven.github.io/Kou
 #| label: setup
 #| include: false
 
-knitr::opts_knit$set(root.dir = normalizePath(".."))
-options(warn = -1)
 packages <- c(
-  "here","kableExtra","emmeans","rstatix","multcompView","brglm2","patchwork","gratia","pROC","caret",
-  "mgcv","tidyr","purrr","corrplot","glmmTMB","performance","tibble","tidyverse",
-  "dplyr","writexl","readxl","lubridate")
+  "kableExtra","emmeans","patchwork","gratia","pROC","caret",
+  "mgcv","glmmTMB","performance","tibble","tidyverse","readxl")
 
 quiet_load <- function(pkg) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
@@ -41,6 +38,7 @@ quiet_load <- function(pkg) {
   invisible(TRUE)
 }
 
+options(repos = c(CRAN = "https://cloud.r-project.org"))
 invisible(lapply(packages, quiet_load))
 
 
