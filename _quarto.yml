@@ -38,6 +38,9 @@ format:
       in-header: references/header.tex
   docx:
     reference-doc: references/reference.docx
+    filters:
+      - at: pre-quarto
+        path: filters/docx-title-page.lua
 
 fig-width: 8
 fig-height: 6

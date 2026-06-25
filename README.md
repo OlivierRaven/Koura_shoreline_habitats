@@ -1,39 +1,72 @@
-# Littoral habitat structure drives freshwater crayfish populations
+# Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand
 
-This repository contains the full reproducible workflow supporting the manuscript:
+Olivier V. Raven | olivier.raven@icloud.com
 
-**"Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand"**
+**DOI:** To be added upon acceptance
 
-The repository includes all code used for data processing, statistical analyses, and figure generation, derived datasets, generated figures, and peer review documents. Raw field data are not tracked in this repository and will be archived in an open-access data repository upon acceptance.
+## Overview
 
----
+This repository contains the full reproducible workflow supporting the manuscript above. It includes all code used for data processing, statistical analyses, and figure generation, derived datasets, generated figures, and peer review documents. Raw field data are not tracked in this repository and will be archived in an open-access data repository upon acceptance.
+
+**Key findings:**
+
+- Kōura occupancy increased with shoreline habitat complexity, particularly coarser substrate types and greater riparian vegetation cover
+- Elevated summer surface water temperatures were negatively associated with kōura occupancy and abundance, indicating reduced habitat suitability during warm periods
+- pH was positively correlated with kōura abundance and biomass
+- Composition and physical structure of littoral habitats are important drivers of kōura distribution and abundance
+- Targeted protection and restoration of coarse substrate shoreline habitats may provide a practical conservation response, since climatic drivers (warmer water, reduced dissolved oxygen) are difficult to manage directly
 
 ## Repository structure
-```
-03_natural_habitat_monitoring/
-├── scripts/
-│   ├── index.qmd              # Main Quarto document (analysis + figures)
-│   ├── Site_selection.R       # Site selection script
-│   └── _quarto.yml            # Quarto project settings
-├── data/
-│   ├── raw/                   # Raw field data (tracked)
-│   └── derived/               # Processed datasets used in analysis (tracked)
-├── outputs/                   # Generated figures and tables (tracked)
-├── manuscript/                # Manuscript versions (tracked)
-│   ├── Cover_letter.docx
-│   ├── Manuscript_v1_preprint.docx  # Before peer review
-│   ├── Manuscript_v2_revised.docx   # After peer review
-│   ├── Manuscript_v2_revised_track_changes
-│   └── Response_to_reviewers.docx              
-└── README.md                        # This file
+
+    .
+    +-- data/
+    |   +-- raw/          # Raw field data (Natural_habitat.xlsx; archived on acceptance)
+    |   +-- derived/      # Processed CSVs used in analysis
+    +-- outputs/          # Generated figures and tables
+    +-- manuscript/       # Manuscript versions, cover letter, reviewer responses
+    +-- images/           # Site photographs
+    +-- references/       # Bibliography (.bib) and citation style files
+    +-- scripts/          # Site selection and other supporting scripts
+    +-- docs/             # Rendered HTML output (GitHub Pages)
+    +-- _quarto.yml       # Quarto project configuration
+    +-- deploy.R          # Post-render script that publishes docs/ to GitHub Pages
+    +-- analysis.qmd      # Full statistical analysis notebook
+    +-- index.qmd         # Manuscript
+
+## Reproducing the analysis
+
+This project uses [Quarto](https://quarto.org/) and R.
+All analyses are contained in `analysis.qmd`.
+
+### Requirements
+
+- R >= 4.3
+- Quarto >= 1.4
+- R packages: `mgcv`, `gratia`, `glmmTMB`, `pROC`, `caret`, `performance`,
+  `kableExtra`, `emmeans`, `patchwork`, `tidyverse`, `readxl`
+
+### Install R packages
+
+```r
+install.packages(c("mgcv", "gratia", "glmmTMB", "pROC", "caret",
+                   "performance", "kableExtra", "emmeans",
+                   "patchwork", "tidyverse", "readxl"))
 ```
 
----
+### Render the analysis
+
+```bash
+quarto render analysis.qmd
+```
+
+The rendered HTML analysis is available at:
+<https://olivierraven.github.io/Koura_shoreline_habitats/>
 
 ## Data availability
 
 ### Raw data
-The primary raw dataset (`data/raw/Natural_habitat.xlsx`) is tracked in this repository. And it will be archived in an open-access repository upon manuscript acceptance.
+
+The primary raw dataset (`data/raw/Natural_habitat.xlsx`) is tracked in this repository and will be archived in an open-access repository upon manuscript acceptance.
 
 - **Data repository:** *To be added upon acceptance*
 - **DOI:** *To be added upon acceptance*
@@ -41,6 +74,7 @@ The primary raw dataset (`data/raw/Natural_habitat.xlsx`) is tracked in this rep
 The raw Excel workbook contains original field observations across multiple worksheets, including site information, environmental variables, kōura catch data, macrophytes, and macroinvertebrates.
 
 ### Derived data
+
 Derived CSV files are tracked in this repository and are sufficient to reproduce all statistical analyses and figures without the raw Excel file:
 
 - `Site_info.csv` — site metadata
@@ -51,42 +85,7 @@ Derived CSV files are tracked in this repository and are sufficient to reproduce
 - `Monitoring_CPUE_data.csv` — fully processed dataset used for modelling
 - `habitat_classification.csv` — classified habitat types per site
 
----
-
-## Code availability
-
-All analyses were conducted in **R** and implemented in a reproducible **Quarto** document (`scripts/index.qmd`), which:
-
-- Loads and filters raw data
-- Calculates CPUE and BPUE metrics
-- Fits GAM statistical models
-- Generates all manuscript figures
-
-Supporting site selection code is in `scripts/Site_selection.R`.
-
-All code relies only on publicly available R packages.
-
----
-
-## How to reproduce the analysis
-
-### Full pipeline (requires raw Excel file)
-1. Clone this repository:
-```bash
-git clone https://github.com/OlivierRaven/Koura_shoreline_habitats.git
-```
-2. Obtain `Natural_habitat.xlsx` from the data repository (DOI above) and place it in `data/raw/`
-3. Open `scripts/index.qmd` in RStudio or Positron
-4. Run the Quarto document from the top
-
-### Analysis and figures only (using derived CSVs)
-1. Clone this repository
-2. Open `scripts/index.qmd` in RStudio or Positron
-3. Navigate to the reproducibility note section in the script, uncomment the `read.csv` lines, and run from there — all analyses and figures can be reproduced without the raw Excel file
-
----
-
-## Outputs
+### Outputs
 
 All generated figures and tables are tracked in `outputs/`:
 
@@ -99,37 +98,30 @@ All generated figures and tables are tracked in `outputs/`:
 - `EnvBio_summary_table.csv` — Table S1: environmental and biotic summary
 - `table_gam_all_models.csv` — GAM model results for all three models
 
----
+## Funding
+
+This research was supported by the Fish Futures programme funded through a Ministry of Business, Innovation and Employment grant (CAWX2101) with additional funding provided by the Bay of Plenty Regional Council under the Toihuarewa Waimāori - Bay of Plenty Regional Council Chair in Lake and Freshwater Science programme.
+
+## Acknowledgements
+
+We thank Te Arawa Lakes Trust and Te Komiti Whakahaere for the opportunity to study kōura in the Rotorua Te Arawa lakes. We are grateful to Soweeta Fort-D'ath and William Anaru (Te Arawa Lakes Trust), and Tihini Grant (Ngāti Pikiao), for facilitating access to the lakes and supporting the field programme. We appreciate Joe Butterworth's assistance with fieldwork, and the support of Andy Bruere and the Bay of Plenty Regional Council in helping to fund the fieldwork. We thank Calum MacNeil and three anonymous reviewers for feedback on an earlier version of this manuscript.
+
+## Ethical approval
+
+This study did not involve experimentation on humans or animals. Kōura and fish were captured using standard fisheries sampling methods. Permission to conduct field sampling and handle aquatic fauna was granted by Te Arawa Lakes Trust and Te Komiti Whakahaere. Formal institutional ethical approval was not required.
 
 ## Peer review transparency
 
-Reviewer comments and author responses are included in the `peer_review/` folder in the interest of open and transparent science. Reviewer identities remain anonymous as per journal policy.
+Reviewer comments and author responses are included in the `manuscript/` folder in the interest of open and transparent science. Reviewer identities remain anonymous as per journal policy.
 
 - `cover_letter.pdf` — cover letter submitted to Hydrobiologia
 - `reviewer_responses.pdf` — responses to reviewer comments
-
----
-
-## Dependencies
-
-All R packages required are loaded at the top of `scripts/index.qmd`. The analysis was conducted using:
-
-- **R** (≥ 4.3.0)
-- **Quarto** (≥ 1.4)
-
-Key packages include: `mgcv`, `gratia`, `glmmTMB`, `pROC`, `ggplot2`, `patchwork`, `tidyverse`
-
----
 
 ## Citation
 
 *To be added upon acceptance.*
 
----
+## Licence
 
-## Contact
-
-Olivier Raven  
-PhD Candidate, Freshwater Ecology  
-University of Waikato, Aotearoa New Zealand  
-GitHub: [OlivierRaven](https://github.com/OlivierRaven)
+Code: MIT License
+Data: CC BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>)

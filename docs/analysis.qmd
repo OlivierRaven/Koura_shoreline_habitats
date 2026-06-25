@@ -579,29 +579,40 @@ Fish_summary_lake <- Fish_data_long %>%
   dplyr::group_by(Lake, Variable) %>%
   dplyr::summarise(
     n       = sum(!is.na(Presence)),
+    k       = sum(Presence, na.rm = TRUE),
     Mean    = mean(Presence, na.rm = TRUE),
     Median  = median(Presence, na.rm = TRUE),
     Min     = min(Presence, na.rm = TRUE),
     Max     = max(Presence, na.rm = TRUE),
-    CI_low  = ci95(Presence)[1],
-    CI_high = ci95(Presence)[2],
     .groups = "drop"
-  )
+  ) %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    CI_low  = ifelse(n > 0, binom.test(k, n)$conf.int[1], NA_real_),
+    CI_high = ifelse(n > 0, binom.test(k, n)$conf.int[2], NA_real_)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(-k)
 
 Fish_summary_all <- Fish_data_long %>%
   dplyr::group_by(Variable) %>%
   dplyr::summarise(
     Lake    = "All lakes",
     n       = sum(!is.na(Presence)),
+    k       = sum(Presence, na.rm = TRUE),
     Mean    = mean(Presence, na.rm = TRUE),
     Median  = median(Presence, na.rm = TRUE),
     Min     = min(Presence, na.rm = TRUE),
     Max     = max(Presence, na.rm = TRUE),
-    CI_low  = ci95(Presence)[1],
-    CI_high = ci95(Presence)[2],
     .groups = "drop"
   ) %>%
-  dplyr::select(Lake, dplyr::everything())
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    CI_low  = ifelse(n > 0, binom.test(k, n)$conf.int[1], NA_real_),
+    CI_high = ifelse(n > 0, binom.test(k, n)$conf.int[2], NA_real_)
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(Lake, dplyr::everything(), -k)
 
 Fish_summary_table <- dplyr::bind_rows(Fish_summary_lake, Fish_summary_all)
 
@@ -2047,17 +2058,21 @@ gam_models_table <- all_models_table |>
   kable(col.names = c("Model", "Component", "Term", "Estimate", "SE", "EDF", "Ref.df", "Statistic", "p-value", ""),
     align = c("l","l","l","r","r","r","r","r","r","l"))
 
-get_pval <- function(model_name, term_name, component = "smooth") {
-  all_models_table |>
+# Returns the comparison operator and the italic "p" label baked in
+# (e.g. "*p* < 0.001" or "*p* = 0.023"). Set label = FALSE for values chained
+# after a leading "*p*" (e.g. "*p* < 0.001, 0.011, 0.004, respectively").
+get_pval <- function(model_name, term_name, component = "smooth", label = TRUE) {
+  p_value <- all_models_table |>
     dplyr::filter(
       model     == model_name,
       grepl(term_name, term, fixed = TRUE),
       component == component
     ) |>
-    dplyr::mutate(
-      p_fmt = format.pval(p_value, digits = 3, eps = 0.001)
-    ) |>
-    dplyr::pull(p_fmt)
+    dplyr::pull(p_value)
+
+  out <- ifelse(p_value < 0.001, "< 0.001",
+                paste0("= ", format.pval(p_value, digits = 3, eps = 0.001)))
+  if (label) paste0("*p* ", out) else out
 }
 
 gam_models_table
