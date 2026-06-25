@@ -69,7 +69,7 @@ write.csv(Weed_data,          file.path(der_data_dir, "Weed_data.csv"),         
 write.csv(Fish_data,          file.path(der_data_dir, "Fish_data.csv"),          row.names = FALSE)
 write.csv(Macroinvertebrates, file.path(der_data_dir, "Macroinvertebrates.csv"), row.names = FALSE)
 
-# Reproducibility note 
+# Reproducibility note ___________________________________________________
 # The sections above require data/raw/Natural_habitat.xlsx (not tracked).
 # To reproduce analyses and figures without the raw Excel file,
 # run from here using the derived CSVs in data/derived/:
@@ -1436,6 +1436,8 @@ final_plot_occupancy
 ```
 
 ```{r}
+#| label: fig-occupancy-model-smooth
+
 smooth_4_names_reordered <- c(
   "s(Temperature)",
   "s(Riparian_vegetation)",
