@@ -27,7 +27,7 @@ manuscript is available at the [project page](https://olivierraven.github.io/Kou
 #| include: false
 
 packages <- c(
-  "kableExtra","emmeans","patchwork","gratia","pROC","caret",
+  "DT","kableExtra","emmeans","patchwork","gratia","pROC","caret",
   "mgcv","glmmTMB","performance","tibble","tidyverse","readxl")
 
 quiet_load <- function(pkg) {
@@ -666,7 +666,31 @@ write.csv(
   row.names = FALSE
 )
 
-knitr::kable(EnvBio_summary_table, digits = 2, align = c("l","l","l","r","r","r","r","r","r","r"))
+DT::datatable(
+  EnvBio_summary_table,
+  filter = "top",
+  options = list(
+    pageLength = 20,
+    dom = 'Bfrtip',
+    buttons = c('csv', 'excel'),
+    columnDefs = list(list(className = 'dt-center', targets = 3:9))
+  ),
+  extensions = 'Buttons',
+  rownames = FALSE,
+  colnames = c("Lake", "Variable", "Unit", "n", "Mean", "Median", "Min", "Max", "CI low", "CI high")
+) |>
+  DT::formatRound(columns = c("Mean","Median","Min","Max","CI_low","CI_high"), digits = 2)
+
+```
+
+```{r}
+#| label: tbl-env-fish-summary-static
+#| echo: false
+#| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
+
+knitr::kable(EnvBio_summary_table, digits = 2,
+             align = c("l","l","l","r","r","r","r","r","r","r"),
+             col.names = c("Lake","Variable","Unit","n","Mean","Median","Min","Max","CI low","CI high"))
 ```
 
 # Kōura presence, CPUE, and BPUE across lakes

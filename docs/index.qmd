@@ -230,5 +230,11 @@ The code and derived data supporting the findings of this study are openly avail
 
 {{< embed analysis.qmd#fig-raw-data-all-predictors >}}
 
+::: {.content-visible when-format="html"}
 {{< embed analysis.qmd#tbl-env-fish-summary >}}
+:::
+
+::: {.content-visible unless-format="html"}
+{{< embed analysis.qmd#tbl-env-fish-summary-static >}}
+:::
 
