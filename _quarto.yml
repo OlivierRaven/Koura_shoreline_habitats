@@ -9,6 +9,8 @@ execute:
   warning: false
   message: false
 
+number-sections: false
+
 manuscript:
   article: index.qmd
   notebooks:
@@ -26,12 +28,10 @@ format:
     toc: true
     toc-depth: 3
     toc-location: left
-    number-sections: true
     smooth-scroll: true
     format-links: [pdf, docx]
   pdf:
     toc: true
-    number-sections: true
     colorlinks: true
     link-citations: true
     include-in-header: references/header.tex

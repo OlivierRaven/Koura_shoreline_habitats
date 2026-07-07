@@ -10,7 +10,7 @@
   numbers=noendperiod]{scrartcl}
 \usepackage{xcolor}
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
@@ -272,7 +272,7 @@ practical conservation response.
 \end{center}
 \afterpage{\pagecolor{thesiscream}}
 
-\section{Introduction}\label{introduction}
+\subsection{Introduction}\label{introduction}
 
 Freshwater crayfish (Astacidea) play a vital role in freshwater
 ecosystems (\citeproc{ref-Momot1995}{Momot, 1995}). They are ecosystem
@@ -390,9 +390,9 @@ littoral zone, this study aims to inform targeted habitat protection and
 restoration strategies for the conservation of this culturally and
 ecologically important species.
 
-\section{Materials and Methods}\label{materials-and-methods}
+\subsection{Materials and Methods}\label{materials-and-methods}
 
-\subsection{Study location}\label{study-location}
+\subsubsection{Study location}\label{study-location}
 
 Study sites were selected in five lakes located in the Rotorua Te Arawa
 Lakes area in the North Island of Aotearoa. The Lakes Rotorua, Rotoiti,
@@ -441,7 +441,7 @@ random coordinates without enforcing fixed spacing between sites. The
 final coordinates of the 12 random survey sites per lake were extracted
 directly from the GRTS output (Figure~\ref{fig-site-map}).
 
-\subsection{Data collection}\label{data-collection}
+\subsubsection{Data collection}\label{data-collection}
 
 In total, 60 sampling sites were sampled once in the Austral
 spring/summer from October 2024 to February 2025. Each sampling site
@@ -524,7 +524,7 @@ correction factor (10\^{}\{0.5 \cdot \sigma\^{}2\})
 \log_{10}(\text{Weight [g]}) = -2.938 + 2.864 \times \log_{10}(\text{OCL length [mm]})
 \]
 
-\subsection{Data analyses}\label{data-analyses}
+\subsubsection{Data analyses}\label{data-analyses}
 
 Because each site was sampled only once, imperfect detection could not
 be estimated separately from occupancy. Presence--absence data therefore
@@ -621,7 +621,7 @@ kōura metrics detected in the GAMM, a descriptive comparison of kōura
 presence rate, CPUE, and BPUE was conducted across catfish-present and
 catfish-absent sites, and across lakes with and without catfish.
 
-\section{Results}\label{results}
+\subsection{Results}\label{results}
 
 A total of 321 kōura were captured across 33 of the 60 surveyed sites
 within the five Rotorua Te Arawa lakes. Kōura OCL ranged from 7--53 mm
@@ -653,7 +653,7 @@ were most abundant in Rotoehu. Common bullies were found in every survey
 location. Trout were found sporadically in Rotorua, Rotoiti and Ōkāreka
 and kōaro were only caught from Ōkāreka.
 
-\subsection{Kōura occupancy}\label{kux14dura-occupancy}
+\subsubsection{Kōura occupancy}\label{kux14dura-occupancy}
 
 The full binomial GAMM for kōura occupancy explained 65 \% of the
 deviance (AIC = 51; adj. R² = 0.647). Stepwise ML reduction (\emph{α} =
@@ -687,7 +687,7 @@ CPUE and BPUE hurdle models produced the same structure and effect
 directions as the occupancy model, so only the positive Gamma components
 are reported here.
 
-\subsection{Kōura CPUE}\label{kux14dura-cpue}
+\subsubsection{Kōura CPUE}\label{kux14dura-cpue}
 
 The full Gamma GAMM for positive CPUE explained 48.4 \% of the deviance
 (AIC = 122; adj. R² = 0.19; n = 33). Stepwise selection (\emph{α} =
@@ -717,7 +717,7 @@ systematic patterns in residual variance across fitted values. The model
 tended to slightly over-predict very low CPUE values and under predict
 the highest observations.
 
-\subsection{Kōura BPUE}\label{kux14dura-bpue}
+\subsubsection{Kōura BPUE}\label{kux14dura-bpue}
 
 The full Gamma GAMM for positive BPUE explained 97.4 \% of the deviance
 (AIC = 266; adj. R² = 0.76; n = 33). Stepwise ML selection (\emph{α} =
@@ -741,7 +741,7 @@ lower tail, likely reflecting a small number of high-biomass sites.
 Predictive accuracy was moderate (Figure~\ref{fig-bpue-hurdle} b), with
 a tendency for the model to under predict the highest BPUE values.
 
-\section{Discussion}\label{discussion}
+\subsection{Discussion}\label{discussion}
 
 We found that local and site-scale habitat characteristics were
 consistently associated with kōura occurrence and abundance across the
@@ -766,7 +766,7 @@ spatial scales have the potential to deliver local gains, particularly
 where whole-lake interventions are not feasible or where local habitat
 degradation is the dominant stressor.
 
-\subsection{Habitat associations with
+\subsubsection{Habitat associations with
 kōura}\label{habitat-associations-with-kux14dura}
 
 Kōura occurrence was consistently associated with coarser substrate
@@ -845,7 +845,7 @@ nonetheless detected across both CPUE and BPUE models suggests the
 relationship is ecologically meaningful despite the limited
 representation of this habitat type in the dataset.
 
-\subsection{Fish associations as indicator of habitat
+\subsubsection{Fish associations as indicator of habitat
 quality}\label{fish-associations-as-indicator-of-habitat-quality}
 
 Associations between kōura abundance and the presence of certain fish
@@ -893,7 +893,7 @@ stable coexistence is possible (\citeproc{ref-Kusabs2026}{Kusabs et al.,
 reflect shared responses to habitat structure and productivity rather
 than direct biotic regulation of kōura populations.
 
-\subsection{Associations with physico-chemical
+\subsubsection{Associations with physico-chemical
 drivers}\label{associations-with-physico-chemical-drivers}
 
 Elevated summer water temperatures were negatively associated with kōura
@@ -962,7 +962,7 @@ associated with calcification and moulting, processes that become
 increasingly demanding as individuals increase in size
 (\citeproc{ref-Greenaway1985}{Greenaway, 1985}).
 
-\subsection{Conclusions}\label{conclusions}
+\subsubsection{Conclusions}\label{conclusions}
 
 Our study found that local littoral habitat complexity, particularly
 coarse substrate availability and riparian vegetation cover, were
@@ -1005,7 +1005,7 @@ the persistence and local recovery of populations in lakes and represent
 a practical approach to conserving functionally important habitat
 complexity in littoral ecosystems.
 
-\section{Acknowledgements}\label{acknowledgements}
+\subsection{Acknowledgements}\label{acknowledgements}
 
 We thank Te Arawa Lakes Trust and Te Komiti Whakahaere for the
 opportunity to study kōura in the Rotorua Te Arawa lakes. We are
@@ -1017,7 +1017,7 @@ Plenty Regional Council in helping to fund the fieldwork. We thank Calum
 MacNeil and three anonymous reviewers for feedback on an earlier version
 of this manuscript.
 
-\subsection{Funding statement}\label{funding-statement}
+\subsubsection{Funding statement}\label{funding-statement}
 
 This research was supported by the Fish Futures programme funded through
 a Ministry of Business, Innovation and Employment grant (CAWX2101) with
@@ -1025,7 +1025,7 @@ additional funding provided by the Bay of Plenty Regional Council under
 the Toihuarewa Waimāori - Bay of Plenty Regional Council Chair in Lake
 and Freshwater Science programme.
 
-\subsection{Authors' contributions}\label{authors-contributions}
+\subsubsection{Authors' contributions}\label{authors-contributions}
 
 Study conception and design were undertaken by O.V.R., F.J.B., I.A.K.K.,
 R.H., and D.Ö. Fieldwork was conducted by O.V.R. Data analysis was
@@ -1034,7 +1034,7 @@ ecological and traditional knowledge was contributed by I.A.K.K. and
 R.H. Manuscript drafting was led by O.V.R. All authors contributed to
 manuscript revision, approved the results, and the final manuscript.
 
-\subsection{Ethical approval}\label{ethical-approval}
+\subsubsection{Ethical approval}\label{ethical-approval}
 
 This study did not involve experimentation on humans or animals. Kōura
 and fish were captured using standard fisheries sampling methods.
@@ -1042,12 +1042,12 @@ Permission to conduct field sampling and handle aquatic fauna was
 granted by Te Arawa Lakes Trust and Te Komiti Whakahaere. Formal
 institutional ethical approval was not required.
 
-\subsection{Declarations}\label{declarations}
+\subsubsection{Declarations}\label{declarations}
 
 The corresponding author has declared that none of the authors has any
 competing interests.
 
-\subsection{Data availability
+\subsubsection{Data availability
 statement}\label{data-availability-statement}
 
 The code and derived data supporting the findings of this study are
@@ -1060,7 +1060,7 @@ raw dataset and code are archived on Zenodo
 including the cover letter and reviewer responses, are available in the
 manuscript repository in the interest of open and transparent science.
 
-\section{Tables}\label{tables}
+\subsection{Tables}\label{tables}
 
 \begin{landscape}
 
@@ -1181,7 +1181,7 @@ Townsend, (2000); Barnes \& Hicks, (2003) \\
 \href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
 Notebook}}
 
-\section{Figures}\label{figures}
+\subsection{Figures}\label{figures}
 
 \begin{figure}
 
@@ -1275,7 +1275,7 @@ summarise model fit.}
 
 \end{figure}%
 
-\section{Supplementary information}\label{supplementary-information}
+\subsection{Supplementary information}\label{supplementary-information}
 
 \begin{figure}
 
