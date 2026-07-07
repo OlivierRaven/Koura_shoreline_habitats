@@ -1,13 +1,8 @@
 ---
 title: "Analysis Notebook"
-format:
-  html:
-    code-fold: true
-    code-tools: true
-    code-summary: "View Code"
-    toc: true
-    toc-depth: 3
-    number-sections: true
+toc: true
+toc-depth: 3
+number-sections: true
 fig-width: 6
 fig-height: 6
 
@@ -402,7 +397,7 @@ use = "complete.obs")
 
 # Lake overview table
 ```{r}
-#| label: tbl-lake-overview
+#| label: tbl-an-lake-overview
 #| echo: false
 #| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database. Shoreline composition percentages are calculated from useable shoreline only, excluding geothermal and cliff sections."
 
@@ -424,7 +419,7 @@ lake_data <- data.frame(
   `Mean depth (m)`                  = c(11, 31.5, 8, 36.9, 20),
   `Maximum depth (m)`               = c(45, 124, 13.5, 83, 33.5),
   `Elevation (m)`                   = c(280, 279, 295, 316, 355),
-  `Mixing regime`                   = c("Polymictic", "Stratified", "Polymictic", "Stratified", "Stratified"),
+  `Mixing regime`                   = c("Polymictic", "Monomictic", "Polymictic", "Monomictic", "Monomictic"),
   `Trophic state`                   = c("Eutrophic", "Mesotrophic", "Eutrophic", "Oligotrophic", "Mesotrophic"),
   check.names = FALSE
 ) %>%
@@ -446,7 +441,7 @@ if (knitr::is_latex_output()) {
 
 # Overview of environmental and biotic variables 
 ```{r}
-#| label: tbl-environmental-biotic-overview
+#| label: tbl-an-environmental-biotic-overview
 #| echo: false
 #| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (*Paranephrops planifrons*). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
 
@@ -467,7 +462,7 @@ knitr::kable(biotic_vars)
 
 # Environmental and fish summaries
 ```{r}
-#| label: tbl-env-fish-summary
+#| label: tbl-an-env-fish-summary
 #| include: true
 #| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
 

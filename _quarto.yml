@@ -34,8 +34,7 @@ format:
     number-sections: true
     colorlinks: true
     link-citations: true
-    includes:
-      in-header: references/header.tex
+    include-in-header: references/header.tex
   docx:
     reference-doc: references/reference.docx
     filters:

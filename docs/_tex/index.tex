@@ -140,6 +140,18 @@
  
 
 
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage[pagewise]{lineno}
+\linenumbers
+
+\usepackage{xcolor}
+\usepackage{afterpage}
+\usepackage{eso-pic}
+\definecolor{thesiscream}{RGB}{255, 252, 240}
+\definecolor{thesissand}{RGB}{232, 212, 162}
+\pagecolor{thesiscream}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -217,7 +229,7 @@ models, Paranephrops planifrons},
 populations in five volcanic lakes of Aotearoa New Zealand}
 \author{Olivier V. Raven \and Francis J. Burdon \and Ian A. K.
 Kusabs \and Robin Holmes \and Deniz Özkundakci}
-\date{2026-07-01}
+\date{2026-06-29}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -248,6 +260,17 @@ practical conservation response.
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
+
+\thispagestyle{empty}
+\AddToShipoutPictureBG*{\AtPageUpperLeft{\includegraphics[width=\paperwidth,height=\paperheight]{images/ch3_cover.jpg}}}
+\null
+\newpage
+\pagecolor{thesissand}
+\vspace{1cm}
+\begin{center}
+\textit{Which natural shoreline features do kōura prefer?}
+\end{center}
+\afterpage{\pagecolor{thesiscream}}
 
 \section{Introduction}\label{introduction}
 
@@ -611,7 +634,7 @@ effect of lake on kōura occupancy (binomial GLMM: likelihood ratio test,
 Figure~\ref{fig-koura-by-lake}).
 
 The five lakes differed substantially in environmental and biotic
-characteristics (\textbf{?@tbl-env-fish-summary}). Physical habitat
+characteristics (Table~\ref{tbl-env-fish-summary}). Physical habitat
 structure varied among lakes, with differences in substrate index,
 nearshore slope, and littoral vegetation cover. Emergent macrophytes
 were absent from Lake Rotorua but present in the other lakes,
@@ -976,11 +999,11 @@ absence of interstitial refuge availability may act as a limiting factor
 freshwater crayfish populations in these systems. Accordingly,
 management actions that prioritise the protection and enhancement of
 coarse littoral substrates and riparian vegetation, including the
-targeted placement of artificial reefs in areas already used by
-freshwater crayfish (\citeproc{ref-Johnsen2008}{Johnsen \& Taugbøl,
-2008}), may help support the persistence and local recovery of
-populations in lakes and represent a practical approach to conserving
-functionally important habitat complexity in littoral ecosystems.
+targeted placement of rocks in areas already used by freshwater crayfish
+(\citeproc{ref-Johnsen2008}{Johnsen \& Taugbøl, 2008}), may help support
+the persistence and local recovery of populations in lakes and represent
+a practical approach to conserving functionally important habitat
+complexity in littoral ecosystems.
 
 \section{Acknowledgements}\label{acknowledgements}
 
@@ -1032,30 +1055,16 @@ openly available on GitHub
 (https://github.com/OlivierRaven/Koura\_shoreline\_habitats) and a
 rendered version of the analysis is hosted at
 https://olivierraven.github.io/Koura\_shoreline\_habitats/. The primary
-raw dataset is archived on Zenodo
+raw dataset and code are archived on Zenodo
 (https://doi.org/10.5281/zenodo.19476793). Peer review documents,
 including the cover letter and reviewer responses, are available in the
 manuscript repository in the interest of open and transparent science.
 
 \section{Tables}\label{tables}
 
-{
+\begin{landscape}
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0645}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0839}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0645}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0774}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0774}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0516}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0645}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0774}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0839}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0968}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0516}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0516}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0516}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 26\tabcolsep) * \real{0.0903}}@{}}
+\begin{longtable}[t]{llrrrrrrllrrrr}
 
 \caption{\label{tbl-lake-overview}Physical, morphometric, and trophic
 characteristics of the five Rotorua Te Arawa lakes surveyed, including
@@ -1068,66 +1077,33 @@ excluding geothermal and cliff sections.}
 
 \tabularnewline
 
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Lake name
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Sampling date (n sites)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Surface area (km²)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Perimeter length (km)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Catchment area (km²)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Mean depth (m)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Maximum depth (m)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Elevation (m)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Mixing regime
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Trophic state
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Muddy (\%)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Sandy (\%)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Rocky (\%)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Emergent macrophytes (\%)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Rotorua & 20/02/2025 (12) & 81 & 45 & 508.0 & 11.0 & 45.0 & 280 &
-Polymictic & Eutrophic & 0.0 & 82.8 & 17.2 & 0.0 \\
-Rotoiti & 15/01/2025 (12) & 34 & 61 & 123.7 & 31.5 & 124.0 & 279 &
-Stratified & Mesotrophic & 0.0 & 68.5 & 21.8 & 9.7 \\
-Rotoehu & 10/12/2024 (12) & 8 & 40 & 49.2 & 8.0 & 13.5 & 295 &
-Polymictic & Eutrophic & 3.3 & 91.2 & 1.7 & 3.8 \\
-Rotomā & 6/11/2024 (12) & 11 & 24 & 27.8 & 36.9 & 83.0 & 316 &
-Stratified & Oligotrophic & 0.0 & 62.0 & 17.7 & 20.4 \\
-Ōkāreka & 31/10/2024 (10), 22/01/2025 (2) & 3 & 11 & 19.6 & 20.0 & 33.5
-& 355 & Stratified & Mesotrophic & 8.9 & 45.1 & 20.2 & 25.8 \\
+\toprule
+\multicolumn{10}{c}{ } & \multicolumn{4}{c}{Shoreline composition} \\
+\cmidrule(l{3pt}r{3pt}){11-14}
+Lake name & Sampling date (n sites) & Surface area (km²) & Perimeter length (km) & Catchment area (km²) & Mean depth (m) & Maximum depth (m) & Elevation (m) & Mixing regime & Trophic state & Muddy (\%) & Sandy (\%) & Rocky (\%) & Emergent macrophytes (\%)\\
+\midrule
+Rotorua & 20/02/2025 (12) & 81 & 45 & 508.0 & 11.0 & 45.0 & 280 & Polymictic & Eutrophic & 0.0 & 82.8 & 17.2 & 0.0\\
+Rotoiti & 15/01/2025 (12) & 34 & 61 & 123.7 & 31.5 & 124.0 & 279 & Monomictic & Mesotrophic & 0.0 & 68.5 & 21.8 & 9.7\\
+Rotoehu & 10/12/2024 (12) & 8 & 40 & 49.2 & 8.0 & 13.5 & 295 & Polymictic & Eutrophic & 3.3 & 91.2 & 1.7 & 3.8\\
+Rotomā & 6/11/2024 (12) & 11 & 24 & 27.8 & 36.9 & 83.0 & 316 & Monomictic & Oligotrophic & 0.0 & 62.0 & 17.7 & 20.4\\
+Ōkāreka & 31/10/2024 (10), 22/01/2025 (2) & 3 & 11 & 19.6 & 20.0 & 33.5 & 355 & Monomictic & Mesotrophic & 8.9 & 45.1 & 20.2 & 25.8\\
+\bottomrule
 
 \end{longtable}
 
-}
+\end{landscape}
 
 \textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-tbl-lake-overview}{Analysis
+\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
 Notebook}}
 
 {
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1807}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2530}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3494}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1928}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2881}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4071}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2214}}@{}}
 
 \caption{\label{tbl-environmental-biotic-overview}Overview of
 environmental and biotic variables measured at littoral sampling sites,
@@ -1202,7 +1178,7 @@ Townsend, (2000); Barnes \& Hicks, (2003) \\
 }
 
 \textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-tbl-environmental-biotic-overview}{Analysis
+\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
 Notebook}}
 
 \section{Figures}\label{figures}
@@ -1223,32 +1199,28 @@ b) Zoom in of Lake Ōkāreka. c) Guidance map to show the lakes location
 
 \end{figure}%
 
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/analysis-fig-koura-by-lake-output-2.png}}
+\includegraphics[width=3in,height=\textheight,keepaspectratio]{outputs/fig-koura-by-lake.png}
 
 }
 
-\caption{\label{fig-koura-by-lake}Fig. 2 Kōura presence, CPUE, and BPUE
-across lakes. The upper panel shows the proportion of sampled sites with
-kōura present in each lake, with error bars indicating 95\% binomial
+\caption{\label{fig-koura-by-lake}Kōura presence, CPUE, and BPUE across
+lakes. The upper panel shows the proportion of sampled sites with kōura
+present in each lake, with error bars indicating 95\% binomial
 confidence intervals. The middle and lower panels show the distribution
 of kōura CPUE and BPUE, respectively, across lakes using boxplots
 (median, interquartile range, and range).}
 
 \end{figure}%
 
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-fig-koura-by-lake}{Analysis
-Notebook}}
-
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/analysis-fig-occupancy-model-output-2.png}}
+\includegraphics[width=6.5in,height=\textheight,keepaspectratio]{outputs/fig-occupancy-model.png}
 
 }
 
@@ -1265,15 +1237,11 @@ indicates perfect calibration.}
 
 \end{figure}%
 
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-fig-occupancy-model}{Analysis
-Notebook}}
-
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/analysis-fig-cpue-hurdle-output-2.png}}
+\includegraphics[width=5.5in,height=\textheight,keepaspectratio]{outputs/fig-cpue-hurdle.png}
 
 }
 
@@ -1288,15 +1256,11 @@ annotated values report R² and RMSE to summarise model fit.}
 
 \end{figure}%
 
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-fig-cpue-hurdle}{Analysis
-Notebook}}
-
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/analysis-fig-bpue-hurdle-output-2.png}}
+\includegraphics[width=4in,height=\textheight,keepaspectratio]{outputs/fig-bpue-hurdle.png}
 
 }
 
@@ -1311,17 +1275,13 @@ summarise model fit.}
 
 \end{figure}%
 
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-fig-bpue-hurdle}{Analysis
-Notebook}}
-
 \section{Supplementary information}\label{supplementary-information}
 
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/analysis-fig-length-weight-output-2.png}}
+\includegraphics[width=6.5in,height=\textheight,keepaspectratio]{outputs/fig-length-weight.png}
 
 }
 
@@ -1335,15 +1295,11 @@ correction factor. The fitted regression equation is shown on the plot.}
 
 \end{figure}%
 
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-fig-length-weight}{Analysis
-Notebook}}
-
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-latex/analysis-fig-raw-data-all-predictors-output-2.png}}
+\includegraphics[width=5in,height=\textheight,keepaspectratio]{outputs/fig-raw-data-all-predictors.png}
 
 }
 
@@ -1357,28 +1313,23 @@ models.}
 
 \end{figure}%
 
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/analysis-preview.html\#cell-fig-raw-data-all-predictors}{Analysis
-Notebook}}
-
 {
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1020}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1837}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0918}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0510}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0918}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0918}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0918}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0918}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0918}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0918}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1149}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.2529}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1034}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0345}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0920}}@{}}
 
-\caption{\label{tbl-env-fish-summary-static}Distribution of
-environmental and biotic variables measured at littoral sampling sites
-across five Te Arawa lakes in the Rotorua region of Aotearoa New
-Zealand.}
+\caption{\label{tbl-env-fish-summary}Distribution of environmental and
+biotic variables measured at littoral sampling sites across five Te
+Arawa lakes in the Rotorua region of Aotearoa New Zealand.}
 
 \tabularnewline
 
@@ -1605,10 +1556,6 @@ All lakes & Presence Trout & & 60 & 0.10 & 0.00 & 0.00 & 1.00 & 0.04 &
 
 }
 
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
-Notebook}}
-
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{0}{1}
 \bibitem[\citeproctext]{ref-Albertson2018}
@@ -1645,11 +1592,10 @@ models: A practical guide for ecology and evolution. Trends in Ecology
 \url{https://doi.org/10.1016/j.tree.2008.10.008}.
 
 \bibitem[\citeproctext]{ref-Brooks2017}
-Brooks, M. E., K. Kristensen, K. J. van Benthem, A. Magnusson, C. W.
-Berg, A. Nielsen, H. J. Skaug, M. Mächler, \& B. M. Bolker, 2017.
-{glmmTMB} balances speed and flexibility among packages for
-zero-inflated generalized linear mixed modeling. The R Journal 9:
-378--400. \url{https://doi.org/10.32614/RJ-2017-066}.
+Brooks, M., B. Bolker, K. Kristensen, M. Maechler, A. Magnusson, H.
+Skaug, A. Nielsen, C. Berg, \& K. van Bentham, 2017.
+\href{https://doi.org/10.32614/cran.package.glmmtmb}{glmmTMB:
+Generalized linear mixed models using template model builder}.
 
 \bibitem[\citeproctext]{ref-Broughton2017}
 Broughton, R. J., I. D. Marsden, J. V. Hill, \& C. N. Glover, 2017.
@@ -1701,12 +1647,10 @@ Management of Aquatic Ecosystems 423: 21.
 \url{https://doi.org/10.1051/kmae/2022016}.
 
 \bibitem[\citeproctext]{ref-Dedual2002}
-Dedual, M., 2002.
-\href{https://doi.org/10.1007/978-94-017-0771-8_15}{Vertical
-distribution and movements of brown bullhead ({\emph{Ameiurus
-nebulosus}} {Lesueur} 1819) in {Motuoapa Bay}, southern {Lake Taupo},
-{New Zealand}}. In Thorstad, E. B., I. A. Fleming, \& T. F. Næsje (eds)
-Aquatic telemetry. Springer Netherlands. pp. 129--135.
+Dedual, M., 2002. Vertical distribution and movements of brown bullhead
+({\emph{Ameiurus nebulosus}} {Lesueur} 1819) in {Motuoapa Bay}, southern
+{Lake Taupo}, {New Zealand}. Hydrobiologia 483: 129--135.
+\url{https://doi.org/10.1007/978-94-017-0771-8_15}.
 
 \bibitem[\citeproctext]{ref-Devcich1979}
 Devcich, A. A., 1979. An ecological study of {\emph{Paranephrops
