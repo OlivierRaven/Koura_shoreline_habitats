@@ -1,6 +1,6 @@
 # Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand
 
-Olivier V. Raven | olivier.raven@icloud.com
+Olivier V. Raven | <olivier.raven@icloud.com>
 
 **DOI:** To be added upon acceptance
 
@@ -20,7 +20,6 @@ This repository contains the full reproducible workflow supporting the manuscrip
 
     .
     +-- data/
-    |   +-- raw/          # Raw field data (Natural_habitat.xlsx; archived on acceptance)
     |   +-- derived/      # Processed CSVs used in analysis
     +-- outputs/          # Generated figures and tables
     +-- manuscript/       # Manuscript versions, cover letter, reviewer responses
@@ -47,35 +46,24 @@ All analyses are contained in `analysis.qmd`.
 
 ### Install R packages
 
-```r
 install.packages(c("mgcv", "gratia", "glmmTMB", "pROC", "caret",
                    "performance", "kableExtra", "emmeans",
                    "patchwork", "tidyverse", "readxl"))
-```
 
 ### Render the analysis
 
-```bash
 quarto render analysis.qmd
-```
 
 The rendered HTML analysis is available at:
 <https://olivierraven.github.io/Koura_shoreline_habitats/>
 
 ## Data availability
 
-### Raw data
+### Data
 
-The primary raw dataset (`data/raw/Natural_habitat.xlsx`) is tracked in this repository and will be archived in an open-access repository upon manuscript acceptance.
+Derived CSV files are tracked in this repository and are sufficient to reproduce all statistical analyses and figures:
 
-- **Data repository:** *To be added upon acceptance*
-- **DOI:** *To be added upon acceptance*
-
-The raw Excel workbook contains original field observations across multiple worksheets, including site information, environmental variables, kōura catch data, macrophytes, and macroinvertebrates.
-
-### Derived data
-
-Derived CSV files are tracked in this repository and are sufficient to reproduce all statistical analyses and figures without the raw Excel file:
+- **Data repository:** <https://doi.org/10.5281/zenodo.19476793>
 
 - `Site_info.csv` — site metadata
 - `Monitoring_data.csv` — environmental variables per site
