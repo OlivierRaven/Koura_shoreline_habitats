@@ -140,6 +140,12 @@
  
 
 
+% Define chapter counter if document class doesn't have one (e.g. article)
+\ifdefined\thechapter\else
+  \newcounter{chapter}
+  \renewcommand*{\thechapter}{\arabic{chapter}}
+\fi
+
 \usepackage{setspace}
 \onehalfspacing
 
@@ -147,6 +153,7 @@
 \linenumbers
 
 \usepackage{xcolor}
+\usepackage{tikz}
 \usepackage{afterpage}
 \usepackage{eso-pic}
 \definecolor{thesiscream}{RGB}{255, 252, 240}
@@ -212,7 +219,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand},
+  pdftitle={Where do Kōura Live?},
   pdfauthor={Olivier V. Raven; Francis J. Burdon; Ian A. K. Kusabs; Robin Holmes; Deniz Özkundakci},
   pdfkeywords={Rotorua Te Arawa Lakes, North Island, Habitat
 structure, Thermal stress, Generalised additive mixed
@@ -225,7 +232,14 @@ models, Paranephrops planifrons},
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Littoral habitat structure influences freshwater crayfish
+\title{Where do Kōura Live?}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Littoral habitat structure influences freshwater crayfish
 populations in five volcanic lakes of Aotearoa New Zealand}
 \author{Olivier V. Raven \and Francis J. Burdon \and Ian A. K.
 Kusabs \and Robin Holmes \and Deniz Özkundakci}
@@ -261,20 +275,67 @@ practical conservation response.
 \tableofcontents
 }
 
+\ifcsname c@chapter\endcsname \setcounter{chapter}{3}
+
+\addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}Where do K\={o}ura Live?}
+\fi
+\providecommand{\thechapter}{3}
 \thispagestyle{empty}
-\clearpage
-\thispagestyle{empty}
-\AddToShipoutPictureBG*{\AtPageUpperLeft{\includegraphics[width=\paperwidth,height=\paperheight]{images/ch3_cover.jpg}}}
+\begin{tikzpicture}[remember picture, overlay]
+  \begin{scope}
+    \clip ([yshift=-7cm]current page.north west)
+          rectangle ([yshift=4.5cm]current page.south east);
+    \node[inner sep=0pt, anchor=north]
+      at ([yshift=-7cm]current page.north)
+      {\includegraphics[width=\paperwidth]{images/ch3_cover.jpg}};
+  \end{scope}
+  \fill[black]
+    (current page.north west) rectangle ([yshift=-7cm]current page.north east);
+  \node[color=thesissand, align=left,
+        font=\fontsize{13}{16}\selectfont\sffamily, anchor=west]
+    at ([xshift=1.5cm, yshift=-1.5cm]current page.north west)
+    {Chapter \thechapter};
+  \node[color=white, text width=0.85\paperwidth, align=left,
+        font=\fontsize{22}{28}\selectfont\bfseries\sffamily, anchor=west]
+    at ([xshift=1.5cm, yshift=-4cm]current page.north west)
+    {Where do K\={o}ura Live?};
+  \fill[black]
+    (current page.south west) rectangle ([yshift=4.5cm]current page.south east);
+  \node[color=white, text width=0.85\paperwidth, align=left,
+        font=\fontsize{9}{13}\selectfont\sffamily, anchor=west]
+    at ([xshift=1.5cm, yshift=3.2cm]current page.south west)
+    {Olivier V.\ Raven, Francis J.\ Burdon, Ian A.\ K.\ Kusabs, Robin Holmes \& Deniz Özkundakci};
+  \node[color=thesissand, text width=0.85\paperwidth, align=left,
+        font=\fontsize{9}{13}\selectfont\itshape\sffamily, anchor=west]
+    at ([xshift=1.5cm, yshift=1.5cm]current page.south west)
+    {Hydrobiologia --- Accepted};
+\end{tikzpicture}
 \null
-\newpage
-\thispagestyle{empty}
-\pagecolor{thesissand}
-\vspace{1cm}
-\begin{center}
-\textit{Which natural shoreline features do kōura prefer?}
-\end{center}
-\afterpage{\pagecolor{thesiscream}}
 \clearpage
+
+\subsection*{Abstract}\label{abstract}
+\addcontentsline{toc}{subsection}{Abstract}
+
+Freshwater crayfish are increasingly threatened by habitat degradation,
+declining water quality, and invasive species. In Aotearoa New Zealand,
+lake populations of the endemic northern freshwater crayfish
+\emph{Paranephrops planifrons} (kōura) have declined by up to 91 \%.
+Identifying key habitat requirements is essential to improve the
+conservation of crayfish facing multiple threats. To assess littoral
+habitat associations, we surveyed shoreline habitats in five Aotearoa
+lakes and modelled kōura occupancy, abundance, and biomass using
+generalised additive mixed models. Kōura occupancy increased with
+shoreline habitat complexity, particularly coarser substrate types and
+greater riparian vegetation cover. Elevated summer surface water
+temperatures were negatively associated with kōura occupancy and
+abundance, indicating reduced habitat suitability during warm periods.
+pH was positively correlated with kōura abundance and biomass. Our
+results suggest that the composition and physical structure of littoral
+habitats are important drivers of kōura distribution and abundance. As
+climatic drivers resulting in warmer water temperatures and reduced
+dissolved oxygen are difficult to manage, targeted protection and
+restoration of coarse substrate shoreline habitats may provide a
+practical conservation response.
 
 \subsection{Introduction}\label{introduction}
 
@@ -409,10 +470,10 @@ lakes (Rotomā, maximum depth 83 m). Shorelines are characterised by a
 mix of native riparian vegetation, exotic pasture, and low-density
 residential development, with several lakes also supporting stands of
 emergent macrophytes. Detailed lake characteristics and shoreline
-composition are summarised in Table 1. All five lakes have populations
-of kōura, and brown bullhead catfish was present in Lakes Rotorua and
-Rotoiti at time of sampling (\citeproc{ref-Kusabs2026}{Kusabs et al.,
-2026}).
+composition are summarised in Table~\ref{tbl-lake-overview}. All five
+lakes have populations of kōura, and brown bullhead catfish was present
+in Lakes Rotorua and Rotoiti at time of sampling
+(\citeproc{ref-Kusabs2026}{Kusabs et al., 2026}).
 
 To survey these lakes, a stratified-random survey design was developed.
 The entire accessible shoreline of each lake was first mapped using
@@ -445,6 +506,57 @@ random coordinates without enforcing fixed spacing between sites. The
 final coordinates of the 12 random survey sites per lake were extracted
 directly from the GRTS output (Figure~\ref{fig-site-map}).
 
+\begin{landscape}
+
+\begin{longtable}[t]{llrrrrrrllrrrr}
+
+\caption{\label{tbl-lake-overview}Physical, morphometric, and trophic
+characteristics of the five Rotorua Te Arawa lakes surveyed, including
+sampling dates and number of littoral sites sampled per lake. Lake
+surface area, perimeter length, catchment area, depth, elevation, mixing
+regime, and trophic state for 2024 are derived from the Land, Air, Water
+Aotearoa (LAWA) (\citeproc{ref-LAWA2025}{2025}) database. Shoreline
+composition percentages are calculated from useable shoreline only,
+excluding geothermal and cliff sections.}
+
+\tabularnewline
+
+\toprule
+\multicolumn{10}{c}{ } & \multicolumn{4}{c}{Shoreline composition} \\
+\cmidrule(l{3pt}r{3pt}){11-14}
+Lake name & Sampling date (n sites) & Surface area (km²) & Perimeter length (km) & Catchment area (km²) & Mean depth (m) & Maximum depth (m) & Elevation (m) & Mixing regime & Trophic state & Muddy (\%) & Sandy (\%) & Rocky (\%) & Emergent macrophytes (\%)\\
+\midrule
+Rotorua & 20/02/2025 (12) & 81 & 45 & 508.0 & 11.0 & 45.0 & 280 & Polymictic & Eutrophic & 0.0 & 82.8 & 17.2 & 0.0\\
+Rotoiti & 15/01/2025 (12) & 34 & 61 & 123.7 & 31.5 & 124.0 & 279 & Monomictic & Mesotrophic & 0.0 & 68.5 & 21.8 & 9.7\\
+Rotoehu & 10/12/2024 (12) & 8 & 40 & 49.2 & 8.0 & 13.5 & 295 & Polymictic & Eutrophic & 3.3 & 91.2 & 1.7 & 3.8\\
+Rotomā & 6/11/2024 (12) & 11 & 24 & 27.8 & 36.9 & 83.0 & 316 & Monomictic & Oligotrophic & 0.0 & 62.0 & 17.7 & 20.4\\
+Ōkāreka & 31/10/2024 (10), 22/01/2025 (2) & 3 & 11 & 19.6 & 20.0 & 33.5 & 355 & Monomictic & Mesotrophic & 8.9 & 45.1 & 20.2 & 25.8\\
+\bottomrule
+
+\end{longtable}
+
+\end{landscape}
+
+\textsubscript{Source:
+\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
+Notebook}}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{images/Natural_habitat_map.png}}
+
+}
+
+\caption{\label{fig-site-map}Map of the sampling locations with
+different dominant littoral habitat types classified. a) Overview map of
+the 5 lakes. Lakes where invasive catfish were detected are indicated.
+b) Zoom in of Lake Ōkāreka. c) Guidance map to show the lakes location
+(white square) on the North Island of Aotearoa New Zealand.}
+
+\end{figure}%
+
 \subsubsection{Data collection}\label{data-collection}
 
 In total, 60 sampling sites were sampled once in the Austral
@@ -454,6 +566,90 @@ locations with unstable lake margins or depths exceeding 1 m,
 observations and measurements were conducted from a boat. At each site,
 physical, chemical and biological parameters were recorded
 (Table~\ref{tbl-environmental-biotic-overview}).
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2881}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4071}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2214}}@{}}
+
+\caption{\label{tbl-environmental-biotic-overview}Overview of
+environmental and biotic variables measured at littoral sampling sites,
+including variable descriptions, units, and hypothesised relevance for
+kōura (\emph{Paranephrops planifrons}). Variables were selected a priori
+based on known habitat requirements, physiological constraints, and
+potential biotic interactions influencing kōura occurrence, abundance,
+and biomass in lake littoral zones.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Description / Unit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Hypothesised importance for kōura
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+References
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lake identity & Categorical variable identifying lake & Captures
+unmeasured lake-specific differences in water chemistry, productivity,
+and catchment characteristics. & Zuur et al., (2009) \\
+Substrate index & Index based on \% cover of bedrock, boulders, cobble,
+gravel, sand, mud, and organic matter & Important for burrowing and
+shelter availability. Coarser substrates increase shelter availability
+through more crevices. & Usio \& Townsend, (2000); Kusabs et al.,
+(2015b) \\
+Slope & Slope from shoreline to the 5 m depth contour & Steeper slopes
+facilitate access to deeper water during daylight refuging and associate
+with coarser substrates. & Devcich, (1979); Kusabs et al., (2015b) \\
+Riparian vegetation & Percentage cover of vegetation growing in the
+riparian zone & Contributes detrital inputs, bank stability, and shading
+at the water's edge. & Parkyn et al., (2002) \\
+Overhanging trees & Percentage cover of trees hanging over the shoreline
+& Provides direct shading and structural inputs into littoral habitats.
+& Smith et al., (1996); Vedia et al., (2017) \\
+Wood cover & Cover of wooden logs and tree branches in the sample site &
+Provides physical structure creating refuge spaces and supports
+macroinvertebrate prey availability. & Parkyn et al., (2009) \\
+Emergent and submerged macrophytes & Percentage cover of macrophytes in
+the sample site divided over emergent and submerged and native and
+non-native species & Native macrophytes can provide cover and serve as a
+food source. Non-native macrophytes may alter movement pathways and
+modify local habitat and water quality conditions. & Coffey \& Clayton,
+(1988); Kusabs \& Quinn, (2009) \\
+Temperature & Temperature of surface water in °C & Influences metabolic
+rate, activity, physiological stress, and habitat suitability. &
+Devcich, (1979); Hammond et al., (2006); Parkyn \& Collier, (2002);
+Angilletta et al., (2004) \\
+Dissolved oxygen & Dissolved oxygen concentration in mg L⁻¹ & Essential
+for respiration; reduced oxygen may constrain activity and habitat use.
+& Hammond et al., (2006); Broughton et al., (2017) \\
+Specific conductivity & Electrical conductivity of the water in µS cm⁻¹
+& Reflects overall lake productivity, supporting food availability. &
+Devcich, (1979) \\
+pH & Acidity or alkalinity of the water & Influences moulting success
+and exoskeleton strength, affected by acidity or calcium levels. &
+Olsson et al., (2006) \\
+Fish presence & Presence/absence of selected native and non-native fish
+species & Fish act as predators, competitors, or indirectly modify
+habitat structure. & Shave et al., (1994); Barnes, (1996); Usio \&
+Townsend, (2000); Barnes \& Hicks, (2003) \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
+Notebook}}
 
 Physical characteristics were assessed using both visual estimates and
 field measurements. Substrate composition was visually estimated with an
@@ -637,8 +833,25 @@ effect of lake on kōura occupancy (binomial GLMM: likelihood ratio test,
 \emph{p} = 0.013), and BPUE (Tweedie GLMM: χ²₄ = 9.66, \emph{p} = 0.047;
 Figure~\ref{fig-koura-by-lake}).
 
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=3in,height=\textheight,keepaspectratio]{outputs/fig-koura-by-lake.png}
+
+}
+
+\caption{\label{fig-koura-by-lake}Kōura presence, CPUE, and BPUE across
+lakes. The upper panel shows the proportion of sampled sites with kōura
+present in each lake, with error bars indicating 95\% binomial
+confidence intervals. The middle and lower panels show the distribution
+of kōura CPUE and BPUE, respectively, across lakes using boxplots
+(median, interquartile range, and range).}
+
+\end{figure}%
+
 The five lakes differed substantially in environmental and biotic
-characteristics (Table~\ref{tbl-env-fish-summary}). Physical habitat
+characteristics (Table~\ref{tbl-an-env-fish-summary}). Physical habitat
 structure varied among lakes, with differences in substrate index,
 nearshore slope, and littoral vegetation cover. Emergent macrophytes
 were absent from Lake Rotorua but present in the other lakes,
@@ -691,6 +904,27 @@ CPUE and BPUE hurdle models produced the same structure and effect
 directions as the occupancy model, so only the positive Gamma components
 are reported here.
 
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=6.5in,height=\textheight,keepaspectratio]{outputs/fig-occupancy-model.png}
+
+}
+
+\caption{\label{fig-occupancy-model}Kōura occupancy GAMM results and
+model performance. a) Estimated smooth terms for riparian vegetation,
+substrate index, surface water temperature, and specific conductivity,
+shown as partial effects with 95\% confidence intervals. See Fig. S2 for
+raw data underlying modelled relationships. b) Receiver operating
+characteristic (ROC) curve illustrating model discrimination, with the
+area under the curve (AUC) reported. c) Calibration plot based on five
+equal-frequency bins, comparing mean predicted occupancy probabilities
+with observed proportions of occupied sites; the dashed 1:1 line
+indicates perfect calibration.}
+
+\end{figure}%
+
 \subsubsection{Kōura CPUE}\label{kux14dura-cpue}
 
 The full Gamma GAMM for positive CPUE explained 48.4 \% of the deviance
@@ -721,6 +955,25 @@ systematic patterns in residual variance across fitted values. The model
 tended to slightly over-predict very low CPUE values and under predict
 the highest observations.
 
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=5.5in,height=\textheight,keepaspectratio]{outputs/fig-cpue-hurdle.png}
+
+}
+
+\caption{\label{fig-cpue-hurdle}Kōura CPUE GAMM results and model
+performance. a) Estimated smooth terms for surface water temperature,
+pH, and emergent native macrophytes, shown with partial effects and 95\%
+confidence intervals. See Fig. S2 for raw data underlying modelled
+relationships. b) Predicted versus observed CPUE from the positive
+(Gamma) component of the hurdle model, with predictions excluding the
+random lake effect. The dashed 1:1 line indicates perfect agreement;
+annotated values report R² and RMSE to summarise model fit.}
+
+\end{figure}%
+
 \subsubsection{Kōura BPUE}\label{kux14dura-bpue}
 
 The full Gamma GAMM for positive BPUE explained 97.4 \% of the deviance
@@ -744,6 +997,25 @@ though minor departure from distributional assumptions was noted at the
 lower tail, likely reflecting a small number of high-biomass sites.
 Predictive accuracy was moderate (Figure~\ref{fig-bpue-hurdle} b), with
 a tendency for the model to under predict the highest BPUE values.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=4in,height=\textheight,keepaspectratio]{outputs/fig-bpue-hurdle.png}
+
+}
+
+\caption{\label{fig-bpue-hurdle}Kōura BPUE GAMM results and model
+performance. a) Estimated smooth terms for pH and emergent native
+macrophytes, shown with partial effects and 95\% confidence intervals.
+See Fig. S2 for raw data underlying modelled relationships. b) Predicted
+versus observed BPUE from the positive (Gamma) component of the hurdle
+model, with predictions excluding the random lake effect. The dashed 1:1
+line indicates perfect agreement; annotated values report R² and RMSE to
+summarise model fit.}
+
+\end{figure}%
 
 \subsection{Discussion}\label{discussion}
 
@@ -1064,221 +1336,6 @@ raw dataset and code are archived on Zenodo
 including the cover letter and reviewer responses, are available in the
 manuscript repository in the interest of open and transparent science.
 
-\subsection{Tables}\label{tables}
-
-\begin{landscape}
-
-\begin{longtable}[t]{llrrrrrrllrrrr}
-
-\caption{\label{tbl-lake-overview}Physical, morphometric, and trophic
-characteristics of the five Rotorua Te Arawa lakes surveyed, including
-sampling dates and number of littoral sites sampled per lake. Lake
-surface area, perimeter length, catchment area, depth, elevation, mixing
-regime, and trophic state for 2024 are derived from the Land, Air, Water
-Aotearoa (LAWA) (\citeproc{ref-LAWA2025}{2025}) database. Shoreline
-composition percentages are calculated from useable shoreline only,
-excluding geothermal and cliff sections.}
-
-\tabularnewline
-
-\toprule
-\multicolumn{10}{c}{ } & \multicolumn{4}{c}{Shoreline composition} \\
-\cmidrule(l{3pt}r{3pt}){11-14}
-Lake name & Sampling date (n sites) & Surface area (km²) & Perimeter length (km) & Catchment area (km²) & Mean depth (m) & Maximum depth (m) & Elevation (m) & Mixing regime & Trophic state & Muddy (\%) & Sandy (\%) & Rocky (\%) & Emergent macrophytes (\%)\\
-\midrule
-Rotorua & 20/02/2025 (12) & 81 & 45 & 508.0 & 11.0 & 45.0 & 280 & Polymictic & Eutrophic & 0.0 & 82.8 & 17.2 & 0.0\\
-Rotoiti & 15/01/2025 (12) & 34 & 61 & 123.7 & 31.5 & 124.0 & 279 & Monomictic & Mesotrophic & 0.0 & 68.5 & 21.8 & 9.7\\
-Rotoehu & 10/12/2024 (12) & 8 & 40 & 49.2 & 8.0 & 13.5 & 295 & Polymictic & Eutrophic & 3.3 & 91.2 & 1.7 & 3.8\\
-Rotomā & 6/11/2024 (12) & 11 & 24 & 27.8 & 36.9 & 83.0 & 316 & Monomictic & Oligotrophic & 0.0 & 62.0 & 17.7 & 20.4\\
-Ōkāreka & 31/10/2024 (10), 22/01/2025 (2) & 3 & 11 & 19.6 & 20.0 & 33.5 & 355 & Monomictic & Mesotrophic & 8.9 & 45.1 & 20.2 & 25.8\\
-\bottomrule
-
-\end{longtable}
-
-\end{landscape}
-
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
-Notebook}}
-
-{
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2881}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4071}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2214}}@{}}
-
-\caption{\label{tbl-environmental-biotic-overview}Overview of
-environmental and biotic variables measured at littoral sampling sites,
-including variable descriptions, units, and hypothesised relevance for
-kōura (\emph{Paranephrops planifrons}). Variables were selected a priori
-based on known habitat requirements, physiological constraints, and
-potential biotic interactions influencing kōura occurrence, abundance,
-and biomass in lake littoral zones.}
-
-\tabularnewline
-
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Variable
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Description / Unit
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Hypothesised importance for kōura
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-References
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-Lake identity & Categorical variable identifying lake & Captures
-unmeasured lake-specific differences in water chemistry, productivity,
-and catchment characteristics. & Zuur et al., (2009) \\
-Substrate index & Index based on \% cover of bedrock, boulders, cobble,
-gravel, sand, mud, and organic matter & Important for burrowing and
-shelter availability. Coarser substrates increase shelter availability
-through more crevices. & Usio \& Townsend, (2000); Kusabs et al.,
-(2015b) \\
-Slope & Slope from shoreline to the 5 m depth contour & Steeper slopes
-facilitate access to deeper water during daylight refuging and associate
-with coarser substrates. & Devcich, (1979); Kusabs et al., (2015b) \\
-Riparian vegetation & Percentage cover of vegetation growing in the
-riparian zone & Contributes detrital inputs, bank stability, and shading
-at the water's edge. & Parkyn et al., (2002) \\
-Overhanging trees & Percentage cover of trees hanging over the shoreline
-& Provides direct shading and structural inputs into littoral habitats.
-& Smith et al., (1996); Vedia et al., (2017) \\
-Wood cover & Cover of wooden logs and tree branches in the sample site &
-Provides physical structure creating refuge spaces and supports
-macroinvertebrate prey availability. & Parkyn et al., (2009) \\
-Emergent and submerged macrophytes & Percentage cover of macrophytes in
-the sample site divided over emergent and submerged and native and
-non-native species & Native macrophytes can provide cover and serve as a
-food source. Non-native macrophytes may alter movement pathways and
-modify local habitat and water quality conditions. & Coffey \& Clayton,
-(1988); Kusabs \& Quinn, (2009) \\
-Temperature & Temperature of surface water in °C & Influences metabolic
-rate, activity, physiological stress, and habitat suitability. &
-Devcich, (1979); Hammond et al., (2006); Parkyn \& Collier, (2002);
-Angilletta et al., (2004) \\
-Dissolved oxygen & Dissolved oxygen concentration in mg L⁻¹ & Essential
-for respiration; reduced oxygen may constrain activity and habitat use.
-& Hammond et al., (2006); Broughton et al., (2017) \\
-Specific conductivity & Electrical conductivity of the water in µS cm⁻¹
-& Reflects overall lake productivity, supporting food availability. &
-Devcich, (1979) \\
-pH & Acidity or alkalinity of the water & Influences moulting success
-and exoskeleton strength, affected by acidity or calcium levels. &
-Olsson et al., (2006) \\
-Fish presence & Presence/absence of selected native and non-native fish
-species & Fish act as predators, competitors, or indirectly modify
-habitat structure. & Shave et al., (1994); Barnes, (1996); Usio \&
-Townsend, (2000); Barnes \& Hicks, (2003) \\
-
-\end{longtable}
-
-}
-
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
-Notebook}}
-
-\subsection{Figures}\label{figures}
-
-\begin{figure}
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{images/Natural_habitat_map.png}}
-
-}
-
-\caption{\label{fig-site-map}Map of the sampling locations with
-different dominant littoral habitat types classified. a) Overview map of
-the 5 lakes. Lakes where invasive catfish were detected are indicated.
-b) Zoom in of Lake Ōkāreka. c) Guidance map to show the lakes location
-(white square) on the North Island of Aotearoa New Zealand.}
-
-\end{figure}%
-
-\begin{figure}
-
-\centering{
-
-\includegraphics[width=3in,height=\textheight,keepaspectratio]{outputs/fig-koura-by-lake.png}
-
-}
-
-\caption{\label{fig-koura-by-lake}Kōura presence, CPUE, and BPUE across
-lakes. The upper panel shows the proportion of sampled sites with kōura
-present in each lake, with error bars indicating 95\% binomial
-confidence intervals. The middle and lower panels show the distribution
-of kōura CPUE and BPUE, respectively, across lakes using boxplots
-(median, interquartile range, and range).}
-
-\end{figure}%
-
-\begin{figure}
-
-\centering{
-
-\includegraphics[width=6.5in,height=\textheight,keepaspectratio]{outputs/fig-occupancy-model.png}
-
-}
-
-\caption{\label{fig-occupancy-model}Kōura occupancy GAMM results and
-model performance. a) Estimated smooth terms for riparian vegetation,
-substrate index, surface water temperature, and specific conductivity,
-shown as partial effects with 95\% confidence intervals. See Fig. S2 for
-raw data underlying modelled relationships. b) Receiver operating
-characteristic (ROC) curve illustrating model discrimination, with the
-area under the curve (AUC) reported. c) Calibration plot based on five
-equal-frequency bins, comparing mean predicted occupancy probabilities
-with observed proportions of occupied sites; the dashed 1:1 line
-indicates perfect calibration.}
-
-\end{figure}%
-
-\begin{figure}
-
-\centering{
-
-\includegraphics[width=5.5in,height=\textheight,keepaspectratio]{outputs/fig-cpue-hurdle.png}
-
-}
-
-\caption{\label{fig-cpue-hurdle}Kōura CPUE GAMM results and model
-performance. a) Estimated smooth terms for surface water temperature,
-pH, and emergent native macrophytes, shown with partial effects and 95\%
-confidence intervals. See Fig. S2 for raw data underlying modelled
-relationships. b) Predicted versus observed CPUE from the positive
-(Gamma) component of the hurdle model, with predictions excluding the
-random lake effect. The dashed 1:1 line indicates perfect agreement;
-annotated values report R² and RMSE to summarise model fit.}
-
-\end{figure}%
-
-\begin{figure}
-
-\centering{
-
-\includegraphics[width=4in,height=\textheight,keepaspectratio]{outputs/fig-bpue-hurdle.png}
-
-}
-
-\caption{\label{fig-bpue-hurdle}Kōura BPUE GAMM results and model
-performance. a) Estimated smooth terms for pH and emergent native
-macrophytes, shown with partial effects and 95\% confidence intervals.
-See Fig. S2 for raw data underlying modelled relationships. b) Predicted
-versus observed BPUE from the positive (Gamma) component of the hurdle
-model, with predictions excluding the random lake effect. The dashed 1:1
-line indicates perfect agreement; annotated values report R² and RMSE to
-summarise model fit.}
-
-\end{figure}%
-
 \subsection{Supplementary information}\label{supplementary-information}
 
 \begin{figure}
@@ -1331,8 +1388,8 @@ models.}
   >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
   >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0920}}@{}}
 
-\caption{\label{tbl-env-fish-summary}Distribution of environmental and
-biotic variables measured at littoral sampling sites across five Te
+\caption{\label{tbl-an-env-fish-summary}Distribution of environmental
+and biotic variables measured at littoral sampling sites across five Te
 Arawa lakes in the Rotorua region of Aotearoa New Zealand.}
 
 \tabularnewline
@@ -1559,6 +1616,10 @@ All lakes & Presence Trout & & 60 & 0.10 & 0.00 & 0.00 & 1.00 & 0.04 &
 \end{longtable}
 
 }
+
+\textsubscript{Source:
+\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
+Notebook}}
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{0}{1}

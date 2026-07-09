@@ -462,10 +462,7 @@ knitr::kable(biotic_vars)
 
 # Environmental and fish summaries
 ```{r}
-#| label: tbl-an-env-fish-summary
-#| include: true
-#| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
-
+#| include: false
 
 M_C_data <- Monitoring_CPUE_data
 lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
@@ -660,6 +657,13 @@ write.csv(
   file = file.path(out_dir, "tbl-env-fish-summary.csv"),
   row.names = FALSE
 )
+
+```
+
+```{r}
+#| label: tbl-an-env-fish-summary-widget
+#| include: true
+#| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
 
 DT::datatable(
   EnvBio_summary_table,

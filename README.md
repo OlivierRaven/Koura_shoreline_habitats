@@ -2,7 +2,7 @@
 
 Olivier V. Raven | <olivier.raven@icloud.com>
 
-**DOI:** To be added upon acceptance
+**DOI:** Raven, O.V., Burdon, F.J., Kusabs, I.A.K. et al. Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand. Hydrobiologia (2026). <https://doi.org/10.1007/s10750-026-06302-z>
 
 ## Overview
 
@@ -107,7 +107,7 @@ Reviewer comments and author responses are included in the `manuscript/` folder 
 
 ## Citation
 
-*To be added upon acceptance.*
+Raven, O.V., Burdon, F.J., Kusabs, I.A.K. et al. Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand. Hydrobiologia (2026). <https://doi.org/10.1007/s10750-026-06302-z>
 
 ## Licence
 
