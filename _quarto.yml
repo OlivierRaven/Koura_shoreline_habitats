@@ -30,6 +30,9 @@ format:
     toc-location: left
     smooth-scroll: true
     format-links: [pdf, docx]
+    include-in-header:
+      text: |
+        <style>#title-block-header .abstract { display: none; }</style>
   pdf:
     toc: true
     colorlinks: true

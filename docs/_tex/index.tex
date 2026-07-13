@@ -243,7 +243,7 @@ models, Paranephrops planifrons},
 populations in five volcanic lakes of Aotearoa New Zealand}
 \author{Olivier V. Raven \and Francis J. Burdon \and Ian A. K.
 Kusabs \and Robin Holmes \and Deniz Özkundakci}
-\date{2026-06-29}
+\date{2026-07-09}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -275,9 +275,14 @@ practical conservation response.
 \tableofcontents
 }
 
-\ifcsname c@chapter\endcsname \setcounter{chapter}{3}
+\clearpage
+\providecommand{\chaptermark}[1]{}
 
-\addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}Where do K\={o}ura Live?}
+\ifcsname c@chapter\endcsname \setcounter{chapter}{3}
+\setcounter{section}{0}
+
+\addcontentsline{toc}{chapter}{\protect\numberline{3}Where do K\={o}ura Live?}
+
 \fi
 \providecommand{\thechapter}{3}
 \thispagestyle{empty}
@@ -287,7 +292,7 @@ practical conservation response.
           rectangle ([yshift=4.5cm]current page.south east);
     \node[inner sep=0pt, anchor=north]
       at ([yshift=-7cm]current page.north)
-      {\includegraphics[width=\paperwidth]{images/ch3_cover.jpg}};
+      {\includegraphics[height=18.2cm]{images/ch3_cover.jpg}};
   \end{scope}
   \fill[black]
     (current page.north west) rectangle ([yshift=-7cm]current page.north east);

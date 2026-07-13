@@ -58,7 +58,7 @@ author:
         address: Private Bag 3105, Hamilton 3240
         country: New Zealand
 
-date: 29 June 2026
+date: 09 July 2026
 
 abstract: "Freshwater crayfish are increasingly threatened by habitat degradation, declining water quality, and invasive species. In Aotearoa New Zealand, lake populations of the endemic northern freshwater crayfish *Paranephrops planifrons* (kōura) have declined by up to 91 %. Identifying key habitat requirements is essential to improve the conservation of crayfish facing multiple threats. To assess littoral habitat associations, we surveyed shoreline habitats in five Aotearoa lakes and modelled kōura occupancy, abundance, and biomass using generalised additive mixed models. Kōura occupancy increased with shoreline habitat complexity, particularly coarser substrate types and greater riparian vegetation cover. Elevated summer surface water temperatures were negatively associated with kōura occupancy and abundance, indicating reduced habitat suitability during warm periods. pH was positively correlated with kōura abundance and biomass. Our results suggest that the composition and physical structure of littoral habitats are important drivers of kōura distribution and abundance. As climatic drivers resulting in warmer water temperatures and reduced dissolved oxygen are difficult to manage, targeted protection and restoration of coarse substrate shoreline habitats may provide a practical conservation response."
  
@@ -86,9 +86,13 @@ knitr:
 ---
 
 ::: {.content-visible when-format="pdf"}
+\clearpage
+\providecommand{\chaptermark}[1]{}
 \ifcsname c@chapter\endcsname
 \setcounter{chapter}{3}
-\addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}Where do K\={o}ura Live?}
+\setcounter{section}{0}
+\addcontentsline{toc}{chapter}{\protect\numberline{3}Where do K\={o}ura Live?}
+\chaptermark{Where do K\={o}ura Live?}
 \fi
 \providecommand{\thechapter}{3}
 \thispagestyle{empty}
@@ -98,7 +102,7 @@ knitr:
           rectangle ([yshift=4.5cm]current page.south east);
     \node[inner sep=0pt, anchor=north]
       at ([yshift=-7cm]current page.north)
-      {\includegraphics[width=\paperwidth]{images/ch3_cover.jpg}};
+      {\includegraphics[height=18.2cm]{images/ch3_cover.jpg}};
   \end{scope}
   \fill[black]
     (current page.north west) rectangle ([yshift=-7cm]current page.north east);
@@ -135,11 +139,16 @@ Olivier V. Raven, Francis J. Burdon, Ian A. K. Kusabs, Robin Holmes & Deniz Özk
 {{< pagebreak >}}
 :::
 
+::: {.content-visible when-format="html"}
+# Where do Kōura Live? {.unnumbered}
+:::
+
 ```{r}
 #| label: start-ch3
 #| include: false
 
-chapter_dir <- if (basename(normalizePath(getwd())) == "03_koura_shoreline_habitats") normalizePath(getwd()) else normalizePath(file.path(getwd(), "03_koura_shoreline_habitats"))
+chapter_dir <- normalizePath(file.path(dirname(knitr::current_input(dir = TRUE)), "03_koura_shoreline_habitats"))
+if (!dir.exists(chapter_dir)) chapter_dir <- normalizePath(dirname(knitr::current_input(dir = TRUE)))
 fig_labels <- c("fig-koura-by-lake", "fig-occupancy-model", "fig-cpue-hurdle",
                  "fig-bpue-hurdle", "fig-length-weight", "fig-raw-data-all-predictors")
 out_dir <- file.path(chapter_dir, "outputs")
@@ -147,11 +156,24 @@ dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 parent_knit_env <- knitr::knit_global()
 
-tmp_r <- tempfile(fileext = ".R")
-knitr::purl(file.path(chapter_dir, "analysis.qmd"), output = tmp_r, quiet = TRUE, documentation = 0)
-.old_wd <- setwd(chapter_dir)
-eval(parse(file = tmp_r), envir = parent_knit_env)
-setwd(.old_wd)
+qmd_lines <- readLines(file.path(chapter_dir, "analysis.qmd"), warn = FALSE)
+in_r_chunk <- FALSE
+r_lines <- character(0)
+for (ln in qmd_lines) {
+  if (grepl("^```\\{[rR]", ln)) { in_r_chunk <- TRUE; next }
+  if (grepl("^```", ln) && in_r_chunk) { in_r_chunk <- FALSE; next }
+  if (in_r_chunk) r_lines <- c(r_lines, ln)
+}
+r_lines <- c(
+  paste0(".chwd <- setwd(", deparse(chapter_dir), ")"),
+  r_lines,
+  "setwd(.chwd)", "rm(.chwd)"
+)
+tmp_r <- file.path(chapter_dir, ".analysis_tmp.R")
+writeLines(r_lines, tmp_r)
+eval(parse(file = tmp_r, encoding = "UTF-8"))
+unlink(tmp_r)
+out_dir <- file.path(chapter_dir, "outputs")
 
 if (!all(file.exists(file.path(out_dir, paste0(fig_labels, ".png"))))) {
   .old_wd <- setwd(chapter_dir)
@@ -162,6 +184,13 @@ if (!all(file.exists(file.path(out_dir, paste0(fig_labels, ".png"))))) {
     if (file.exists(src)) file.copy(src, file.path(out_dir, paste0(lbl, ".png")), overwrite = TRUE)
   }
 }
+input_dir <- normalizePath(dirname(knitr::current_input(dir = TRUE)))
+if (input_dir != chapter_dir) {
+  thesis_out <- file.path(input_dir, "outputs")
+  dir.create(thesis_out, showWarnings = FALSE, recursive = TRUE)
+  file.copy(list.files(out_dir, full.names = TRUE, pattern = "\\.(png|jpg)$"), thesis_out, overwrite = TRUE)
+}
+knitr::opts_knit$set(root.dir = chapter_dir)
 ```
 
 ## Abstract {.unnumbered}
