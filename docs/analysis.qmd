@@ -51,11 +51,11 @@ Weed_data          <- read_excel(exc_file_dir, sheet = "Weed_data")  %>% dplyr::
 Fish_data          <- read_excel(exc_file_dir, sheet = "Fish_data")  %>% dplyr::select(-starts_with("..."))
 Macroinvertebrates <- read_excel(exc_file_dir, sheet = "Macroinvertebrates")
 
-Site_info          <- Site_info          |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
-Monitoring_data    <- Monitoring_data    |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
-Weed_data          <- Weed_data          |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
-Fish_data          <- Fish_data          |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
-Macroinvertebrates <- Macroinvertebrates |> dplyr::filter(!stringr::str_ends(Monitoring_ID, "_1"))
+Site_info          <- Site_info          |> dplyr::filter(!stringr::str_ends(monitoring_id, "_1"))
+Monitoring_data    <- Monitoring_data    |> dplyr::filter(!stringr::str_ends(monitoring_id, "_1"))
+Weed_data          <- Weed_data          |> dplyr::filter(!stringr::str_ends(monitoring_id, "_1"))
+Fish_data          <- Fish_data          |> dplyr::filter(!stringr::str_ends(monitoring_id, "_1"))
+Macroinvertebrates <- Macroinvertebrates |> dplyr::filter(!stringr::str_ends(monitoring_id, "_1"))
 
 # Save as csv to derived
 write.csv(Site_info,          file.path(der_data_dir, "Site_info.csv"),          row.names = FALSE)
@@ -117,9 +117,9 @@ format_pval <- function(p) {
 #| fig-cap: "Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot."
 
 lw_model <- lm(
-log10(Weight_g) ~ log10(Length_mm),
+log10(weight_g) ~ log10(length_mm),
 data = Fish_data,
-subset = Species_name == "Freshwater_crayfish" | Maori_name == "Kōura",
+subset = species_name == "Freshwater_crayfish" | maori_name == "Kōura",
 na.action = na.exclude
 )
 
@@ -128,9 +128,9 @@ c <- 10^(0.5 * sigma_log10^2)
 
 Fish_data <- Fish_data |>
 mutate(
-is_koura = Species_name == "Freshwater_crayfish" | Maori_name == "Kōura",
+is_koura = species_name == "Freshwater_crayfish" | maori_name == "Kōura",
 Predicted_weight = case_when(
-!is.na(Weight_g) ~ Weight_g,
+!is.na(weight_g) ~ weight_g,
 is_koura ~ {
 pred_log <- predict(lw_model, newdata = pick(everything()))
 10^(pred_log) * c
@@ -138,8 +138,8 @@ pred_log <- predict(lw_model, newdata = pick(everything()))
 TRUE ~ NA_real_
 ),
 Weight_source = case_when(
-is_koura & !is.na(Weight_g) ~ "measured",
-is_koura & is.na(Weight_g) ~ "predicted",
+is_koura & !is.na(weight_g) ~ "measured",
+is_koura & is.na(weight_g) ~ "predicted",
 TRUE ~ NA_character_
 )
 )
@@ -153,7 +153,7 @@ formula_text <- paste0(
 
 length_weight_plot <- ggplot(
 Fish_data |> dplyr::filter(is_koura),
-aes(x = Length_mm, y = Predicted_weight, shape = Weight_source)) +
+aes(x = length_mm, y = Predicted_weight, shape = Weight_source)) +
 geom_point(size = 2.2, colour = "black", stroke = 0.6) +
 scale_shape_manual(values = c("measured" = 16, "predicted" = 1)) +
 labs(x = "OCL length (mm)", y = "Weight (g)", shape = "Weight source") +
@@ -170,24 +170,24 @@ length_weight_plot
 #| include: false
 
 CPUE_BPUE_legacy <- Fish_data %>%
-filter(!is.na(Species)) %>%
-group_by(Monitoring_ID, Species, Net_type) %>%
+filter(!is.na(species)) %>%
+group_by(monitoring_id, species, net_type) %>%
 dplyr::reframe(
-Total_Individuals = sum(Amount, na.rm = TRUE),
+Total_Individuals = sum(amount, na.rm = TRUE),
 Total_Weight      = sum(Predicted_weight, na.rm = TRUE),
-Total_Effort      = dplyr::first(Amount_nets),
+Total_Effort      = dplyr::first(amount_nets),
 CPUE              = Total_Individuals / Total_Effort,
 BPUE              = Total_Weight / Total_Effort,
-Mean_Length       = mean(Length_mm, na.rm = TRUE),
-Min_Length        = ifelse(all(is.na(Length_mm)), NA, min(Length_mm, na.rm = TRUE)),
-Max_Length        = ifelse(all(is.na(Length_mm)), NA, max(Length_mm, na.rm = TRUE)),
+Mean_Length       = mean(length_mm, na.rm = TRUE),
+Min_Length        = ifelse(all(is.na(length_mm)), NA, min(length_mm, na.rm = TRUE)),
+Max_Length        = ifelse(all(is.na(length_mm)), NA, max(length_mm, na.rm = TRUE)),
 Mean_Weight       = mean(Predicted_weight, na.rm = TRUE),
 Min_Weight        = ifelse(all(is.na(Predicted_weight)), NA, min(Predicted_weight, na.rm = TRUE)),
 Max_Weight        = ifelse(all(is.na(Predicted_weight)), NA, max(Predicted_weight, na.rm = TRUE))
 )
 
 CPUE_BPUE_weighted <- CPUE_BPUE_legacy %>%
-group_by(Monitoring_ID, Species) %>%
+group_by(monitoring_id, species) %>%
 summarise(
 Total_Individuals       = sum(Total_Individuals, na.rm = TRUE),
 Total_Weight            = sum(Total_Weight,      na.rm = TRUE),
@@ -203,17 +203,17 @@ Max_Weight              = ifelse(all(is.na(Max_Weight)), NA, max(Max_Weight, na.
 .groups = "drop"
 ) %>%
 mutate(
-Total_Effort_sum = ifelse(Monitoring_ID %in% c("96_0", "101_0", "117_1", "119_1"), 3, 4),
+Total_Effort_sum = ifelse(monitoring_id %in% c("96_0", "101_0", "117_1", "119_1"), 3, 4),
 Weighted_CPUE    = Weighted_CPUE_numerator / Total_Effort_sum,
 Weighted_BPUE    = Weighted_BPUE_numerator / Total_Effort_sum
 )
 
 species_presence_absence <- Fish_data %>%
-filter(!is.na(Species)) %>%
-distinct(Monitoring_ID, Species) %>%
+filter(!is.na(species)) %>%
+distinct(monitoring_id, species) %>%
 mutate(Presence = 1) %>%
 pivot_wider(
-names_from  = Species,
+names_from  = species,
 values_from = Presence,
 values_fill = list(Presence = 0),
 names_prefix = "Presence_"
@@ -222,7 +222,7 @@ mutate(Predator_Fish_Presence = pmax(Presence_Trout, Presence_Eel, Presence_Catf
 
 CPUE_BPUE_weighted_summary <- CPUE_BPUE_weighted %>%
 pivot_wider(
-names_from  = Species,
+names_from  = species,
 values_from = c(
 Total_Individuals, Weighted_CPUE, Weighted_BPUE, Total_Weight,
 Mean_Length, Mean_Weight, Weighted_CPUE_numerator, Weighted_BPUE_numerator,
@@ -244,15 +244,15 @@ Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_w
 #| include: false
 
 unit_metadata <- Monitoring_data %>%
-dplyr::select(Parameter, Unit) %>%
+dplyr::select(parameter, unit) %>%
 distinct()
 
 Monitoring_summary <- Monitoring_data %>%
-dplyr::select(-Group, -Notes, -Unit) %>%
+dplyr::select(-group, -notes, -unit) %>%
 pivot_wider(
-names_from  = c(Parameter),
-values_from = Value,
-values_fill = list(Value = NA)
+names_from  = c(parameter),
+values_from = value,
+values_fill = list(value = NA)
 ) %>%
 mutate(across(
 c(
@@ -265,52 +265,52 @@ Conductivity, Specific_conductivity, pH, Wood_cover
 ))
 
 Weed_summary <- Weed_data %>%
-group_by(Monitoring_ID, Weed_Type, Native_Status) %>%
-summarise(Total_Cover = sum(Percentage_Cover, na.rm = TRUE), .groups = "drop") %>%
+group_by(monitoring_id, weed_type, native_status) %>%
+summarise(Total_Cover = sum(percentage_cover, na.rm = TRUE), .groups = "drop") %>%
 pivot_wider(
-names_from  = c(Weed_Type, Native_Status),
+names_from  = c(weed_type, native_status),
 values_from = Total_Cover,
 values_fill = 0
 )
 
 Macroinvertebrates_sum <- Macroinvertebrates %>%
-group_by(Monitoring_ID, Species) %>%
-summarise(Total_amount = sum(Amount, na.rm = TRUE), .groups = "drop") %>%
-pivot_wider(names_from = c(Species), values_from = Total_amount, values_fill = 0) %>%
+group_by(monitoring_id, species) %>%
+summarise(Total_amount = sum(amount, na.rm = TRUE), .groups = "drop") %>%
+pivot_wider(names_from = c(species), values_from = Total_amount, values_fill = 0) %>%
 mutate(
-Invertebrates_Richness  = rowSums(dplyr::select(., -Monitoring_ID) > 0),
-Invertebrates_Abundance = rowSums(dplyr::select(., -Monitoring_ID))
+Invertebrates_Richness  = rowSums(dplyr::select(., -monitoring_id) > 0),
+Invertebrates_Abundance = rowSums(dplyr::select(., -monitoring_id))
 )
 
 Monitoring_CPUE_data <- Site_info %>%
-left_join(Monitoring_summary, by = "Monitoring_ID") %>%
+left_join(Monitoring_summary, by = "monitoring_id") %>%
 left_join(
 Weed_summary %>% dplyr::select(
-Monitoring_ID,
+monitoring_id,
 Emergent_Native, Emergent_Non_Native,
 Submerged_Native, Submerged_Non_Native, Turf_Native
 ),
-by = "Monitoring_ID"
+by = "monitoring_id"
 ) %>%
-left_join(CPUE_BPUE_weighted_summary, by = "Monitoring_ID") %>%
-left_join(species_presence_absence, by = "Monitoring_ID") %>%
-left_join(Macroinvertebrates_sum, by = "Monitoring_ID")
+left_join(CPUE_BPUE_weighted_summary, by = "monitoring_id") %>%
+left_join(species_presence_absence, by = "monitoring_id") %>%
+left_join(Macroinvertebrates_sum, by = "monitoring_id")
 
 Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
   mutate(
     Presence_rocks = if_else(Cobble > 1 | Boulders > 1, 1, 0),
-    Slope_5m       = 5 / Distance_5m,
-    Site_ID_       = Site_ID.x - 60,
-    Monitoring_ID_ = paste0(
-      as.numeric(sub("_.*", "", Monitoring_ID)) - 60,
-      sub("^[^_]*", "", Monitoring_ID)
+    Slope_5m       = 5 / distance_5m,
+    site_id_       = site_id.x - 60,
+    monitoring_id_ = paste0(
+      as.numeric(sub("_.*", "", monitoring_id)) - 60,
+      sub("^[^_]*", "", monitoring_id)
     ),
-    Monitoring     = sub(".*?_", "", Monitoring_ID),
-    Date           = as.Date(Date_Time),
-    Time           = format(as.POSIXct(Date_Time), "%H:%M:%S"),
-    Year           = lubridate::year(Date_Time),
-    Month          = lubridate::month(Date_Time, label = TRUE),
-    Day            = lubridate::day(Date_Time),
+    Monitoring     = sub(".*?_", "", monitoring_id),
+    Date           = as.Date(date_time),
+    Time           = format(as.POSIXct(date_time), "%H:%M:%S"),
+    Year           = lubridate::year(date_time),
+    Month          = lubridate::month(date_time, label = TRUE),
+    Day            = lubridate::day(date_time),
     Season         = case_when(
       Month %in% c("Dec", "Jan", "Feb") ~ "Summer",
       Month %in% c("Mar", "Apr", "May") ~ "Autumn",
@@ -318,12 +318,12 @@ Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
       Month %in% c("Sep", "Oct", "Nov") ~ "Spring",
       TRUE ~ NA_character_
     ),
-    Date_Time_Numeric = as.numeric(Date_Time)
+    Date_Time_Numeric = as.numeric(date_time)
   )
 
 habitat_classification <- Monitoring_CPUE_data %>%
 dplyr::select(
-Monitoring_ID, DHT, Lake,
+monitoring_id, DHT, lake,
 Bedrock, Boulders, Cobble, Gravel, Sand, Mud, Organic_matter,
 Emergent_Native, Emergent_Non_Native,
 Submerged_Native, Submerged_Non_Native, Wood_cover
@@ -337,7 +337,7 @@ Submerged_Native, Submerged_Non_Native, Wood_cover
 names_to = "Type",
 values_to = "Percentage"
 ) %>%
-group_by(Monitoring_ID) %>%
+group_by(monitoring_id) %>%
 summarise(
 Rocky_Percentage = sum(Percentage[Type %in% c("Bedrock", "Boulders", "Cobble")], na.rm = TRUE),
 Sand_Percentage  = sum(Percentage[Type == "Sand"], na.rm = TRUE),
@@ -372,10 +372,10 @@ Sand_Percentage >= Mud_Percentage ~ "Sandy",
 TRUE ~ "Muddy"
 )
 ) %>%
-dplyr::select(Monitoring_ID, Habitat_Type, Substrate_index, Substrate_CV)
+dplyr::select(monitoring_id, Habitat_Type, Substrate_index, Substrate_CV)
 
 Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
-left_join(habitat_classification, by = "Monitoring_ID")
+left_join(habitat_classification, by = "monitoring_id")
 
 #writexl::write_xlsx(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.xlsx"))
 #write.csv(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.csv"), row.names = FALSE)
@@ -428,10 +428,30 @@ lake_data <- data.frame(
 write.csv(lake_data, file = file.path(out_dir, "tbl-lake-overview.csv"), row.names = FALSE)
 
 if (knitr::is_latex_output()) {
-  knitr::kable(lake_data, booktabs = TRUE) %>%
-    kableExtra::kable_styling(latex_options = c("scale_down", "hold_position")) %>%
-    kableExtra::add_header_above(c(" " = 10, "Shoreline composition" = 4)) %>%
-    kableExtra::landscape()
+  col_nms <- colnames(lake_data)
+  rotated_nms <- c(
+    col_nms[1],
+    sapply(col_nms[-1], function(x)
+      paste0("\\rotatebox{90}{\\parbox{3.2cm}{\\raggedright ", x, "}}")
+    )
+  )
+  knitr::kable(lake_data,
+               booktabs = TRUE,
+               col.names = rotated_nms,
+               escape = FALSE,
+               linesep = "") %>%
+    kableExtra::kable_styling(
+      latex_options = "hold_position",
+      full_width = FALSE,
+      font_size = 9
+    ) %>%
+    kableExtra::add_header_above(
+      c(" " = 10, "Shoreline composition (%)" = 4),
+      bold = TRUE
+    ) %>%
+    kableExtra::column_spec(1, width = "2.2cm") %>%
+    kableExtra::column_spec(2, width = "1.8cm") %>%
+    kableExtra::column_spec(3:14, width = "0.9cm")
 } else {
   knitr::kable(lake_data)
 }
@@ -455,7 +475,23 @@ biotic_vars <- data.frame(
 
 write.csv(biotic_vars, file = file.path(out_dir, "tbl-environmental-biotic-overview.csv"), row.names = FALSE)
 
-knitr::kable(biotic_vars)
+if (knitr::is_latex_output()) {
+  knitr::kable(biotic_vars,
+               booktabs = TRUE,
+               longtable = TRUE,
+               linesep = "") %>%
+    kableExtra::kable_styling(
+      latex_options = c("repeat_header"),
+      font_size = 9,
+      full_width = FALSE
+    ) %>%
+    kableExtra::column_spec(1, width = "2.5cm") %>%
+    kableExtra::column_spec(2, width = "3.2cm") %>%
+    kableExtra::column_spec(3, width = "5.8cm") %>%
+    kableExtra::column_spec(4, width = "4.0cm")
+} else {
+  knitr::kable(biotic_vars)
+}
 
 ```
 
@@ -466,7 +502,7 @@ knitr::kable(biotic_vars)
 
 M_C_data <- Monitoring_CPUE_data
 lake_order <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
-M_C_data$Lake <- factor(M_C_data$Lake, levels = lake_order)
+M_C_data$lake <- factor(M_C_data$lake, levels = lake_order)
 
 ci95 <- function(x) {
   x <- x[!is.na(x)]
@@ -479,30 +515,30 @@ ci95 <- function(x) {
 }
 
 unit_lookup <- Monitoring_data %>%
-  dplyr::select(Parameter, Unit) %>%
+  dplyr::select(parameter, unit) %>%
   dplyr::distinct() %>%
   dplyr::mutate(
     Variable = dplyr::case_when(
-      Parameter == "Riparian_vegetation"       ~ "Riparian_vegetation",
-      Parameter == "Overhanging_trees"         ~ "Overhanging_trees",
-      Parameter == "Wood_cover"                ~ "Wood_cover",
-      Parameter == "Temperature"               ~ "Temperature",
-      Parameter == "DO_mgl"                    ~ "DO_mgl",
-      Parameter == "pH"                        ~ "pH",
-      Parameter == "Specific_conductivity"     ~ "Specific_conductivity",
-      Parameter == "Substrate_index"           ~ "Substrate_index",
-      Parameter == "Slope_5m"                  ~ "Slope_5m",
+      parameter == "Riparian_vegetation"       ~ "Riparian_vegetation",
+      parameter == "Overhanging_trees"         ~ "Overhanging_trees",
+      parameter == "Wood_cover"                ~ "Wood_cover",
+      parameter == "Temperature"               ~ "Temperature",
+      parameter == "DO_mgl"                    ~ "DO_mgl",
+      parameter == "pH"                        ~ "pH",
+      parameter == "Specific_conductivity"     ~ "Specific_conductivity",
+      parameter == "Substrate_index"           ~ "Substrate_index",
+      parameter == "Slope_5m"                  ~ "Slope_5m",
       TRUE ~ NA_character_
     )
   ) %>%
   dplyr::filter(!is.na(Variable)) %>%
-  dplyr::select(Variable, Unit) %>%
+  dplyr::select(Variable, unit) %>%
   dplyr::distinct()
 
 # Add units for derived variables (not in Monitoring_data)
 derived_units <- tibble::tibble(
   Variable = c("Emergent_vegetation", "Submerged_vegetation"),
-  Unit     = c("%", "%")
+  unit     = c("%", "%")
 )
 
 # Fish presence units (binary)
@@ -511,7 +547,7 @@ fish_units <- tibble::tibble(
     "Presence_Eel","Presence_Common_smelt","Presence_Catfish",
     "Presence_Goldfish","Presence_Kōaro","Presence_Trout"
   ),
-  Unit = ""
+  unit = ""
 )
 
 unit_lookup_all <- dplyr::bind_rows(unit_lookup, derived_units, fish_units) %>%
@@ -524,13 +560,13 @@ Env_data <- M_C_data %>%
     Submerged_vegetation = Submerged_Native + Submerged_Non_Native
   ) %>%
   dplyr::select(
-    Lake, Substrate_index, Slope_5m, Riparian_vegetation, Overhanging_trees, Wood_cover,
+    lake, Substrate_index, Slope_5m, Riparian_vegetation, Overhanging_trees, Wood_cover,
     Temperature, DO_mgl, pH, Specific_conductivity, Emergent_vegetation, Submerged_vegetation
   ) %>%
-  tidyr::pivot_longer(-Lake, names_to = "Variable", values_to = "Value")
+  tidyr::pivot_longer(-lake, names_to = "Variable", values_to = "Value")
 
 Env_summary_table <- Env_data %>%
-  dplyr::group_by(Lake, Variable) %>%
+  dplyr::group_by(lake, Variable) %>%
   dplyr::summarise(
     n       = sum(!is.na(Value)),
     Mean    = mean(Value, na.rm = TRUE),
@@ -545,7 +581,7 @@ Env_summary_table <- Env_data %>%
 Env_summary_all <- Env_data %>%
   dplyr::group_by(Variable) %>%
   dplyr::summarise(
-    Lake    = "All lakes",
+    lake    = "All lakes",
     n       = sum(!is.na(Value)),
     Mean    = mean(Value, na.rm = TRUE),
     Median  = median(Value, na.rm = TRUE),
@@ -555,20 +591,20 @@ Env_summary_all <- Env_data %>%
     CI_high = ci95(Value)[2],
     .groups = "drop"
   ) %>%
-  dplyr::select(Lake, dplyr::everything())
+  dplyr::select(lake, dplyr::everything())
 
 Env_summary_table <- dplyr::bind_rows(Env_summary_table, Env_summary_all)
 
 # ---- Fish presence summary ----
 Fish_data_long <- M_C_data %>%
   dplyr::select(
-    Lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish,
+    lake, Presence_Eel, Presence_Common_smelt, Presence_Catfish,
     Presence_Goldfish, Presence_Kōaro, Presence_Trout
   ) %>%
-  tidyr::pivot_longer(-Lake, names_to = "Variable", values_to = "Presence")
+  tidyr::pivot_longer(-lake, names_to = "Variable", values_to = "Presence")
 
 Fish_summary_lake <- Fish_data_long %>%
-  dplyr::group_by(Lake, Variable) %>%
+  dplyr::group_by(lake, Variable) %>%
   dplyr::summarise(
     n       = sum(!is.na(Presence)),
     k       = sum(Presence, na.rm = TRUE),
@@ -589,7 +625,7 @@ Fish_summary_lake <- Fish_data_long %>%
 Fish_summary_all <- Fish_data_long %>%
   dplyr::group_by(Variable) %>%
   dplyr::summarise(
-    Lake    = "All lakes",
+    lake    = "All lakes",
     n       = sum(!is.na(Presence)),
     k       = sum(Presence, na.rm = TRUE),
     Mean    = mean(Presence, na.rm = TRUE),
@@ -604,7 +640,7 @@ Fish_summary_all <- Fish_data_long %>%
     CI_high = ifelse(n > 0, binom.test(k, n)$conf.int[2], NA_real_)
   ) %>%
   dplyr::ungroup() %>%
-  dplyr::select(Lake, dplyr::everything(), -k)
+  dplyr::select(lake, dplyr::everything(), -k)
 
 Fish_summary_table <- dplyr::bind_rows(Fish_summary_lake, Fish_summary_all)
 
@@ -632,7 +668,7 @@ EnvBio_summary_table <- dplyr::bind_rows(Env_summary_table, Fish_summary_table) 
       Presence_Kōaro        = "Presence Kōaro",
       Presence_Trout        = "Presence Trout"
     ),
-    Unit = dplyr::coalesce(Unit, "")
+    unit = dplyr::coalesce(unit, "")
   )
 
 lake_order_exact <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka", "All lakes")
@@ -641,13 +677,13 @@ var_order_exact <- c("Substrate index","Slope 5m","Riparian vegetation","Overhan
 
 EnvBio_summary_table <- EnvBio_summary_table %>%
   dplyr::mutate(
-    Lake     = factor(as.character(Lake), levels = lake_order_exact),
+    lake     = factor(as.character(lake), levels = lake_order_exact),
     Variable = factor(as.character(Variable), levels = var_order_exact)
   ) %>%
-  dplyr::select(Lake, Variable, Unit, n, Mean, Median, Min, Max, CI_low, CI_high) %>%
-  dplyr::arrange(Variable, Lake) %>%
+  dplyr::select(lake, Variable, unit, n, Mean, Median, Min, Max, CI_low, CI_high) %>%
+  dplyr::arrange(Variable, lake) %>%
   dplyr::mutate(
-    Lake     = as.character(Lake),
+    lake     = as.character(lake),
     Variable = as.character(Variable)
   )
 
@@ -705,7 +741,7 @@ type = c("continuous", "presence"),
 show_x_title = FALSE) {
 
 type <- match.arg(type)
-lakes <- levels(data$Lake)
+lakes <- levels(data$lake)
 xlab_text <- if (show_x_title) "Lake" else NULL
 
 base_theme <- theme_classic() +
@@ -719,13 +755,13 @@ panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
 if (type == "continuous") {
 
 
-ggplot(data, aes(Lake, .data[[y_var]])) +
+ggplot(data, aes(lake, .data[[y_var]])) +
   geom_boxplot(fill = NA, colour = "black", linewidth = 0.3, outlier.size = 1.5) +
   labs(y = y_label, x = xlab_text) +
   base_theme
 } else {
 presence_summary <- data %>%
-  group_by(Lake) %>%
+  group_by(lake) %>%
   summarise(
     n = sum(!is.na(.data[[y_var]])),
     k = sum(.data[[y_var]] == 1, na.rm = TRUE),
@@ -738,9 +774,9 @@ presence_summary <- data %>%
     CI_high = ifelse(n > 0, binom.test(k, n)$conf.int[2], NA_real_)
   ) %>%
   ungroup() %>%
-  mutate(Lake = factor(Lake, levels = lakes))
+  mutate(lake = factor(lake, levels = lakes))
 
-ggplot(presence_summary, aes(x = Lake, y = Presence_Rate)) +
+ggplot(presence_summary, aes(x = lake, y = Presence_Rate)) +
   geom_col(fill = NA, colour = "black", linewidth = 0.3) +
   geom_errorbar(aes(ymin = CI_low, ymax = CI_high), width = 0.15, linewidth = 0.3) +
   scale_y_continuous(limits = c(0, 1)) +
@@ -765,19 +801,19 @@ Koura_plots
 #| label: lake-glmm
 #| include: false
 
-fit_presence_glmm <- function(data, response, lake_var = "Lake", random_effect = "Habitat_Type") {
+fit_presence_glmm <- function(data, response, lake_var = "lake", random_effect = "Habitat_Type") {
   form <- as.formula(paste0(response, " ~ ", lake_var, " + (1|", random_effect, ")"))
   glmmTMB::glmmTMB(form, data = data, family = binomial(link = "logit"))
 }
 
-fit_tweedie_glmm <- function(data, response, lake_var = "Lake", random_effect = "Habitat_Type") {
+fit_tweedie_glmm <- function(data, response, lake_var = "lake", random_effect = "Habitat_Type") {
   form <- as.formula(paste0(response, " ~ ", lake_var, " + (1|", random_effect, ")"))
   glmmTMB::glmmTMB(form, data = data, family = glmmTMB::tweedie(link = "log"))
 }
 
-m_koura_pres <- fit_presence_glmm(M_C_data, response = "Presence_Kōura",       lake_var = "Lake", random_effect = "Habitat_Type")
-m_koura_cpue <- fit_tweedie_glmm( M_C_data, response = "Weighted_CPUE_Kōura",  lake_var = "Lake", random_effect = "Habitat_Type")
-m_koura_bpue <- fit_tweedie_glmm( M_C_data, response = "Weighted_BPUE_Kōura",  lake_var = "Lake", random_effect = "Habitat_Type")
+m_koura_pres <- fit_presence_glmm(M_C_data, response = "Presence_Kōura",       lake_var = "lake", random_effect = "Habitat_Type")
+m_koura_cpue <- fit_tweedie_glmm( M_C_data, response = "Weighted_CPUE_Kōura",  lake_var = "lake", random_effect = "Habitat_Type")
+m_koura_bpue <- fit_tweedie_glmm( M_C_data, response = "Weighted_BPUE_Kōura",  lake_var = "lake", random_effect = "Habitat_Type")
 
 # Overall lake effect (LRT via drop1)
 pres_lrt <- drop1(m_koura_pres, test = "Chisq")
@@ -785,17 +821,17 @@ cpue_lrt <- drop1(m_koura_cpue, test = "Chisq")
 bpue_lrt <- drop1(m_koura_bpue, test = "Chisq")
 
 # Helper to report a drop1 LRT inline, e.g. "chi^2_4 = 13.76, p = 0.008"
-report_lrt <- function(lrt_obj, term = "Lake") {
-  subscript_digits <- chartr("0123456789", "₀₁₂₃₄₅₆₇₈₉", as.character(lrt_obj[term, "Df"]))
+report_lrt <- function(lrt_obj, term = "lake") {
+  df    <- as.character(lrt_obj[term, "Df"])
   chisq <- formatC(lrt_obj[term, "LRT"], format = "f", digits = 2)
   p_val <- formatC(lrt_obj[term, "Pr(>Chi)"], format = "f", digits = 3)
-  sprintf("χ²%s = %s, *p* = %s", subscript_digits, chisq, p_val)
+  sprintf("$\\chi^2_{%s} = %s$, *p* = %s", df, chisq, p_val)
 }
 
 # Pairwise lake comparisons (BH-adjusted)
-pres_pairs <- pairs(emmeans(m_koura_pres, ~ Lake, type = "response"), adjust = "BH")
-cpue_pairs <- pairs(emmeans(m_koura_cpue, ~ Lake, type = "response"), adjust = "BH")
-bpue_pairs <- pairs(emmeans(m_koura_bpue, ~ Lake, type = "response"), adjust = "BH")
+pres_pairs <- pairs(emmeans(m_koura_pres, ~ lake, type = "response"), adjust = "BH")
+cpue_pairs <- pairs(emmeans(m_koura_cpue, ~ lake, type = "response"), adjust = "BH")
+bpue_pairs <- pairs(emmeans(m_koura_bpue, ~ lake, type = "response"), adjust = "BH")
 
 pres_lrt
 cpue_lrt
@@ -2157,7 +2193,7 @@ M_C_data %>%
 
 # 3. Kōura metrics: catfish-invaded vs catfish-free lakes
 M_C_data %>%
-  mutate(catfish_lake = if_else(Lake %in% c("Rotorua", "Rotoiti"),
+  mutate(catfish_lake = if_else(lake %in% c("Rotorua", "Rotoiti"),
                                 "Catfish present", "Catfish absent")) %>%
   group_by(catfish_lake) %>%
   summarise(n_sites = n(),

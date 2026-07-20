@@ -246,43 +246,15 @@ Kusabs \and Robin Holmes \and Deniz Özkundakci}
 \date{2026-07-09}
 \begin{document}
 \maketitle
-\begin{abstract}
-Freshwater crayfish are increasingly threatened by habitat degradation,
-declining water quality, and invasive species. In Aotearoa New Zealand,
-lake populations of the endemic northern freshwater crayfish
-\emph{Paranephrops planifrons} (kōura) have declined by up to 91 \%.
-Identifying key habitat requirements is essential to improve the
-conservation of crayfish facing multiple threats. To assess littoral
-habitat associations, we surveyed shoreline habitats in five Aotearoa
-lakes and modelled kōura occupancy, abundance, and biomass using
-generalised additive mixed models. Kōura occupancy increased with
-shoreline habitat complexity, particularly coarser substrate types and
-greater riparian vegetation cover. Elevated summer surface water
-temperatures were negatively associated with kōura occupancy and
-abundance, indicating reduced habitat suitability during warm periods.
-pH was positively correlated with kōura abundance and biomass. Our
-results suggest that the composition and physical structure of littoral
-habitats are important drivers of kōura distribution and abundance. As
-climatic drivers resulting in warmer water temperatures and reduced
-dissolved oxygen are difficult to manage, targeted protection and
-restoration of coarse substrate shoreline habitats may provide a
-practical conservation response.
-\end{abstract}
 
-\renewcommand*\contentsname{Table of contents}
-{
-\setcounter{tocdepth}{3}
-\tableofcontents
-}
 
 \clearpage
 \providecommand{\chaptermark}[1]{}
-
-\ifcsname c@chapter\endcsname \setcounter{chapter}{3}
+\ifcsname c@chapter\endcsname
+\setcounter{chapter}{3}
 \setcounter{section}{0}
-
 \addcontentsline{toc}{chapter}{\protect\numberline{3}Where do K\={o}ura Live?}
-
+\chaptermark{Where do K\={o}ura Live?}
 \fi
 \providecommand{\thechapter}{3}
 \thispagestyle{empty}
@@ -304,6 +276,10 @@ practical conservation response.
         font=\fontsize{22}{28}\selectfont\bfseries\sffamily, anchor=west]
     at ([xshift=1.5cm, yshift=-4cm]current page.north west)
     {Where do K\={o}ura Live?};
+  \node[color=white, text width=0.85\paperwidth, align=left,
+        font=\fontsize{10}{13}\selectfont\itshape\sffamily, anchor=north west]
+    at ([xshift=1.5cm, yshift=-5.0cm]current page.north west)
+    {Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand};
   \fill[black]
     (current page.south west) rectangle ([yshift=4.5cm]current page.south east);
   \node[color=white, text width=0.85\paperwidth, align=left,
@@ -313,7 +289,7 @@ practical conservation response.
   \node[color=thesissand, text width=0.85\paperwidth, align=left,
         font=\fontsize{9}{13}\selectfont\itshape\sffamily, anchor=west]
     at ([xshift=1.5cm, yshift=1.5cm]current page.south west)
-    {Hydrobiologia --- Accepted};
+    {Hydrobiologia (2026) --- https://doi.org/10.1007/s10750-026-06302-z};
 \end{tikzpicture}
 \null
 \clearpage
@@ -511,9 +487,9 @@ random coordinates without enforcing fixed spacing between sites. The
 final coordinates of the 12 random survey sites per lake were extracted
 directly from the GRTS output (Figure~\ref{fig-site-map}).
 
-\begin{landscape}
+\begingroup\fontsize{9}{11}\selectfont
 
-\begin{longtable}[t]{llrrrrrrllrrrr}
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedright\arraybackslash}p{0.9cm}>{\raggedright\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}}
 
 \caption{\label{tbl-lake-overview}Physical, morphometric, and trophic
 characteristics of the five Rotorua Te Arawa lakes surveyed, including
@@ -527,9 +503,9 @@ excluding geothermal and cliff sections.}
 \tabularnewline
 
 \toprule
-\multicolumn{10}{c}{ } & \multicolumn{4}{c}{Shoreline composition} \\
+\multicolumn{10}{c}{\textbf{ }} & \multicolumn{4}{c}{\textbf{Shoreline composition (\%)}} \\
 \cmidrule(l{3pt}r{3pt}){11-14}
-Lake name & Sampling date (n sites) & Surface area (km²) & Perimeter length (km) & Catchment area (km²) & Mean depth (m) & Maximum depth (m) & Elevation (m) & Mixing regime & Trophic state & Muddy (\%) & Sandy (\%) & Rocky (\%) & Emergent macrophytes (\%)\\
+Lake name & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Sampling date (n sites)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Surface area (km²)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Perimeter length (km)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Catchment area (km²)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Mean depth (m)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Maximum depth (m)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Elevation (m)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Mixing regime\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Trophic state\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Muddy (\%)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Sandy (\%)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Rocky (\%)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Emergent macrophytes (\%)\}\}\\
 \midrule
 Rotorua & 20/02/2025 (12) & 81 & 45 & 508.0 & 11.0 & 45.0 & 280 & Polymictic & Eutrophic & 0.0 & 82.8 & 17.2 & 0.0\\
 Rotoiti & 15/01/2025 (12) & 34 & 61 & 123.7 & 31.5 & 124.0 & 279 & Monomictic & Mesotrophic & 0.0 & 68.5 & 21.8 & 9.7\\
@@ -540,7 +516,7 @@ Rotomā & 6/11/2024 (12) & 11 & 24 & 27.8 & 36.9 & 83.0 & 316 & Monomictic & Oli
 
 \end{longtable}
 
-\end{landscape}
+\endgroup{}
 
 \textsubscript{Source:
 \href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
@@ -572,13 +548,9 @@ observations and measurements were conducted from a boat. At each site,
 physical, chemical and biological parameters were recorded
 (Table~\ref{tbl-environmental-biotic-overview}).
 
-{
+\begingroup\fontsize{9}{11}\selectfont
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2881}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.4071}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2214}}@{}}
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{5.8cm}>{\raggedright\arraybackslash}p{4.0cm}}
 
 \caption{\label{tbl-environmental-biotic-overview}Overview of
 environmental and biotic variables measured at littoral sampling sites,
@@ -590,67 +562,37 @@ and biomass in lake littoral zones.}
 
 \tabularnewline
 
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Variable
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Description / Unit
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Hypothesised importance for kōura
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-References
-\end{minipage} \\
-\midrule\noalign{}
+\toprule
+Variable & Description / Unit & Hypothesised importance for kōura & References\\
+\midrule
+\endfirsthead
+\multicolumn{4}{@{}l}{\textit{(continued)}}\\
+\toprule
+Variable & Description / Unit & Hypothesised importance for kōura & References\\
+\midrule
 \endhead
-\bottomrule\noalign{}
+
+\endfoot
+\bottomrule
 \endlastfoot
-Lake identity & Categorical variable identifying lake & Captures
-unmeasured lake-specific differences in water chemistry, productivity,
-and catchment characteristics. & Zuur et al., (2009) \\
-Substrate index & Index based on \% cover of bedrock, boulders, cobble,
-gravel, sand, mud, and organic matter & Important for burrowing and
-shelter availability. Coarser substrates increase shelter availability
-through more crevices. & Usio \& Townsend, (2000); Kusabs et al.,
-(2015b) \\
-Slope & Slope from shoreline to the 5 m depth contour & Steeper slopes
-facilitate access to deeper water during daylight refuging and associate
-with coarser substrates. & Devcich, (1979); Kusabs et al., (2015b) \\
-Riparian vegetation & Percentage cover of vegetation growing in the
-riparian zone & Contributes detrital inputs, bank stability, and shading
-at the water's edge. & Parkyn et al., (2002) \\
-Overhanging trees & Percentage cover of trees hanging over the shoreline
-& Provides direct shading and structural inputs into littoral habitats.
-& Smith et al., (1996); Vedia et al., (2017) \\
-Wood cover & Cover of wooden logs and tree branches in the sample site &
-Provides physical structure creating refuge spaces and supports
-macroinvertebrate prey availability. & Parkyn et al., (2009) \\
-Emergent and submerged macrophytes & Percentage cover of macrophytes in
-the sample site divided over emergent and submerged and native and
-non-native species & Native macrophytes can provide cover and serve as a
-food source. Non-native macrophytes may alter movement pathways and
-modify local habitat and water quality conditions. & Coffey \& Clayton,
-(1988); Kusabs \& Quinn, (2009) \\
-Temperature & Temperature of surface water in °C & Influences metabolic
-rate, activity, physiological stress, and habitat suitability. &
-Devcich, (1979); Hammond et al., (2006); Parkyn \& Collier, (2002);
-Angilletta et al., (2004) \\
-Dissolved oxygen & Dissolved oxygen concentration in mg L⁻¹ & Essential
-for respiration; reduced oxygen may constrain activity and habitat use.
-& Hammond et al., (2006); Broughton et al., (2017) \\
-Specific conductivity & Electrical conductivity of the water in µS cm⁻¹
-& Reflects overall lake productivity, supporting food availability. &
-Devcich, (1979) \\
-pH & Acidity or alkalinity of the water & Influences moulting success
-and exoskeleton strength, affected by acidity or calcium levels. &
-Olsson et al., (2006) \\
-Fish presence & Presence/absence of selected native and non-native fish
-species & Fish act as predators, competitors, or indirectly modify
-habitat structure. & Shave et al., (1994); Barnes, (1996); Usio \&
-Townsend, (2000); Barnes \& Hicks, (2003) \\
+Lake identity & Categorical variable identifying lake & Captures unmeasured lake-specific differences in water chemistry, productivity, and catchment characteristics. & Zuur et al., (2009)\\
+Substrate index & Index based on \% cover of bedrock, boulders, cobble, gravel, sand, mud, and organic matter & Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices. & Usio \& Townsend, (2000); Kusabs et al., (2015b)\\
+Slope & Slope from shoreline to the 5 m depth contour & Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates. & Devcich, (1979); Kusabs et al., (2015b)\\
+Riparian vegetation & Percentage cover of vegetation growing in the riparian zone & Contributes detrital inputs, bank stability, and shading at the water's edge. & Parkyn et al., (2002)\\
+Overhanging trees & Percentage cover of trees hanging over the shoreline & Provides direct shading and structural inputs into littoral habitats. & Smith et al., (1996); Vedia et al., (2017)\\
+\addlinespace
+Wood cover & Cover of wooden logs and tree branches in the sample site & Provides physical structure creating refuge spaces and supports macroinvertebrate prey availability. & Parkyn et al., (2009)\\
+Emergent and submerged macrophytes & Percentage cover of macrophytes in the sample site divided over emergent and submerged and native and non-native species & Native macrophytes can provide cover and serve as a food source. Non-native macrophytes may alter movement pathways and modify local habitat and water quality conditions. & Coffey \& Clayton, (1988); Kusabs \& Quinn, (2009)\\
+Temperature & Temperature of surface water in °C & Influences metabolic rate, activity, physiological stress, and habitat suitability. & Devcich, (1979); Hammond et al., (2006); Parkyn \& Collier, (2002); Angilletta et al., (2004)\\
+Dissolved oxygen & Dissolved oxygen concentration in mg L⁻¹ & Essential for respiration; reduced oxygen may constrain activity and habitat use. & Hammond et al., (2006); Broughton et al., (2017)\\
+Specific conductivity & Electrical conductivity of the water in µS cm⁻¹ & Reflects overall lake productivity, supporting food availability. & Devcich, (1979)\\
+\addlinespace
+pH & Acidity or alkalinity of the water & Influences moulting success and exoskeleton strength, affected by acidity or calcium levels. & Olsson et al., (2006)\\
+Fish presence & Presence/absence of selected native and non-native fish species & Fish act as predators, competitors, or indirectly modify habitat structure. & Shave et al., (1994); Barnes, (1996); Usio \& Townsend, (2000); Barnes \& Hicks, (2003)\\*
 
 \end{longtable}
 
-}
+\endgroup{}
 
 \textsubscript{Source:
 \href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
@@ -669,7 +611,11 @@ a formula adapted to include fine organic matter and mud
 \citeproc{ref-Harding2009}{Harding et al., 2009}):
 
 \[
-\text{Substrate index} = 0.08 \times (\text{bedrock}) + 0.07 \times (\text{boulders}) + 0.06 \times (\text{cobble}) + 0.04 \times (\text{gravel}) + 0.03 \times (\text{sand}) + 0.02 \times (\text{organic matter}) + 0.01 \times (\text{mud})
+\begin{aligned}
+\text{Substrate index} &= 0.08 \times (\text{bedrock}) + 0.07 \times (\text{boulders}) \\
+&\quad + 0.06 \times (\text{cobble}) + 0.04 \times (\text{gravel}) + 0.03 \times (\text{sand}) \\
+&\quad + 0.02 \times (\text{organic matter}) + 0.01 \times (\text{mud})
+\end{aligned}
 \]
 
 Larger substrate classes were assigned higher weights because coarse
@@ -690,10 +636,11 @@ along with emergent, submerged, and turf vegetation cover. To assess
 proximity to deeper waters, slope was calculated as horizontal distance
 from the shoreline to the 5 m depth contour derived from bathymetric
 maps. Chemical parameters included water temperature (°C), dissolved
-oxygen (mg L⁻¹), and conductivity (µS cm⁻¹), measured with a YSI ProSolo
-meter (Pro2030 Dissolved Oxygen and Conductivity Meter, YSI Inc., Yellow
-Springs, OH, USA) and pH was determined using a handheld pH meter
-(EC-PCTestr35, Eutech Instruments Pte Ltd, Paisley, UK).
+oxygen (mg L\(^{-1}\)), and conductivity (\(\mu\)S cm\(^{-1}\)),
+measured with a YSI ProSolo meter (Pro2030 Dissolved Oxygen and
+Conductivity Meter, YSI Inc., Yellow Springs, OH, USA) and pH was
+determined using a handheld pH meter (EC-PCTestr35, Eutech Instruments
+Pte Ltd, Paisley, UK).
 
 Catch data for kōura and fish were collected using two single-winged,
 double-throated fyke nets (600 mm high D-shaped entrance hoop) and two
@@ -720,10 +667,10 @@ al., 2015b}). Missing kōura weights due to failure of scale (n = 81)
 were estimated using a log₁₀--log₁₀ length--weight regression fitted to
 individuals with both measurements (n = 240), following standard
 approaches for weight length relationships in aquatic organisms
-(Figure~\ref{fig-length-weight}) (\citeproc{ref-Froese2006}{Froese,
+(\textbf{?@fig-length-weight}) (\citeproc{ref-Froese2006}{Froese,
 2006}). Predicted values were back-transformed with a lognormal bias
-correction factor (10\^{}\{0.5 \cdot \sigma\^{}2\})
-(\citeproc{ref-Quinn2002}{Quinn \& Keough, 2002}).
+correction factor \(10^{0.5 \sigma^2}\) (\citeproc{ref-Quinn2002}{Quinn
+\& Keough, 2002}).
 
 \[
 \log_{10}(\text{Weight [g]}) = -2.938 + 2.864 \times \log_{10}(\text{OCL length [mm]})
@@ -760,7 +707,7 @@ threshold of VIF \textgreater{} 5 was applied
 \citeproc{ref-Kutner2005}{Kutner et al., 2005}). Across all model sets,
 dissolved oxygen expressed as percentage saturation (DO \%) exceeded
 this threshold and was excluded from further analyses, while dissolved
-oxygen concentration (DO mg L⁻¹) was retained.
+oxygen concentration (DO mg L\(^{-1}\)) was retained.
 
 For occupancy analyses, kōura presence--absence was modelled using a
 binomial GAMM with a logit link function (\citeproc{ref-Zuur2009}{Zuur
@@ -778,29 +725,29 @@ and biotic predictors considered included substrate index, slope to 5 m
 depth, riparian vegetation, overhanging trees, wood cover, aquatic
 vegetation classes (emergent native, submerged native, submerged
 non-native, and emergent non-native vegetation), water temperature (°C),
-dissolved oxygen (mg L⁻¹), pH, specific conductivity (µS cm⁻¹), and the
-presence of catfish, eels, goldfish, and common smelt. Continuous
-predictors were centred and standardised prior to modelling to improve
-convergence and facilitate comparison of effect sizes and were modelled
-as smooth terms using thin plate regression splines (bs = `ts'), which
-apply additional shrinkage to penalise overly complex relationships and
-can shrink smooth terms fully to zero during selection
-(\citeproc{ref-Wood2017}{Wood, 2017}). Basis dimensions (k) were set
-based on the number of unique values per predictor and adjusted where
-necessary to balance flexibility and parsimony. Binary predictors (fish
-presence variables) were included as parametric terms.
+dissolved oxygen (mg L\(^{-1}\)), pH, specific conductivity (\(\mu\)S
+cm\(^{-1}\)), and the presence of catfish, eels, goldfish, and common
+smelt. Continuous predictors were centred and standardised prior to
+modelling to improve convergence and facilitate comparison of effect
+sizes and were modelled as smooth terms using thin plate regression
+splines (bs = `ts'), which apply additional shrinkage to penalise overly
+complex relationships and can shrink smooth terms fully to zero during
+selection (\citeproc{ref-Wood2017}{Wood, 2017}). Basis dimensions (k)
+were set based on the number of unique values per predictor and adjusted
+where necessary to balance flexibility and parsimony. Binary predictors
+(fish presence variables) were included as parametric terms.
 
 Model selection was performed using maximum likelihood estimation with
 stepwise backward elimination, sequentially removed and the model
-refitted until all remaining terms met the retention threshold (\emph{α}
-≤ 0.05). Reduced models were compared with their respective full models
-using likelihood ratio tests and Akaike Information Criterion (AIC)
-scores. Final selected models were refitted using restricted maximum
-likelihood (REML), which accounts for the degrees of freedom associated
-with fixed effects and provides less biased estimates of variance
-components, resulting in more stable smoothing parameter estimates in
-models with random effects. Lake identity was included as a random
-effect in all GAMMs to account for spatial clustering and
+refitted until all remaining terms met the retention threshold
+(\(\alpha\) ≤ 0.05). Reduced models were compared with their respective
+full models using likelihood ratio tests and Akaike Information
+Criterion (AIC) scores. Final selected models were refitted using
+restricted maximum likelihood (REML), which accounts for the degrees of
+freedom associated with fixed effects and provides less biased estimates
+of variance components, resulting in more stable smoothing parameter
+estimates in models with random effects. Lake identity was included as a
+random effect in all GAMMs to account for spatial clustering and
 non-independence among observations and was not subject to the variable
 selection procedure (\citeproc{ref-Zuur2009}{Zuur et al., 2009}).
 
@@ -834,8 +781,9 @@ and individual body mass from 0.2--87 g. Kōura were detected in all five
 lakes; however, abundance varied among lakes, with total counts ranging
 from 19 to 112 individuals. Mixed-effects models indicated a significant
 effect of lake on kōura occupancy (binomial GLMM: likelihood ratio test,
-χ²₄ = 13.76, \emph{p} = 0.008), CPUE (Tweedie GLMM: χ²₄ = 12.60,
-\emph{p} = 0.013), and BPUE (Tweedie GLMM: χ²₄ = 9.66, \emph{p} = 0.047;
+\(\chi^2_{4} = 13.76\), \emph{p} = 0.008), CPUE (Tweedie GLMM:
+\(\chi^2_{4} = 12.60\), \emph{p} = 0.013), and BPUE (Tweedie GLMM:
+\(\chi^2_{4} = 9.66\), \emph{p} = 0.047;
 Figure~\ref{fig-koura-by-lake}).
 
 \begin{figure}
@@ -878,23 +826,23 @@ and kōaro were only caught from Ōkāreka.
 \subsubsection{Kōura occupancy}\label{kux14dura-occupancy}
 
 The full binomial GAMM for kōura occupancy explained 65 \% of the
-deviance (AIC = 51; adj. R² = 0.647). Stepwise ML reduction (\emph{α} =
-0.05) retained riparian vegetation, substrate index, temperature, and
-specific conductivity as smoother terms, lake identity as a random
-effect, and the presence of goldfish (negative) and catfish (positive)
-as parametric terms. The final model refitted using REML explained 57.9
-\% of the deviance (adj. R² = 0.592) and retained positive influences of
-riparian vegetation (\emph{p} = 0.026), substrate index (\emph{p} =
-0.001), specific conductivity (\emph{p} = 0.002) and a negative
-influence of temperature (\emph{p} \textless{} 0.001), as significant
-smoother terms (Figure~\ref{fig-occupancy-model} a). The random effect
-of lake identity was not statistically significant (\emph{p} = 0.622),
-indicating limited residual variation between lakes after accounting for
-environmental and biotic predictors. Among the parametric covariates,
-goldfish had a significant negative relationship (\emph{p} = 0.017), and
-catfish presence showed a significant positive relationship (\emph{p} =
-0.014). Model diagnostics showed no evidence of overfitting (edf
-\textless{} k) and good discrimination (AUC = 0.946;
+deviance (AIC = 51; adj. R² = 0.647). Stepwise ML reduction
+(\(\alpha = 0.05\)) retained riparian vegetation, substrate index,
+temperature, and specific conductivity as smoother terms, lake identity
+as a random effect, and the presence of goldfish (negative) and catfish
+(positive) as parametric terms. The final model refitted using REML
+explained 57.9 \% of the deviance (adj. R² = 0.592) and retained
+positive influences of riparian vegetation (\emph{p} = 0.026), substrate
+index (\emph{p} = 0.001), specific conductivity (\emph{p} = 0.002) and a
+negative influence of temperature (\emph{p} \textless{} 0.001), as
+significant smoother terms (Figure~\ref{fig-occupancy-model} a). The
+random effect of lake identity was not statistically significant
+(\emph{p} = 0.622), indicating limited residual variation between lakes
+after accounting for environmental and biotic predictors. Among the
+parametric covariates, goldfish had a significant negative relationship
+(\emph{p} = 0.017), and catfish presence showed a significant positive
+relationship (\emph{p} = 0.014). Model diagnostics showed no evidence of
+overfitting (edf \textless{} k) and good discrimination (AUC = 0.946;
 Figure~\ref{fig-occupancy-model} b). Concurvity diagnostics revealed
 high collinearity between specific conductivity and lake identity
 (worst-case = 1.00, observed = 0.94), and between temperature and lake
@@ -933,14 +881,14 @@ indicates perfect calibration.}
 \subsubsection{Kōura CPUE}\label{kux14dura-cpue}
 
 The full Gamma GAMM for positive CPUE explained 48.4 \% of the deviance
-(AIC = 122; adj. R² = 0.19; n = 33). Stepwise selection (\emph{α} =
-0.05) reduced the model to temperature, pH, and emergent native
-macrophytes as smoother terms, lake identity as a random effect, and the
-presence of common smelt (negative) as a parametric effect. This reduced
-model achieved a lower AIC (115) and explained 47.3 \% of the deviance
-(adj. R² = 0.194). Likelihood ratio tests indicated that the reduced
-model was statistically equivalent to the full model (\emph{p} = 0.950),
-and it was therefore selected as the final CPUE model.
+(AIC = 122; adj. R² = 0.19; n = 33). Stepwise selection
+(\(\alpha = 0.05\)) reduced the model to temperature, pH, and emergent
+native macrophytes as smoother terms, lake identity as a random effect,
+and the presence of common smelt (negative) as a parametric effect. This
+reduced model achieved a lower AIC (115) and explained 47.3 \% of the
+deviance (adj. R² = 0.194). Likelihood ratio tests indicated that the
+reduced model was statistically equivalent to the full model (\emph{p} =
+0.950), and it was therefore selected as the final CPUE model.
 
 The final REML-fitted model explained 47.3 \% of the deviance (adj. R² =
 0.195) and retained positive influence of pH (\emph{p} \textless{}
@@ -982,26 +930,27 @@ annotated values report R² and RMSE to summarise model fit.}
 \subsubsection{Kōura BPUE}\label{kux14dura-bpue}
 
 The full Gamma GAMM for positive BPUE explained 97.4 \% of the deviance
-(AIC = 266; adj. R² = 0.76; n = 33). Stepwise ML selection (\emph{α} =
-0.05) retained pH, emergent native macrophytes, and the lake identity
-random effect. The resulting reduced model had a higher AIC (318) and
-explained 26 \% of the deviance (adj. R² = 0.141). As the full model was
-overfitting the data the reduced model was chosen for inference. The
-final REML-fitted BPUE model explained 25.9 \% of the deviance (adj. R²
-= 0.14) and retained a positive influence of pH (\emph{p} = 0.002) and a
-negative influence of emergent native macrophytes (\emph{p} = 0.041) as
-significant, near-linear smoothing (Figure~\ref{fig-bpue-hurdle} a). The
-emergent macrophyte effect, while statistically significant, was close
-to the threshold and should be interpreted with caution given the
-distributional limitations of the model. The lake identity random effect
-was not significant (\emph{p} = 0.607), indicating minimal additional
-between lake variation after accounting for environmental predictors.
-Diagnostic checks showed appropriate basis dimensions (edf \textless{}
-k), stable convergence, and acceptable levels of observed concurvity,
-though minor departure from distributional assumptions was noted at the
-lower tail, likely reflecting a small number of high-biomass sites.
-Predictive accuracy was moderate (Figure~\ref{fig-bpue-hurdle} b), with
-a tendency for the model to under predict the highest BPUE values.
+(AIC = 266; adj. R² = 0.76; n = 33). Stepwise ML selection
+(\(\alpha = 0.05\)) retained pH, emergent native macrophytes, and the
+lake identity random effect. The resulting reduced model had a higher
+AIC (318) and explained 26 \% of the deviance (adj. R² = 0.141). As the
+full model was overfitting the data the reduced model was chosen for
+inference. The final REML-fitted BPUE model explained 25.9 \% of the
+deviance (adj. R² = 0.14) and retained a positive influence of pH
+(\emph{p} = 0.002) and a negative influence of emergent native
+macrophytes (\emph{p} = 0.041) as significant, near-linear smoothing
+(Figure~\ref{fig-bpue-hurdle} a). The emergent macrophyte effect, while
+statistically significant, was close to the threshold and should be
+interpreted with caution given the distributional limitations of the
+model. The lake identity random effect was not significant (\emph{p} =
+0.607), indicating minimal additional between lake variation after
+accounting for environmental predictors. Diagnostic checks showed
+appropriate basis dimensions (edf \textless{} k), stable convergence,
+and acceptable levels of observed concurvity, though minor departure
+from distributional assumptions was noted at the lower tail, likely
+reflecting a small number of high-biomass sites. Predictive accuracy was
+moderate (Figure~\ref{fig-bpue-hurdle} b), with a tendency for the model
+to under predict the highest BPUE values.
 
 \begin{figure}
 
@@ -1343,6 +1292,11 @@ manuscript repository in the interest of open and transparent science.
 
 \subsection{Supplementary information}\label{supplementary-information}
 
+\subsection*{Chapter 3 --- Supplementary
+information}\label{chapter-3-supplementary-information}
+\addcontentsline{toc}{subsection}{Chapter 3 --- Supplementary
+information}
+
 \begin{figure}
 
 \centering{
@@ -1351,13 +1305,14 @@ manuscript repository in the interest of open and transparent science.
 
 }
 
-\caption{\label{fig-length-weight}Length--weight relationship used to
-estimate missing kōura weights. Observed (measured) and model-predicted
-body weights are shown in relation to orbital carapace length (OCL). The
-log₁₀--log₁₀ regression was fitted to individuals with both length and
-weight measurements (n = 240) and used to estimate missing weights (n =
-81). Predicted values were back-transformed using a lognormal bias
-correction factor. The fitted regression equation is shown on the plot.}
+\caption{\label{fig-length-weight-ch3}Length--weight relationship used
+to estimate missing kōura weights. Observed (measured) and
+model-predicted body weights are shown in relation to orbital carapace
+length (OCL). The log₁₀--log₁₀ regression was fitted to individuals with
+both length and weight measurements (n = 240) and used to estimate
+missing weights (n = 81). Predicted values were back-transformed using a
+lognormal bias correction factor. The fitted regression equation is
+shown on the plot.}
 
 \end{figure}%
 
@@ -1369,13 +1324,13 @@ correction factor. The fitted regression equation is shown on the plot.}
 
 }
 
-\caption{\label{fig-raw-data-all-predictors}Raw relationships between
-all environmental predictors examined and kōura occurrence, CPUE, and
-BPUE across all 60 surveyed littoral sites. Each panel shows observed
-values at individual sites (n = 60 for occurrence; n = 33 for CPUE and
-BPUE). Points are jittered slightly for occurrence data to reduce
-overplotting. Predictors highlighted in bold were retained in final GAM
-models.}
+\caption{\label{fig-raw-data-all-predictors-ch3}Raw relationships
+between all environmental predictors examined and kōura occurrence,
+CPUE, and BPUE across all 60 surveyed littoral sites. Each panel shows
+observed values at individual sites (n = 60 for occurrence; n = 33 for
+CPUE and BPUE). Points are jittered slightly for occurrence data to
+reduce overplotting. Predictors highlighted in bold were retained in
+final GAM models.}
 
 \end{figure}%
 
@@ -1621,10 +1576,6 @@ All lakes & Presence Trout & & 60 & 0.10 & 0.00 & 0.00 & 1.00 & 0.04 &
 \end{longtable}
 
 }
-
-\textsubscript{Source:
-\href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
-Notebook}}
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{0}{1}
