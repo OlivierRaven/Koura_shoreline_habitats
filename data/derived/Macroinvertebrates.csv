@@ -1,4 +1,4 @@
-"Site_ID","Monitoring_ID","Date_Time","Net_type","Species","Scientific_name","Native/nonnative","Amount"
+"site_id","monitoring_id","date_time","net_type","species","scientific_name","native/nonnative","amount"
 61,"61_0",2025-02-21 11:00:00,"Box","Caddishfly",NA,NA,1
 62,"62_0",NA,NA,NA,NA,NA,NA
 63,"63_0",2025-02-21 02:00:00,"Box","Caddishfly",NA,NA,4

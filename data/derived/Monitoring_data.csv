@@ -1,4 +1,4 @@
-"Site_ID","Monitoring_ID","Group","Parameter","Unit","Value","Notes"
+"site_id","monitoring_id","group","parameter","unit","value","notes"
 61,"61_0","Physical","Shear_stress","m/s, degrees",NA,"need to be calculated from wind speed and wind direction"
 61,"61_0","Physical","Bottom_visible","0/1","0",NA
 61,"61_0","Physical","Water_clarity","m",NA,NA

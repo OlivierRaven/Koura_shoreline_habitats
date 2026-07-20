@@ -1,0 +1,22 @@
+## Chapter 3 — Supplementary information {.unnumbered}
+
+![Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot.](outputs/fig-length-weight.png){#fig-length-weight-ch3 width=6.5in}
+
+![Raw relationships between all environmental predictors examined and kōura occurrence, CPUE, and BPUE across all 60 surveyed littoral sites. Each panel shows observed values at individual sites (n = 60 for occurrence; n = 33 for CPUE and BPUE). Points are jittered slightly for occurrence data to reduce overplotting. Predictors highlighted in bold were retained in final GAM models.](outputs/fig-raw-data-all-predictors.png){#fig-raw-data-all-predictors-ch3 width=5in}
+
+```{r}
+#| echo: false
+#| label: tbl-an-env-fish-summary
+#| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
+col_nms_env <- c("Lake","Variable","Unit","n","Mean","Median","Min","Max","CI low","CI high")
+if (knitr::is_latex_output()) {
+  knitr::kable(EnvBio_summary_table, digits = 2,
+               align = c("l","l","l","r","r","r","r","r","r","r"),
+               col.names = col_nms_env)
+} else {
+  DT::datatable(EnvBio_summary_table, colnames = col_nms_env, filter = "top", rownames = FALSE,
+                options = list(pageLength = 20, dom = 'Bfrtip', buttons = c('csv', 'excel')),
+                extensions = 'Buttons') |>
+    DT::formatRound(columns = c("Mean","Median","Min","Max","CI_low","CI_high"), digits = 2)
+}
+```

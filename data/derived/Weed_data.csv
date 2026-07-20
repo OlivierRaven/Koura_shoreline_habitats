@@ -1,4 +1,4 @@
-"Site_ID","Monitoring_ID","Weed_Type","Species","Scientific_name","Native_Status","Percentage_Cover"
+"site_id","monitoring_id","weed_type","species","scientific_name","native_status","percentage_cover"
 61,"61_0","Emergent",NA,NA,NA,0
 61,"61_0","Submerged",NA,NA,NA,0
 61,"61_0","Turf",NA,NA,NA,0

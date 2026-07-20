@@ -34,7 +34,7 @@ format:
       text: |
         <style>#title-block-header .abstract { display: none; }</style>
   pdf:
-    toc: true
+    toc: false
     colorlinks: true
     link-citations: true
     include-in-header: references/header.tex
