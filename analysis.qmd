@@ -248,7 +248,7 @@ dplyr::select(parameter, unit) %>%
 distinct()
 
 Monitoring_summary <- Monitoring_data %>%
-dplyr::select(-group, -notes, -unit) %>%
+dplyr::select(-site_id, -group, -notes, -unit) %>%
 pivot_wider(
 names_from  = c(parameter),
 values_from = value,
@@ -300,7 +300,7 @@ Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
   mutate(
     Presence_rocks = if_else(Cobble > 1 | Boulders > 1, 1, 0),
     Slope_5m       = 5 / distance_5m,
-    site_id_       = site_id.x - 60,
+    site_id_       = site_id - 60,
     monitoring_id_ = paste0(
       as.numeric(sub("_.*", "", monitoring_id)) - 60,
       sub("^[^_]*", "", monitoring_id)
@@ -377,9 +377,9 @@ dplyr::select(monitoring_id, Habitat_Type, Substrate_index, Substrate_CV)
 Monitoring_CPUE_data <- Monitoring_CPUE_data %>%
 left_join(habitat_classification, by = "monitoring_id")
 
-#writexl::write_xlsx(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.xlsx"))
-#write.csv(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.csv"), row.names = FALSE)
-#write.csv(habitat_classification, file.path(der_data_dir, "habitat_classification.csv"), row.names = FALSE)
+writexl::write_xlsx(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.xlsx"))
+write.csv(Monitoring_CPUE_data, file.path(der_data_dir, "Monitoring_CPUE_data.csv"), row.names = FALSE)
+write.csv(habitat_classification, file.path(der_data_dir, "habitat_classification.csv"), row.names = FALSE)
 
 #head(Monitoring_CPUE_data)
 

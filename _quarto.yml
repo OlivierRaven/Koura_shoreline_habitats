@@ -2,6 +2,10 @@ project:
   type: manuscript
   output-dir: docs
   post-render: deploy.R
+  render:
+    - "index.qmd"
+    - "analysis.qmd"
+    - "supplementary.qmd"
 
 execute:
   freeze: false
