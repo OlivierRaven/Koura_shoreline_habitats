@@ -20,6 +20,8 @@ manuscript:
   notebooks:
     - notebook: analysis.qmd
       title: "Analysis Notebook"
+    - notebook: supplementary.qmd
+      title: "Supplementary Information"
 
 format:
   html:

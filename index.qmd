@@ -179,6 +179,7 @@ writeLines(r_lines, tmp_r)
 eval(parse(file = tmp_r, encoding = "UTF-8"))
 unlink(tmp_r)
 out_dir <- file.path(chapter_dir, "outputs")
+ch3_out_dir <- out_dir
 
 if (!all(file.exists(file.path(out_dir, paste0(fig_labels, ".png"))))) {
   .old_wd <- setwd(chapter_dir)
