@@ -9,6 +9,8 @@ fig-height: 6
 execute:
   freeze: false
   cache: false
+  warning: false
+  message: false
 ---
 
 This notebook contains all data processing, model fitting, and figure 

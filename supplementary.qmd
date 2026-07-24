@@ -7,9 +7,9 @@
 EnvBio_summary_table <- read.csv(file.path(.ch3_out, "tbl-env-fish-summary.csv"), check.names = FALSE)
 ```
 
-![Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot.](outputs/fig-length-weight.png){#fig-length-weight-ch3 width=6.5in}
+![Length–weight relationship used to estimate missing kōura weights. Observed (measured) and model-predicted body weights are shown in relation to orbital carapace length (OCL). The log₁₀–log₁₀ regression was fitted to individuals with both length and weight measurements (n = 240) and used to estimate missing weights (n = 81). Predicted values were back-transformed using a lognormal bias correction factor. The fitted regression equation is shown on the plot.](outputs/fig-length-weight.png){#fig-length-weight width=6.5in}
 
-![Raw relationships between all environmental predictors examined and kōura occurrence, CPUE, and BPUE across all 60 surveyed littoral sites. Each panel shows observed values at individual sites (n = 60 for occurrence; n = 33 for CPUE and BPUE). Points are jittered slightly for occurrence data to reduce overplotting. Predictors highlighted in bold were retained in final GAM models.](outputs/fig-raw-data-all-predictors.png){#fig-raw-data-all-predictors-ch3 width=5in}
+![Raw relationships between all environmental predictors examined and kōura occurrence, CPUE, and BPUE across all 60 surveyed littoral sites. Each panel shows observed values at individual sites (n = 60 for occurrence; n = 33 for CPUE and BPUE). Points are jittered slightly for occurrence data to reduce overplotting. Predictors highlighted in bold were retained in final GAM models.](outputs/fig-raw-data-all-predictors.png){#fig-raw-data-all-predictors width=5in}
 
 ```{r}
 #| echo: false

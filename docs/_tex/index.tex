@@ -9,6 +9,7 @@
   DIV=11,
   numbers=noendperiod]{scrartcl}
 \usepackage{xcolor}
+\usepackage[top=25.4mm,bottom=25.4mm,left=25.4mm,right=25.4mm]{geometry}
 \usepackage{amsmath,amssymb}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
@@ -149,8 +150,12 @@
 \usepackage{setspace}
 \onehalfspacing
 
-\usepackage[pagewise]{lineno}
-\linenumbers
+\usepackage{lscape}
+
+% kableExtra loads pdflscape which sets /Rotate 90 on PDF pages, making them appear
+% horizontal in the viewer. Reset to /Rotate 0 just before each page ships so pages
+% stay portrait while table content remains rotated 90° by lscape on the page.
+\AddToHook{shipout/before}{\pdfpageattr{/Rotate 0}}
 
 \usepackage{xcolor}
 \usepackage{tikz}
@@ -247,52 +252,6 @@ Kusabs \and Robin Holmes \and Deniz Özkundakci}
 \begin{document}
 \maketitle
 
-
-\clearpage
-\providecommand{\chaptermark}[1]{}
-\ifcsname c@chapter\endcsname
-\setcounter{chapter}{3}
-\setcounter{section}{0}
-\addcontentsline{toc}{chapter}{\protect\numberline{3}Where do K\={o}ura Live?}
-\chaptermark{Where do K\={o}ura Live?}
-\fi
-\providecommand{\thechapter}{3}
-\thispagestyle{empty}
-\begin{tikzpicture}[remember picture, overlay]
-  \begin{scope}
-    \clip ([yshift=-7cm]current page.north west)
-          rectangle ([yshift=4.5cm]current page.south east);
-    \node[inner sep=0pt, anchor=north]
-      at ([yshift=-7cm]current page.north)
-      {\includegraphics[height=18.2cm]{images/ch3_cover.jpg}};
-  \end{scope}
-  \fill[black]
-    (current page.north west) rectangle ([yshift=-7cm]current page.north east);
-  \node[color=thesissand, align=left,
-        font=\fontsize{13}{16}\selectfont\sffamily, anchor=west]
-    at ([xshift=1.5cm, yshift=-1.5cm]current page.north west)
-    {Chapter \thechapter};
-  \node[color=white, text width=0.85\paperwidth, align=left,
-        font=\fontsize{22}{28}\selectfont\bfseries\sffamily, anchor=west]
-    at ([xshift=1.5cm, yshift=-4cm]current page.north west)
-    {Where do K\={o}ura Live?};
-  \node[color=white, text width=0.85\paperwidth, align=left,
-        font=\fontsize{10}{13}\selectfont\itshape\sffamily, anchor=north west]
-    at ([xshift=1.5cm, yshift=-5.0cm]current page.north west)
-    {Littoral habitat structure influences freshwater crayfish populations in five volcanic lakes of Aotearoa New Zealand};
-  \fill[black]
-    (current page.south west) rectangle ([yshift=4.5cm]current page.south east);
-  \node[color=white, text width=0.85\paperwidth, align=left,
-        font=\fontsize{9}{13}\selectfont\sffamily, anchor=west]
-    at ([xshift=1.5cm, yshift=3.2cm]current page.south west)
-    {Olivier V.\ Raven, Francis J.\ Burdon, Ian A.\ K.\ Kusabs, Robin Holmes \& Deniz Özkundakci};
-  \node[color=thesissand, text width=0.85\paperwidth, align=left,
-        font=\fontsize{9}{13}\selectfont\itshape\sffamily, anchor=west]
-    at ([xshift=1.5cm, yshift=1.5cm]current page.south west)
-    {Hydrobiologia (2026) --- https://doi.org/10.1007/s10750-026-06302-z};
-\end{tikzpicture}
-\null
-\clearpage
 
 \subsection*{Abstract}\label{abstract}
 \addcontentsline{toc}{subsection}{Abstract}
@@ -487,12 +446,13 @@ random coordinates without enforcing fixed spacing between sites. The
 final coordinates of the 12 random survey sites per lake were extracted
 directly from the GRTS output (Figure~\ref{fig-site-map}).
 
-\begingroup\fontsize{9}{11}\selectfont
+\begin{landscape}
+\begingroup\fontsize{8}{10}\selectfont
 
 \begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedright\arraybackslash}p{0.9cm}>{\raggedright\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}>{\raggedleft\arraybackslash}p{0.9cm}}
 
 \caption{\label{tbl-lake-overview}Physical, morphometric, and trophic
-characteristics of the five Rotorua Te Arawa lakes surveyed, including
+characteristics of the five Rotorua Te Arawa Lakes surveyed, including
 sampling dates and number of littoral sites sampled per lake. Lake
 surface area, perimeter length, catchment area, depth, elevation, mixing
 regime, and trophic state for 2024 are derived from the Land, Air, Water
@@ -505,7 +465,7 @@ excluding geothermal and cliff sections.}
 \toprule
 \multicolumn{10}{c}{\textbf{ }} & \multicolumn{4}{c}{\textbf{Shoreline composition (\%)}} \\
 \cmidrule(l{3pt}r{3pt}){11-14}
-Lake name & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Sampling date (n sites)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Surface area (km²)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Perimeter length (km)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Catchment area (km²)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Mean depth (m)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Maximum depth (m)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Elevation (m)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Mixing regime\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Trophic state\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Muddy (\%)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Sandy (\%)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Rocky (\%)\}\} & \textbackslash{}rotatebox\{90\}\{\textbackslash{}parbox\{3.2cm\}\{\textbackslash{}raggedright Emergent macrophytes (\%)\}\}\\
+Lake name & Sampling date (n sites) & \rotatebox{90}{\parbox{2.8cm}{\raggedright Surface area (km²)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Perimeter length (km)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Catchment area (km²)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Mean depth (m)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Maximum depth (m)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Elevation (m)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Mixing regime}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Trophic state}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Muddy (\%)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Sandy (\%)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Rocky (\%)}} & \rotatebox{90}{\parbox{2.8cm}{\raggedright Emergent macrophytes (\%)}}\\
 \midrule
 Rotorua & 20/02/2025 (12) & 81 & 45 & 508.0 & 11.0 & 45.0 & 280 & Polymictic & Eutrophic & 0.0 & 82.8 & 17.2 & 0.0\\
 Rotoiti & 15/01/2025 (12) & 34 & 61 & 123.7 & 31.5 & 124.0 & 279 & Monomictic & Mesotrophic & 0.0 & 68.5 & 21.8 & 9.7\\
@@ -517,6 +477,7 @@ Rotomā & 6/11/2024 (12) & 11 & 24 & 27.8 & 36.9 & 83.0 & 316 & Monomictic & Oli
 \end{longtable}
 
 \endgroup{}
+\end{landscape}
 
 \textsubscript{Source:
 \href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
@@ -548,9 +509,10 @@ observations and measurements were conducted from a boat. At each site,
 physical, chemical and biological parameters were recorded
 (Table~\ref{tbl-environmental-biotic-overview}).
 
-\begingroup\fontsize{9}{11}\selectfont
+\begin{landscape}
+\begingroup\fontsize{7}{9}\selectfont
 
-\begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{5.8cm}>{\raggedright\arraybackslash}p{4.0cm}}
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{9.5cm}>{\raggedright\arraybackslash}p{5.0cm}}
 
 \caption{\label{tbl-environmental-biotic-overview}Overview of
 environmental and biotic variables measured at littoral sampling sites,
@@ -565,16 +527,6 @@ and biomass in lake littoral zones.}
 \toprule
 Variable & Description / Unit & Hypothesised importance for kōura & References\\
 \midrule
-\endfirsthead
-\multicolumn{4}{@{}l}{\textit{(continued)}}\\
-\toprule
-Variable & Description / Unit & Hypothesised importance for kōura & References\\
-\midrule
-\endhead
-
-\endfoot
-\bottomrule
-\endlastfoot
 Lake identity & Categorical variable identifying lake & Captures unmeasured lake-specific differences in water chemistry, productivity, and catchment characteristics. & Zuur et al., (2009)\\
 Substrate index & Index based on \% cover of bedrock, boulders, cobble, gravel, sand, mud, and organic matter & Important for burrowing and shelter availability. Coarser substrates increase shelter availability through more crevices. & Usio \& Townsend, (2000); Kusabs et al., (2015b)\\
 Slope & Slope from shoreline to the 5 m depth contour & Steeper slopes facilitate access to deeper water during daylight refuging and associate with coarser substrates. & Devcich, (1979); Kusabs et al., (2015b)\\
@@ -588,11 +540,13 @@ Dissolved oxygen & Dissolved oxygen concentration in mg L⁻¹ & Essential for r
 Specific conductivity & Electrical conductivity of the water in µS cm⁻¹ & Reflects overall lake productivity, supporting food availability. & Devcich, (1979)\\
 \addlinespace
 pH & Acidity or alkalinity of the water & Influences moulting success and exoskeleton strength, affected by acidity or calcium levels. & Olsson et al., (2006)\\
-Fish presence & Presence/absence of selected native and non-native fish species & Fish act as predators, competitors, or indirectly modify habitat structure. & Shave et al., (1994); Barnes, (1996); Usio \& Townsend, (2000); Barnes \& Hicks, (2003)\\*
+Fish presence & Presence/absence of selected native and non-native fish species & Fish act as predators, competitors, or indirectly modify habitat structure. & Shave et al., (1994); Barnes, (1996); Usio \& Townsend, (2000); Barnes \& Hicks, (2003)\\
+\bottomrule
 
 \end{longtable}
 
 \endgroup{}
+\end{landscape}
 
 \textsubscript{Source:
 \href{https://OlivierRaven.github.io/Koura_shoreline_habitats/index.qmd.html}{Article
@@ -667,7 +621,7 @@ al., 2015b}). Missing kōura weights due to failure of scale (n = 81)
 were estimated using a log₁₀--log₁₀ length--weight regression fitted to
 individuals with both measurements (n = 240), following standard
 approaches for weight length relationships in aquatic organisms
-(\textbf{?@fig-length-weight}) (\citeproc{ref-Froese2006}{Froese,
+(Figure~\ref{fig-length-weight}) (\citeproc{ref-Froese2006}{Froese,
 2006}). Predicted values were back-transformed with a lognormal bias
 correction factor \(10^{0.5 \sigma^2}\) (\citeproc{ref-Quinn2002}{Quinn
 \& Keough, 2002}).
@@ -776,7 +730,7 @@ catfish-absent sites, and across lakes with and without catfish.
 \subsection{Results}\label{results}
 
 A total of 321 kōura were captured across 33 of the 60 surveyed sites
-within the five Rotorua Te Arawa lakes. Kōura OCL ranged from 7--53 mm
+within the five Rotorua Te Arawa Lakes. Kōura OCL ranged from 7--53 mm
 and individual body mass from 0.2--87 g. Kōura were detected in all five
 lakes; however, abundance varied among lakes, with total counts ranging
 from 19 to 112 individuals. Mixed-effects models indicated a significant
@@ -804,7 +758,7 @@ of kōura CPUE and BPUE, respectively, across lakes using boxplots
 \end{figure}%
 
 The five lakes differed substantially in environmental and biotic
-characteristics (\textbf{?@tbl-an-env-fish-summary}). Physical habitat
+characteristics (Table~\ref{tbl-an-env-fish-summary}). Physical habitat
 structure varied among lakes, with differences in substrate index,
 nearshore slope, and littoral vegetation cover. Emergent macrophytes
 were absent from Lake Rotorua but present in the other lakes,
@@ -1238,7 +1192,7 @@ complexity in littoral ecosystems.
 \subsection{Acknowledgements}\label{acknowledgements}
 
 We thank Te Arawa Lakes Trust and Te Komiti Whakahaere for the
-opportunity to study kōura in the Rotorua Te Arawa lakes. We are
+opportunity to study kōura in the Rotorua Te Arawa Lakes. We are
 grateful to Soweeta Fort-D'ath and William Anaru (Te Arawa Lakes Trust),
 and Tihini Grant (Ngāti Pikiao), for facilitating access to the lakes
 and supporting the field programme. We appreciate Joe Butterworth's
@@ -1290,9 +1244,289 @@ raw dataset and code are archived on Zenodo
 including the cover letter and reviewer responses, are available in the
 manuscript repository in the interest of open and transparent science.
 
-\subsection{Supplementary information}\label{supplementary-information}
+\subsection*{Chapter 3 --- Supplementary
+information}\label{chapter-3-supplementary-information}
+\addcontentsline{toc}{subsection}{Chapter 3 --- Supplementary
+information}
 
-\emph{Supplementary figures and tables are provided in the appendices.}
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=6.5in,height=\textheight,keepaspectratio]{outputs/fig-length-weight.png}
+
+}
+
+\caption{\label{fig-length-weight}Length--weight relationship used to
+estimate missing kōura weights. Observed (measured) and model-predicted
+body weights are shown in relation to orbital carapace length (OCL). The
+log₁₀--log₁₀ regression was fitted to individuals with both length and
+weight measurements (n = 240) and used to estimate missing weights (n =
+81). Predicted values were back-transformed using a lognormal bias
+correction factor. The fitted regression equation is shown on the plot.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=5in,height=\textheight,keepaspectratio]{outputs/fig-raw-data-all-predictors.png}
+
+}
+
+\caption{\label{fig-raw-data-all-predictors}Raw relationships between
+all environmental predictors examined and kōura occurrence, CPUE, and
+BPUE across all 60 surveyed littoral sites. Each panel shows observed
+values at individual sites (n = 60 for occurrence; n = 33 for CPUE and
+BPUE). Points are jittered slightly for occurrence data to reduce
+overplotting. Predictors highlighted in bold were retained in final GAM
+models.}
+
+\end{figure}%
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1149}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.2529}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.1034}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0345}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0805}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 18\tabcolsep) * \real{0.0920}}@{}}
+
+\caption{\label{tbl-an-env-fish-summary}Distribution of environmental
+and biotic variables measured at littoral sampling sites across five Te
+Arawa lakes in the Rotorua region of Aotearoa New Zealand.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Lake
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Unit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+n
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Median
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Min
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Max
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+CI low
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+CI high
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Rotorua & Substrate index & & 12 & 3.66 & 3.30 & 2.80 & 6.30 & 3.01 &
+4.31 \\
+Rotoiti & Substrate index & & 12 & 3.92 & 3.20 & 2.00 & 8.00 & 2.73 &
+5.11 \\
+Rotoehu & Substrate index & & 12 & 2.77 & 2.45 & 2.00 & 4.90 & 2.15 &
+3.39 \\
+Rotomā & Substrate index & & 12 & 3.50 & 3.02 & 2.00 & 6.20 & 2.64 &
+4.36 \\
+Ōkāreka & Substrate index & & 12 & 2.86 & 2.70 & 1.00 & 6.20 & 1.92 &
+3.79 \\
+All lakes & Substrate index & & 60 & 3.34 & 3.00 & 1.00 & 8.00 & 2.98 &
+3.71 \\
+Rotorua & Slope 5m & & 12 & 0.02 & 0.01 & 0.01 & 0.16 & 0.00 & 0.05 \\
+Rotoiti & Slope 5m & & 12 & 0.09 & 0.07 & 0.04 & 0.30 & 0.04 & 0.14 \\
+Rotoehu & Slope 5m & & 12 & 0.08 & 0.06 & 0.02 & 0.27 & 0.03 & 0.12 \\
+Rotomā & Slope 5m & & 12 & 0.07 & 0.06 & 0.01 & 0.23 & 0.03 & 0.11 \\
+Ōkāreka & Slope 5m & & 12 & 0.11 & 0.13 & 0.01 & 0.20 & 0.07 & 0.15 \\
+All lakes & Slope 5m & & 60 & 0.08 & 0.06 & 0.01 & 0.30 & 0.06 & 0.09 \\
+Rotorua & Riparian vegetation & \% & 12 & 67.50 & 100.00 & 0.00 & 100.00
+& 40.12 & 94.88 \\
+Rotoiti & Riparian vegetation & \% & 12 & 92.50 & 100.00 & 20.00 &
+100.00 & 77.88 & 107.12 \\
+Rotoehu & Riparian vegetation & \% & 12 & 67.50 & 100.00 & 0.00 & 100.00
+& 36.95 & 98.05 \\
+Rotomā & Riparian vegetation & \% & 12 & 63.33 & 90.00 & 0.00 & 100.00 &
+35.13 & 91.53 \\
+Ōkāreka & Riparian vegetation & \% & 12 & 75.83 & 100.00 & 0.00 & 100.00
+& 48.01 & 103.66 \\
+All lakes & Riparian vegetation & \% & 60 & 73.33 & 100.00 & 0.00 &
+100.00 & 62.65 & 84.02 \\
+Rotorua & Overhanging trees & \% & 12 & 46.67 & 30.00 & 0.00 & 100.00 &
+15.50 & 77.83 \\
+Rotoiti & Overhanging trees & \% & 12 & 54.17 & 65.00 & 0.00 & 100.00 &
+23.22 & 85.11 \\
+Rotoehu & Overhanging trees & \% & 12 & 35.83 & 0.00 & 0.00 & 100.00 &
+5.25 & 66.42 \\
+Rotomā & Overhanging trees & \% & 12 & 52.50 & 55.00 & 0.00 & 100.00 &
+22.44 & 82.56 \\
+Ōkāreka & Overhanging trees & \% & 12 & 52.50 & 65.00 & 0.00 & 100.00 &
+21.71 & 83.29 \\
+All lakes & Overhanging trees & \% & 60 & 48.33 & 30.00 & 0.00 & 100.00
+& 36.15 & 60.52 \\
+Rotorua & Wood cover & \% & 12 & 8.33 & 3.50 & 0.00 & 30.00 & 1.98 &
+14.69 \\
+Rotoiti & Wood cover & \% & 12 & 4.25 & 1.50 & 0.00 & 20.00 & 0.31 &
+8.19 \\
+Rotoehu & Wood cover & \% & 12 & 14.92 & 10.00 & 3.00 & 40.00 & 7.24 &
+22.60 \\
+Rotomā & Wood cover & \% & 12 & 10.00 & 10.00 & 0.00 & 30.00 & 4.13 &
+15.87 \\
+Ōkāreka & Wood cover & \% & 12 & 11.25 & 7.50 & 0.00 & 40.00 & 2.56 &
+19.94 \\
+All lakes & Wood cover & \% & 60 & 9.75 & 5.00 & 0.00 & 40.00 & 6.96 &
+12.54 \\
+Rotorua & Emergent macrophytes & \% & 12 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.00 & 0.00 \\
+Rotoiti & Emergent macrophytes & \% & 12 & 9.50 & 0.00 & 0.00 & 100.00 &
+-8.71 & 27.71 \\
+Rotoehu & Emergent macrophytes & \% & 12 & 8.75 & 0.00 & 0.00 & 35.00 &
+-0.74 & 18.24 \\
+Rotomā & Emergent macrophytes & \% & 12 & 10.83 & 0.00 & 0.00 & 80.00 &
+-4.78 & 26.45 \\
+Ōkāreka & Emergent macrophytes & \% & 12 & 22.50 & 0.00 & 0.00 & 90.00 &
+-0.35 & 45.35 \\
+All lakes & Emergent macrophytes & \% & 60 & 10.32 & 0.00 & 0.00 &
+100.00 & 3.98 & 16.65 \\
+Rotorua & Submerged macrophytes & \% & 12 & 0.83 & 0.00 & 0.00 & 10.00 &
+-1.00 & 2.67 \\
+Rotoiti & Submerged macrophytes & \% & 12 & 0.83 & 0.00 & 0.00 & 10.00 &
+-1.00 & 2.67 \\
+Rotoehu & Submerged macrophytes & \% & 12 & 51.42 & 52.50 & 0.00 &
+100.00 & 20.51 & 82.33 \\
+Rotomā & Submerged macrophytes & \% & 12 & 21.67 & 10.00 & 0.00 & 85.00
+& 2.21 & 41.12 \\
+Ōkāreka & Submerged macrophytes & \% & 12 & 10.83 & 0.00 & 0.00 & 100.00
+& -7.43 & 29.10 \\
+All lakes & Submerged macrophytes & \% & 60 & 17.12 & 0.00 & 0.00 &
+100.00 & 8.42 & 25.81 \\
+Rotorua & Temperature & Degree C & 12 & 23.15 & 23.25 & 21.80 & 25.30 &
+22.52 & 23.78 \\
+Rotoiti & Temperature & Degree C & 12 & 21.62 & 21.50 & 20.60 & 23.80 &
+21.03 & 22.22 \\
+Rotoehu & Temperature & Degree C & 12 & 22.11 & 22.05 & 21.20 & 23.00 &
+21.72 & 22.49 \\
+Rotomā & Temperature & Degree C & 12 & 17.02 & 16.85 & 16.30 & 18.10 &
+16.64 & 17.39 \\
+Ōkāreka & Temperature & Degree C & 12 & 16.98 & 16.30 & 16.00 & 20.70 &
+15.93 & 18.04 \\
+All lakes & Temperature & Degree C & 60 & 20.18 & 21.25 & 16.00 & 25.30
+& 19.44 & 20.91 \\
+Rotorua & Dissolved oxygen & mg/l & 12 & 8.49 & 7.92 & 5.25 & 11.05 &
+7.39 & 9.59 \\
+Rotoiti & Dissolved oxygen & mg/l & 12 & 9.59 & 9.76 & 6.80 & 10.64 &
+8.92 & 10.25 \\
+Rotoehu & Dissolved oxygen & mg/l & 12 & 10.36 & 10.77 & 8.85 & 11.79 &
+9.67 & 11.05 \\
+Rotomā & Dissolved oxygen & mg/l & 12 & 9.72 & 9.76 & 8.66 & 10.31 &
+9.45 & 9.98 \\
+Ōkāreka & Dissolved oxygen & mg/l & 12 & 9.37 & 9.38 & 8.83 & 9.74 &
+9.20 & 9.53 \\
+All lakes & Dissolved oxygen & mg/l & 60 & 9.50 & 9.62 & 5.25 & 11.79 &
+9.20 & 9.81 \\
+Rotorua & Specific conductivity & µS/cm & 12 & 205.36 & 188.27 & 156.20
+& 443.01 & 156.39 & 254.33 \\
+Rotoiti & Specific conductivity & µS/cm & 12 & 163.11 & 158.70 & 155.79
+& 196.01 & 156.22 & 170.00 \\
+Rotoehu & Specific conductivity & µS/cm & 12 & 458.89 & 458.22 & 455.44
+& 464.72 & 456.91 & 460.87 \\
+Rotomā & Specific conductivity & µS/cm & 12 & 162.90 & 161.79 & 156.73 &
+174.96 & 159.94 & 165.85 \\
+Ōkāreka & Specific conductivity & µS/cm & 12 & 76.34 & 76.15 & 75.62 &
+78.59 & 75.82 & 76.86 \\
+All lakes & Specific conductivity & µS/cm & 60 & 213.32 & 162.55 & 75.62
+& 464.72 & 178.41 & 248.23 \\
+Rotorua & pH & & 12 & 6.94 & 7.04 & 3.78 & 7.69 & 6.29 & 7.60 \\
+Rotoiti & pH & & 12 & 8.67 & 8.72 & 8.08 & 9.02 & 8.46 & 8.87 \\
+Rotoehu & pH & & 12 & 8.83 & 8.90 & 8.46 & 9.21 & 8.68 & 8.99 \\
+Rotomā & pH & & 12 & 7.80 & 7.92 & 6.44 & 8.56 & 7.47 & 8.13 \\
+Ōkāreka & pH & & 12 & 8.32 & 8.29 & 7.77 & 9.00 & 8.15 & 8.50 \\
+All lakes & pH & & 60 & 8.11 & 8.28 & 3.78 & 9.21 & 7.89 & 8.34 \\
+Rotorua & Presence Catfish & & 12 & 0.08 & 0.00 & 0.00 & 1.00 & 0.00 &
+0.38 \\
+Rotoiti & Presence Catfish & & 12 & 0.42 & 0.00 & 0.00 & 1.00 & 0.15 &
+0.72 \\
+Rotoehu & Presence Catfish & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Rotomā & Presence Catfish & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Ōkāreka & Presence Catfish & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+All lakes & Presence Catfish & & 60 & 0.10 & 0.00 & 0.00 & 1.00 & 0.04 &
+0.21 \\
+Rotorua & Presence Eel & & 12 & 0.33 & 0.00 & 0.00 & 1.00 & 0.10 &
+0.65 \\
+Rotoiti & Presence Eel & & 12 & 0.08 & 0.00 & 0.00 & 1.00 & 0.00 &
+0.38 \\
+Rotoehu & Presence Eel & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Rotomā & Presence Eel & & 12 & 0.25 & 0.00 & 0.00 & 1.00 & 0.05 &
+0.57 \\
+Ōkāreka & Presence Eel & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+All lakes & Presence Eel & & 60 & 0.13 & 0.00 & 0.00 & 1.00 & 0.06 &
+0.25 \\
+Rotorua & Presence Goldfish & & 12 & 0.08 & 0.00 & 0.00 & 1.00 & 0.00 &
+0.38 \\
+Rotoiti & Presence Goldfish & & 12 & 0.67 & 1.00 & 0.00 & 1.00 & 0.35 &
+0.90 \\
+Rotoehu & Presence Goldfish & & 12 & 1.00 & 1.00 & 1.00 & 1.00 & 0.74 &
+1.00 \\
+Rotomā & Presence Goldfish & & 12 & 0.50 & 0.50 & 0.00 & 1.00 & 0.21 &
+0.79 \\
+Ōkāreka & Presence Goldfish & & 12 & 0.25 & 0.00 & 0.00 & 1.00 & 0.05 &
+0.57 \\
+All lakes & Presence Goldfish & & 60 & 0.50 & 0.50 & 0.00 & 1.00 & 0.37
+& 0.63 \\
+Rotorua & Presence Common smelt & & 12 & 0.25 & 0.00 & 0.00 & 1.00 &
+0.05 & 0.57 \\
+Rotoiti & Presence Common smelt & & 12 & 0.67 & 1.00 & 0.00 & 1.00 &
+0.35 & 0.90 \\
+Rotoehu & Presence Common smelt & & 12 & 0.50 & 0.50 & 0.00 & 1.00 &
+0.21 & 0.79 \\
+Rotomā & Presence Common smelt & & 12 & 0.42 & 0.00 & 0.00 & 1.00 & 0.15
+& 0.72 \\
+Ōkāreka & Presence Common smelt & & 12 & 0.58 & 1.00 & 0.00 & 1.00 &
+0.28 & 0.85 \\
+All lakes & Presence Common smelt & & 60 & 0.48 & 0.00 & 0.00 & 1.00 &
+0.35 & 0.62 \\
+Rotorua & Presence Kōaro & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Rotoiti & Presence Kōaro & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Rotoehu & Presence Kōaro & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Rotomā & Presence Kōaro & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Ōkāreka & Presence Kōaro & & 12 & 0.67 & 1.00 & 0.00 & 1.00 & 0.35 &
+0.90 \\
+All lakes & Presence Kōaro & & 60 & 0.13 & 0.00 & 0.00 & 1.00 & 0.06 &
+0.25 \\
+Rotorua & Presence Trout & & 12 & 0.17 & 0.00 & 0.00 & 1.00 & 0.02 &
+0.48 \\
+Rotoiti & Presence Trout & & 12 & 0.17 & 0.00 & 0.00 & 1.00 & 0.02 &
+0.48 \\
+Rotoehu & Presence Trout & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Rotomā & Presence Trout & & 12 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 &
+0.26 \\
+Ōkāreka & Presence Trout & & 12 & 0.17 & 0.00 & 0.00 & 1.00 & 0.02 &
+0.48 \\
+All lakes & Presence Trout & & 60 & 0.10 & 0.00 & 0.00 & 1.00 & 0.04 &
+0.21 \\
+
+\end{longtable}
+
+}
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{0}{1}

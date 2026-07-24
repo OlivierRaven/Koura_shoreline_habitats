@@ -7,8 +7,12 @@
 \usepackage{setspace}
 \onehalfspacing
 
-\usepackage[pagewise]{lineno}
-\linenumbers
+\usepackage{lscape}
+
+% kableExtra loads pdflscape which sets /Rotate 90 on PDF pages, making them appear
+% horizontal in the viewer. Reset to /Rotate 0 just before each page ships so pages
+% stay portrait while table content remains rotated 90° by lscape on the page.
+\AddToHook{shipout/before}{\pdfpageattr{/Rotate 0}}
 
 \usepackage{xcolor}
 \usepackage{tikz}

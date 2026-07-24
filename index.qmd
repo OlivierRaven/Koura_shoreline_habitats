@@ -83,6 +83,7 @@ knitr:
     dev: "ragg_png"
 ---
 
+::: {.content-visible when-profile="thesis"}
 ```{=latex}
 \clearpage
 \providecommand{\chaptermark}[1]{}
@@ -130,6 +131,7 @@ knitr:
 \null
 \clearpage
 ```
+:::
 
 ::: {.content-visible when-format="docx"}
 Chapter 3 Where do Kōura Live?
@@ -224,24 +226,28 @@ For each lake, the total shoreline length of each habitat type within this sampl
 ```{r}
 #| echo: false
 #| label: tbl-lake-overview
-#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database. Shoreline composition percentages are calculated from useable shoreline only, excluding geothermal and cliff sections."
+#| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa Lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database. Shoreline composition percentages are calculated from useable shoreline only, excluding geothermal and cliff sections."
 if (knitr::is_latex_output()) {
   col_nms <- colnames(lake_data)
-  rotated_nms <- c(
-    col_nms[1],
-    sapply(col_nms[-1], function(x)
-      paste0("\\rotatebox{90}{\\parbox{3.2cm}{\\raggedright ", x, "}}")
-    )
+
+  # Build rotated LaTeX for cols 3-14 (injected AFTER kableExtra pipeline
+  # to avoid kableExtra re-escaping backslashes in col.names).
+  # Must escape % → \% before injecting into LaTeX (% starts a comment).
+  escape_latex_pct <- function(x) gsub("%", "\\%", x, fixed = TRUE)
+  rotated_latex <- sapply(col_nms[3:14], function(x)
+    paste0("\\rotatebox{90}{\\parbox{2.8cm}{\\raggedright ", escape_latex_pct(x), "}}")
   )
-  knitr::kable(lake_data,
+  # Placeholder names: plain ASCII so kableExtra leaves them untouched
+  placeholder_nms <- c(col_nms[1:2], sprintf("PHCOL%02d", 3:14))
+
+  tbl <- knitr::kable(lake_data,
                booktabs = TRUE,
-               col.names = rotated_nms,
-               escape = FALSE,
-               linesep = "") %>%
+               linesep = "",
+               col.names = placeholder_nms) %>%
     kableExtra::kable_styling(
       latex_options = "hold_position",
       full_width = FALSE,
-      font_size = 9
+      font_size = 8
     ) %>%
     kableExtra::add_header_above(
       c(" " = 10, "Shoreline composition (%)" = 4),
@@ -250,6 +256,19 @@ if (knitr::is_latex_output()) {
     kableExtra::column_spec(1, width = "2.2cm") %>%
     kableExtra::column_spec(2, width = "1.8cm") %>%
     kableExtra::column_spec(3:14, width = "0.9cm")
+
+  # Replace placeholders with rotated LaTeX in the generated string
+  tbl_str <- as.character(tbl)
+  for (i in 3:14) {
+    tbl_str <- gsub(sprintf("PHCOL%02d", i), rotated_latex[i - 2], tbl_str, fixed = TRUE)
+  }
+
+  tbl <- structure(
+    paste0("\\begin{landscape}\n", tbl_str, "\n\\end{landscape}"),
+    class = "knitr_kable",
+    format = "latex"
+  )
+  tbl
 } else {
   knitr::kable(lake_data)
 }
@@ -265,19 +284,24 @@ In total, 60 sampling sites were sampled once in the Austral spring/summer from 
 #| label: tbl-environmental-biotic-overview
 #| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (*Paranephrops planifrons*). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
 if (knitr::is_latex_output()) {
-  knitr::kable(biotic_vars,
+  tbl <- knitr::kable(biotic_vars,
                booktabs = TRUE,
-               longtable = TRUE,
                linesep = "") %>%
     kableExtra::kable_styling(
-      latex_options = c("repeat_header"),
-      font_size = 9,
+      latex_options = "hold_position",
+      font_size = 7,
       full_width = FALSE
     ) %>%
     kableExtra::column_spec(1, width = "2.5cm") %>%
-    kableExtra::column_spec(2, width = "3.2cm") %>%
-    kableExtra::column_spec(3, width = "5.8cm") %>%
-    kableExtra::column_spec(4, width = "4.0cm")
+    kableExtra::column_spec(2, width = "3.5cm") %>%
+    kableExtra::column_spec(3, width = "9.5cm") %>%
+    kableExtra::column_spec(4, width = "5.0cm")
+  tbl <- structure(
+    paste0("\\begin{landscape}\n", as.character(tbl), "\n\\end{landscape}"),
+    class = "knitr_kable",
+    format = "latex"
+  )
+  tbl
 } else {
   knitr::kable(biotic_vars)
 }
@@ -316,7 +340,7 @@ Model diagnostics were performed to evaluate model fit and assumptions. Residual
 To provide context for the association between catfish presence and kōura metrics detected in the GAMM, a descriptive comparison of kōura presence rate, CPUE, and BPUE was conducted across catfish-present and catfish-absent sites, and across lakes with and without catfish.
 
 ## Results
-A total of 321 kōura were captured across 33 of the 60 surveyed sites within the five Rotorua Te Arawa lakes. Kōura OCL ranged from 7–53 mm and individual body mass from 0.2–87 g. Kōura were detected in all five lakes; however, abundance varied among lakes, with total counts ranging from 19 to 112 individuals. Mixed-effects models indicated a significant effect of lake on kōura occupancy (binomial GLMM: likelihood ratio test, `r report_lrt(pres_lrt)`), CPUE (Tweedie GLMM: `r report_lrt(cpue_lrt)`), and BPUE (Tweedie GLMM: `r report_lrt(bpue_lrt)`; @fig-koura-by-lake).
+A total of 321 kōura were captured across 33 of the 60 surveyed sites within the five Rotorua Te Arawa Lakes. Kōura OCL ranged from 7–53 mm and individual body mass from 0.2–87 g. Kōura were detected in all five lakes; however, abundance varied among lakes, with total counts ranging from 19 to 112 individuals. Mixed-effects models indicated a significant effect of lake on kōura occupancy (binomial GLMM: likelihood ratio test, `r report_lrt(pres_lrt)`), CPUE (Tweedie GLMM: `r report_lrt(cpue_lrt)`), and BPUE (Tweedie GLMM: `r report_lrt(bpue_lrt)`; @fig-koura-by-lake).
 
 ![Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range).](outputs/fig-koura-by-lake.png){#fig-koura-by-lake width=3in}
 
@@ -368,7 +392,7 @@ Our study found that local littoral habitat complexity, particularly coarse subs
 Climate warming is expected to impose increasing constraints on freshwater crayfish populations through rising summer water temperatures, prolonged periods of thermal stratification, and intensified interactions with non-native species that are better adapted to warmer conditions [@Capinha2013; @Lee2025]. While such broad-scale drivers are difficult to manage directly, local habitat conditions represent a tractable management lever. The strong association between kōura occurrence and coarse substrate availability suggests that an absence of interstitial refuge availability may act as a limiting factor freshwater crayfish populations in these systems. Accordingly, management actions that prioritise the protection and enhancement of coarse littoral substrates and riparian vegetation, including the targeted placement of rocks in areas already used by freshwater crayfish [@Johnsen2008], may help support the persistence and local recovery of populations in lakes and represent a practical approach to conserving functionally important habitat complexity in littoral ecosystems.
 
 ## Acknowledgements
-We thank Te Arawa Lakes Trust and Te Komiti Whakahaere for the opportunity to study kōura in the Rotorua Te Arawa lakes. We are grateful to Soweeta Fort-D’ath and William Anaru (Te Arawa Lakes Trust), and Tihini Grant (Ngāti Pikiao), for facilitating access to the lakes and supporting the field programme. We appreciate Joe Butterworth’s assistance with fieldwork, and the support of Andy Bruere and the Bay of Plenty Regional Council in helping to fund the fieldwork. We thank Calum MacNeil and three anonymous reviewers for feedback on an earlier version of this manuscript.
+We thank Te Arawa Lakes Trust and Te Komiti Whakahaere for the opportunity to study kōura in the Rotorua Te Arawa Lakes. We are grateful to Soweeta Fort-D’ath and William Anaru (Te Arawa Lakes Trust), and Tihini Grant (Ngāti Pikiao), for facilitating access to the lakes and supporting the field programme. We appreciate Joe Butterworth’s assistance with fieldwork, and the support of Andy Bruere and the Bay of Plenty Regional Council in helping to fund the fieldwork. We thank Calum MacNeil and three anonymous reviewers for feedback on an earlier version of this manuscript.
 
 ::: {.chapter-only}
 ### Funding statement
@@ -387,9 +411,7 @@ The corresponding author has declared that none of the authors has any competing
 The code and derived data supporting the findings of this study are openly available on GitHub (https://github.com/OlivierRaven/Koura_shoreline_habitats) and a rendered version of the analysis is hosted at https://olivierraven.github.io/Koura_shoreline_habitats/. The primary raw dataset and code are archived on Zenodo (https://doi.org/10.5281/zenodo.19476793). Peer review documents, including the cover letter and reviewer responses, are available in the manuscript repository in the interest of open and transparent science.
 :::
 
-::: {.supplementary}
-## Supplementary information
-
-*Supplementary figures and tables are provided in the appendices.*
+::: {.content-visible unless-profile="thesis"}
+{{< include supplementary.qmd >}}
 :::
 
