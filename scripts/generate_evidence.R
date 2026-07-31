@@ -24,6 +24,12 @@
 #   is a best-effort scan of README.md (first non-Zenodo DOI found) — both
 #   are optional; the manifest just omits what it can't find rather than
 #   requiring it.
+# - Writes are recognized under two conventions, since proven against a
+#   third real repo (a minimal `project: type: default` template) that used
+#   neither of the first two: `file.path(out_dir, "...")` (trout/kōura's
+#   convention) and literal-path calls — saveRDS(x, "path.rds"),
+#   write_csv/write.csv(x, "path.csv"), ggsave("path.png", plot) — regardless
+#   of whether the path is the first or a later argument.
 #
 # Many claim chunks are thin display wrappers (e.g. `x |> knitr::kable()`)
 # whose actual computation — and actual file reads/writes — happened in an
@@ -41,6 +47,18 @@
 #   top-level `var <- ...` assignments and whole-word variable mentions are
 #   followed. Variables built inside loops with dynamic paths (e.g.
 #   read.delim(file_path) in a loop) aren't traceable this way.
+# - Two systematic false-positive sources were found and fixed against a
+#   second real repo: short generic names (c, n, x, tbl...) reused as loop
+#   counters/temporaries across unrelated chunks, and named function
+#   arguments (predict(model, type = "response")) colliding with a
+#   same-named variable defined elsewhere. What's left after both fixes is
+#   genuinely ambiguous, not another bug: a short, natural domain word
+#   (e.g. "lakes" in an ecology paper) independently reused as a variable
+#   name in two unrelated chunks looks identical, in plain text, to a real
+#   shared dependency. Resolving that needs actual scope-aware parsing,
+#   which is out of scope for a static regex-based tool — noted here
+#   rather than chased with increasingly narrow rules that risk breaking
+#   legitimate matches elsewhere.
 #
 # Run this after a successful `quarto render` — generatedAt is treated
 # downstream as "last verified reproducible".
@@ -222,20 +240,37 @@ find_writes <- function(body) {
     # not as "propagate the empty vector" — hence the length check above.
     paste0("outputs/", trimws(gsub('file\\.path\\(out_dir,\\s*"\\s*([^"]+)"\\)', "\\1", writes)))
 
-  # saveRDS(list(...), "literal/path.rds") — the path is a full literal
-  # string, not built from out_dir, and is the LAST argument in a call that
-  # usually spans many lines (one list element per line). [\\s\\S]*? matches
-  # across those newlines non-greedily so this doesn't stop at the list's
-  # own closing paren before reaching saveRDS's.
-  rds_matches <- regmatches(
-    body,
-    gregexpr('saveRDS\\([\\s\\S]*?"([^"]+\\.rds)"\\s*\\)', body, perl = TRUE)
-  )[[1]]
-  direct_writes <- if (length(rds_matches) == 0) character(0) else
-    # (?s) makes `.` match newlines too — these matches span many lines
-    unique(gsub('(?s).*"([^"]+\\.rds)"\\s*\\)$', "\\1", rds_matches, perl = TRUE))
+  # Literal-path writes: saveRDS(x, "path.rds"), write_csv(x, "path.csv"),
+  # write.csv(x, "path.csv"), ggsave("path.png", plot). The path is a full
+  # literal string (not built from out_dir), and may be the first argument
+  # (ggsave) or a later one (saveRDS/write_csv) in a call that often spans
+  # several lines (e.g. saveRDS(list(...), "path.rds") with one list element
+  # per line). [\\s\\S]*? matches across those newlines non-greedily and
+  # stops at the first quoted string with the right extension, regardless of
+  # argument position.
+  literal_write_fns <- list(
+    list(fn = "saveRDS", ext = "\\.rds"),
+    list(fn = "write_csv|readr::write_csv|write\\.csv|write\\.table", ext = "\\.csv"),
+    list(fn = "ggsave", ext = "\\.(png|pdf|svg|jpg|jpeg|tiff)")
+  )
+  literal_writes <- unique(unlist(lapply(literal_write_fns, function(spec) {
+    fn <- paste0("(?:", spec$fn, ")")  # see note in find_files() above
+    matches <- regmatches(body, gregexpr(
+      paste0(fn, '\\([\\s\\S]*?"([^"]+', spec$ext, ')"'), body, perl = TRUE
+    ))[[1]]
+    if (length(matches) == 0) return(character(0))
+    # Skip matches that actually reach into a file.path(out_dir, "...") call
+    # nested inside this one (e.g. ggsave(x, file = file.path(out_dir,
+    # "f.png"))) — that write is already captured, with its outputs/ prefix
+    # intact, by the file.path(out_dir, ...) pattern above; without this
+    # guard it'd also get picked up here, minus the prefix, as a duplicate.
+    matches <- matches[!grepl("file\\.path\\(out_dir", matches, fixed = FALSE)]
+    if (length(matches) == 0) return(character(0))
+    # (?s) makes `.` match newlines too — these matches can span many lines
+    unique(gsub(paste0('(?s).*"([^"]+', spec$ext, ')".*'), "\\1", matches, perl = TRUE))
+  })))
 
-  unique(c(out_writes, direct_writes))
+  unique(c(out_writes, literal_writes))
 }
 
 get_opt <- function(body, name) {
@@ -362,7 +397,10 @@ for (chunk_idx in seq_along(chunks)) {
     sentences <- strsplit(para, "(?<=[.?!])\\s+", perl = TRUE)[[1]]
     hit <- sentences[grepl(paste0("@", label, label_boundary), sentences, perl = TRUE)]
     if (length(hit)) {
-      claim_text <- trimws(gsub(paste0("\\(?@", label, label_boundary, "\\)?"), "", hit[1], perl = TRUE))
+      # Strip EVERY fig-/tbl- citation in the sentence, not just this
+      # label's — a sentence like "See @fig-a and @tbl-b." would otherwise
+      # leave the other label's raw "@tbl-b" markup sitting in claimText.
+      claim_text <- trimws(gsub("\\(?@(fig|tbl)-[A-Za-z0-9_-]+\\)?", "", hit[1], perl = TRUE))
       # inline computed values (`r accuracy_rf`) can't be evaluated by this
       # static parser — mark them as a placeholder rather than leak raw code
       claim_text <- gsub("`r [^`]+`", "[computed value]", claim_text, perl = TRUE)
