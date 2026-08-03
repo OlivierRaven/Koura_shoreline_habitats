@@ -6,7 +6,7 @@ Olivier V. Raven | <olivier.raven@icloud.com>
 
 ## Overview
 
-This repository contains the full reproducible workflow supporting the manuscript above. It includes all code used for data processing, statistical analyses, and figure generation, derived datasets, generated figures, and peer review documents. Raw field data are not tracked in this repository and will be archived in an open-access data repository upon acceptance.
+This repository contains the full reproducible workflow supporting the manuscript above. It includes all code used for data processing, statistical analyses, and figure generation, derived datasets, generated figures, and peer review documents. Raw field data are not tracked in this repository and are archived on Zenodo (see Data availability below).
 
 **Key findings:**
 
@@ -18,19 +18,21 @@ This repository contains the full reproducible workflow supporting the manuscrip
 
 ## Repository structure
 
-    .
-    +-- data/
-    |   +-- derived/      # Processed CSVs used in analysis
-    +-- outputs/          # Generated figures and tables
-    +-- manuscript/       # Manuscript versions, cover letter, reviewer responses
-    +-- images/           # Site photographs
-    +-- references/       # Bibliography (.bib) and citation style files
-    +-- scripts/          # Site selection and other supporting scripts
-    +-- docs/             # Rendered HTML output (GitHub Pages)
-    +-- _quarto.yml       # Quarto project configuration
-    +-- deploy.R          # Post-render script that publishes docs/ to GitHub Pages
-    +-- analysis.qmd      # Full statistical analysis notebook
-    +-- index.qmd         # Manuscript
+```text
+.
++-- data/
+|   +-- derived/      # Processed CSVs used in analysis
++-- outputs/          # Generated figures and tables
++-- manuscript/       # Manuscript versions, cover letter, reviewer responses
++-- images/           # Site photographs
++-- references/       # Bibliography (.bib) and citation style files
++-- scripts/          # Site selection and other supporting scripts
++-- docs/             # Rendered HTML output (GitHub Pages)
++-- _quarto.yml       # Quarto project configuration
++-- deploy.R          # Post-render script that publishes docs/ to GitHub Pages
++-- analysis.qmd      # Full statistical analysis notebook
++-- index.qmd         # Manuscript
+```
 
 ## Reproducing the analysis
 
@@ -41,18 +43,21 @@ All analyses are contained in `analysis.qmd`.
 
 - R >= 4.3
 - Quarto >= 1.4
-- R packages: `mgcv`, `gratia`, `glmmTMB`, `pROC`, `caret`, `performance`,
-  `kableExtra`, `emmeans`, `patchwork`, `tidyverse`, `readxl`
+- renv (installed automatically when you open the project)
 
 ### Install R packages
 
-install.packages(c("mgcv", "gratia", "glmmTMB", "pROC", "caret",
-                   "performance", "kableExtra", "emmeans",
-                   "patchwork", "tidyverse", "readxl"))
+This project uses [renv](https://rstudio.github.io/renv/) for reproducible package management. To restore the exact package versions used in the analysis:
+
+```r
+renv::restore()
+```
 
 ### Render the analysis
 
+```bash
 quarto render analysis.qmd
+```
 
 The rendered HTML analysis is available at:
 <https://olivierraven.github.io/Koura_shoreline_habitats/>
@@ -111,5 +116,5 @@ Raven, O.V., Burdon, F.J., Kusabs, I.A.K. et al. Littoral habitat structure infl
 
 ## Licence
 
-Code: MIT License
-Data: CC BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>)
+Code: [MIT License](LICENSE)
+Data: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
