@@ -700,7 +700,8 @@ write.csv(
 
 ```{r}
 #| label: tbl-an-env-fish-summary-widget
-#| include: true
+#| eval: !expr knitr::is_html_output()
+#| include: !expr knitr::is_html_output()
 #| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
 
 DT::datatable(
@@ -723,6 +724,7 @@ DT::datatable(
 ```{r}
 #| label: tbl-env-fish-summary-static
 #| echo: false
+#| eval: !expr "!knitr::is_html_output()"
 #| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
 
 knitr::kable(EnvBio_summary_table, digits = 2,

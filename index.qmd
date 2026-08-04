@@ -83,7 +83,6 @@ knitr:
     dev: "ragg_png"
 ---
 
-::: {.content-visible when-profile="thesis"}
 ```{=latex}
 \clearpage
 \providecommand{\chaptermark}[1]{}
@@ -131,7 +130,6 @@ knitr:
 \null
 \clearpage
 ```
-:::
 
 ::: {.content-visible when-format="docx"}
 Chapter 3 Where do Kōura Live?
@@ -147,7 +145,7 @@ Olivier V. Raven, Francis J. Burdon, Ian A. K. Kusabs, Robin Holmes & Deniz Özk
 :::
 
 ::: {.content-visible when-format="html"}
-# Where do Kōura Live? {.unnumbered}
+# Chapter 3 Where do Kōura Live? {.unnumbered}
 :::
 
 ```{r}

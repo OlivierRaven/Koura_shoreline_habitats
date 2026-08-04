@@ -16,14 +16,14 @@ EnvBio_summary_table <- read.csv(file.path(.ch3_out, "tbl-env-fish-summary.csv")
 #| label: tbl-an-env-fish-summary
 #| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
 col_nms_env <- c("Lake","Variable","Unit","n","Mean","Median","Min","Max","CI low","CI high")
-if (knitr::is_latex_output()) {
-  knitr::kable(EnvBio_summary_table, digits = 2,
-               align = c("l","l","l","r","r","r","r","r","r","r"),
-               col.names = col_nms_env)
-} else {
+if (knitr::is_html_output()) {
   DT::datatable(EnvBio_summary_table, colnames = col_nms_env, filter = "top", rownames = FALSE,
                 options = list(pageLength = 20, dom = 'Bfrtip', buttons = c('csv', 'excel')),
                 extensions = 'Buttons') |>
     DT::formatRound(columns = c("Mean","Median","Min","Max","CI_low","CI_high"), digits = 2)
+} else {
+  knitr::kable(EnvBio_summary_table, digits = 2,
+               align = c("l","l","l","r","r","r","r","r","r","r"),
+               col.names = col_nms_env)
 }
 ```
