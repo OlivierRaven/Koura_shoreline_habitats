@@ -161,7 +161,7 @@ scale_shape_manual(values = c("measured" = 16, "predicted" = 1)) +
 labs(x = "OCL length (mm)", y = "Weight (g)", shape = "Weight source") +
 annotate("text", x = Inf, y = Inf, label = formula_text, hjust = 1.1, vjust = 1.3, size = 3) 
 
-ggsave(filename = file.path(out_dir, "fig-length-weight.png"), plot = length_weight_plot, width = 7, height = 5, dpi = 1200, create.dir = TRUE)
+ggsave(filename = file.path(out_dir, "fig-length-weight-ch3.png"), plot = length_weight_plot, width = 7, height = 5, dpi = 1200, create.dir = TRUE)
 
 length_weight_plot
 ```

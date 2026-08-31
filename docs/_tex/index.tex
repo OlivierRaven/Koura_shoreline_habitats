@@ -224,12 +224,17 @@
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
 \hypersetup{
   pdftitle={Where do Kōura Live?},
   pdfauthor={Olivier V. Raven; Francis J. Burdon; Ian A. K. Kusabs; Robin Holmes; Deniz Özkundakci},
-  pdfkeywords={Rotorua Te Arawa Lakes, North Island, Habitat
-structure, Thermal stress, Generalised additive mixed
-models, Paranephrops planifrons},
+  pdfkeywords={\xmpquote{Rotorua Te Arawa Lakes}, \xmpquote{North
+Island}, \xmpquote{Habitat structure}, \xmpquote{Thermal
+stress}, \xmpquote{Generalised additive mixed
+models}, \xmpquote{Paranephrops planifrons}},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -409,7 +414,7 @@ low flow velocities (\citeproc{ref-Usio2000}{Usio \& Townsend, 2000};
 \citeproc{ref-Jowett2008}{Jowett et al., 2008};
 \citeproc{ref-Parkyn2009}{Parkyn et al., 2009}). In contrast, habitats
 used by kōura in lakes remains poorly understood, with previous studies
-largely focused on deeper offshore habitats
+largely focussed on deeper offshore habitats
 (\citeproc{ref-Kusabs2015b}{Kusabs et al., 2015b};
 \citeproc{ref-Devcich1979}{Devcich, 1979};
 \citeproc{ref-Kusabs2009}{Kusabs \& Quinn, 2009}). These studies suggest
@@ -534,7 +539,7 @@ Notebook}}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{images/Natural_habitat_map.png}}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{images/Natural_habitat_map.png}
 
 }
 
@@ -667,10 +672,11 @@ nets and traps used at each site (\citeproc{ref-Kusabs2015b}{Kusabs et
 al., 2015b}). Missing kōura weights due to failure of scale (n = 81)
 were estimated using a log₁₀--log₁₀ length--weight regression fitted to
 individuals with both measurements (n = 240), following standard
-approaches for weight length relationships in aquatic organisms ({(Fig.
-S1)}) (\citeproc{ref-Froese2006}{Froese, 2006}). Predicted values were
-back-transformed with a lognormal bias correction factor
-\(10^{0.5 \sigma^2}\) (\citeproc{ref-Quinn2002}{Quinn \& Keough, 2002}).
+approaches for weight length relationships in aquatic organisms
+({\textbf{?@fig-length-weight-ch3}}) (\citeproc{ref-Froese2006}{Froese,
+2006}). Predicted values were back-transformed with a lognormal bias
+correction factor \(10^{0.5 \sigma^2}\) (\citeproc{ref-Quinn2002}{Quinn
+\& Keough, 2002}).
 
 \[
 \log_{10}(\text{Weight [g]}) = -2.938 + 2.864 \times \log_{10}(\text{OCL length [mm]})
@@ -790,7 +796,7 @@ Figure~\ref{fig-koura-by-lake}).
 
 \centering{
 
-\includegraphics[width=3in,height=\textheight,keepaspectratio]{outputs/fig-koura-by-lake.png}
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{outputs/fig-koura-by-lake.png}
 
 }
 
@@ -804,24 +810,24 @@ of kōura CPUE and BPUE, respectively, across lakes using boxplots
 \end{figure}%
 
 The five lakes differed substantially in environmental and biotic
-characteristics ({(Table S1)}). Physical habitat structure varied among
-lakes, with differences in substrate index, nearshore slope, and
-littoral vegetation cover. Emergent macrophytes were absent from Lake
-Rotorua but present in the other lakes, particularly Ōkāreka, while
-submerged macrophyte cover at the shore was rare in Rotorua and Rotoiti
-but more extensive in Rotoehu and Rotomā. Water chemistry also differed
-markedly among lakes. Surface water temperatures were highest in Rotorua
-and lowest in Rotomā and Ōkāreka, while pH ranged from circum-neutral
-conditions in Rotorua to more alkaline conditions in Rotoehu and
-Rotoiti. Specific conductivity showed strong contrasts, being highest in
-Rotoehu and lowest in Ōkāreka. Dissolved oxygen concentrations in the
-littoral zone varied less among lakes but were generally lowest in
-Rotorua. Fish populations differed between lakes, reflecting invasion
-history. Catfish were detected only in Lakes Rotorua and Rotoiti,
-whereas goldfish occurred in all lakes but were most abundant in
-Rotoehu. Common bullies were found in every survey location. Trout were
-found sporadically in Rotorua, Rotoiti and Ōkāreka and kōaro were only
-caught from Ōkāreka.
+characteristics ({\textbf{?@tbl-an-env-fish-summary}}). Physical habitat
+structure varied among lakes, with differences in substrate index,
+nearshore slope, and littoral vegetation cover. Emergent macrophytes
+were absent from Lake Rotorua but present in the other lakes,
+particularly Ōkāreka, while submerged macrophyte cover at the shore was
+rare in Rotorua and Rotoiti but more extensive in Rotoehu and Rotomā.
+Water chemistry also differed markedly among lakes. Surface water
+temperatures were highest in Rotorua and lowest in Rotomā and Ōkāreka,
+while pH ranged from circum-neutral conditions in Rotorua to more
+alkaline conditions in Rotoehu and Rotoiti. Specific conductivity showed
+strong contrasts, being highest in Rotoehu and lowest in Ōkāreka.
+Dissolved oxygen concentrations in the littoral zone varied less among
+lakes but were generally lowest in Rotorua. Fish populations differed
+between lakes, reflecting invasion history. Catfish were detected only
+in Lakes Rotorua and Rotoiti, whereas goldfish occurred in all lakes but
+were most abundant in Rotoehu. Common bullies were found in every survey
+location. Trout were found sporadically in Rotorua, Rotoiti and Ōkāreka
+and kōaro were only caught from Ōkāreka.
 
 \subsubsection{Kōura occupancy}\label{kux14dura-occupancy}
 
@@ -861,7 +867,7 @@ are reported here.
 
 \centering{
 
-\includegraphics[width=6.5in,height=\textheight,keepaspectratio]{outputs/fig-occupancy-model.png}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{outputs/fig-occupancy-model.png}
 
 }
 
@@ -912,7 +918,7 @@ the highest observations.
 
 \centering{
 
-\includegraphics[width=5in,height=\textheight,keepaspectratio]{outputs/fig-cpue-hurdle.png}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{outputs/fig-cpue-hurdle.png}
 
 }
 
@@ -956,7 +962,7 @@ to under predict the highest BPUE values.
 
 \centering{
 
-\includegraphics[width=4in,height=\textheight,keepaspectratio]{outputs/fig-bpue-hurdle.png}
+\includegraphics[width=0.65\linewidth,height=\textheight,keepaspectratio]{outputs/fig-bpue-hurdle.png}
 
 }
 
@@ -1209,12 +1215,12 @@ forms of structural complexity equally support biodiversity. Different
 forms of structural complexity likely support different species and
 ecological functions, meaning that maintaining diversity of habitat
 types within the littoral zone is important for broader biodiversity
-conservation (\citeproc{ref-Meerhoff2022}{Meerhoff \& González-Sagrario,
-2022}). As shoreline modification, sedimentation, and invasive
-macrophyte expansion continue to reduce variation and structural
-diversity in littoral habitats, understanding which components of
-habitat complexity are functionally important for target species becomes
-critical for effective restoration planning.
+conservation (\citeproc{ref-Meerhoff2022a}{Meerhoff \&
+González-Sagrario, 2022}). As shoreline modification, sedimentation, and
+invasive macrophyte expansion continue to reduce variation and
+structural diversity in littoral habitats, understanding which
+components of habitat complexity are functionally important for target
+species becomes critical for effective restoration planning.
 
 Climate warming is expected to impose increasing constraints on
 freshwater crayfish populations through rising summer water
@@ -1565,7 +1571,7 @@ macroinvertebrate use of {\emph{Typha}}-invaded {Great Lakes} coastal
 wetlands. Freshwater Biology 68: 1462--1477.
 \url{https://doi.org/10.1111/fwb.14141}.
 
-\bibitem[\citeproctext]{ref-Meerhoff2022}
+\bibitem[\citeproctext]{ref-Meerhoff2022a}
 Meerhoff, M., \& M. de los Ángeles González-Sagrario, 2022. Habitat
 complexity in shallow lakes and ponds: Importance, threats, and
 potential for restoration. Hydrobiologia 849: 3737--3760.
