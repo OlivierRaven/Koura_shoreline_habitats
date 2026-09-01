@@ -276,7 +276,98 @@ if (knitr::is_latex_output()) {
 }
 ```
 
+::: {.content-visible unless-format="html"}
 ![Map of the sampling locations with different dominant littoral habitat types classified. a) Overview map of the 5 lakes. Lakes where invasive catfish were detected are indicated. b) Zoom in of Lake Ōkāreka. c) Guidance map to show the lakes location (white square) on the North Island of Aotearoa New Zealand.](images/Natural_habitat_map.png){#fig-site-map width=80%}
+:::
+
+::: {.content-visible when-format="html"}
+```{r}
+#| label: fig-site-map
+#| echo: false
+#| eval: !expr knitr::is_html_output()
+#| fig-cap: "Map of the 5 study lakes with sampling locations coloured by dominant littoral habitat type. Lakes with invasive catfish (Rotorua, Rotoiti) are shown with a warm fill; catfish-free lakes with a cool fill. Click a marker to see the site details."
+
+if (!requireNamespace("sf", quietly = TRUE) || !requireNamespace("leaflet", quietly = TRUE)) {
+  img <- if (file.exists("images/Natural_habitat_map.png"))
+    "images/Natural_habitat_map.png"
+  else
+    "03_koura_shoreline_habitats/images/Natural_habitat_map.png"
+  knitr::include_graphics(img)
+} else {
+
+ch3_dir      <- if (dir.exists("03_koura_shoreline_habitats")) "03_koura_shoreline_habitats" else "."
+study_lakes  <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
+catfish_lakes <- c("Rotorua", "Rotoiti")
+
+all_lakes <- sf::st_read(
+  file.path(ch3_dir, "data/raw/12_lakes.gpkg"), quiet = TRUE
+) |>
+  sf::st_make_valid() |>
+  sf::st_transform(4326)
+
+non_geom  <- names(all_lakes)[!sapply(all_lakes, inherits, what = "sfc")]
+name_col  <- if ("name" %in% non_geom && any(!is.na(all_lakes[["name"]]))) "name" else "name_ascii"
+all_lakes <- dplyr::rename(all_lakes, lake_name = dplyr::all_of(name_col))
+all_lakes <- dplyr::mutate(all_lakes,
+  lake_name = sub("^Lake\\s+", "", lake_name),
+  lake_name = trimws(sub("\\s*[/(\\&].*$", "", lake_name)),
+  lake_name = dplyr::case_when(
+    grepl("kareka", lake_name, ignore.case = TRUE) ~ "Ōkāreka",
+    grepl("^Rotoma$", lake_name, ignore.case = TRUE) ~ "Rotomā",
+    TRUE ~ lake_name
+  )
+) |>
+  dplyr::filter(lake_name %in% study_lakes) |>
+  dplyr::mutate(catfish = lake_name %in% catfish_lakes)
+
+site_info <- readr::read_csv(
+  file.path(ch3_dir, "data/derived/Site_info.csv"), show_col_types = FALSE
+) |>
+  dplyr::distinct(site_id, lake, lat, lon, DHT)
+
+dht_colors <- c(
+  "Rocky"               = "#808080",
+  "Sandy"               = "#d4a843",
+  "Muddy"               = "#8B6914",
+  "Emergent Macrophyte" = "#228B22"
+)
+site_info <- dplyr::mutate(site_info, color = dht_colors[DHT])
+
+leaflet::leaflet() |>
+  leaflet::addProviderTiles("CartoDB.Positron") |>
+  leaflet::addPolygons(
+    data        = all_lakes,
+    fillColor   = ~ifelse(catfish, "#ffe0b2", "#e3f2fd"),
+    fillOpacity = 0.5,
+    color       = "#2a2a2a",
+    weight      = 1.5,
+    label       = ~paste0(lake_name, ifelse(catfish, " (catfish present)", "")),
+    popup       = ~paste0("<b>", lake_name, "</b>",
+                          ifelse(catfish, "<br><i>Catfish present</i>", ""))
+  ) |>
+  leaflet::addCircleMarkers(
+    data        = site_info,
+    lat         = ~lat,
+    lng         = ~lon,
+    radius      = 6,
+    color       = ~color,
+    fillColor   = ~color,
+    fillOpacity = 0.9,
+    weight      = 1.5,
+    popup       = ~paste0("Site ", site_id, "<br>Lake: ", lake, "<br>Habitat: ", DHT)
+  ) |>
+  leaflet::addLegend(
+    position = "bottomright",
+    colors   = unname(dht_colors),
+    labels   = names(dht_colors),
+    title    = "Dominant habitat type",
+    opacity  = 0.9
+  )
+
+} # end requireNamespace guard
+```
+:::
+
 
 ### Data collection
 In total, 60 sampling sites were sampled once in the Austral spring/summer from October 2024 to February 2025. Each sampling site measured 15 × 10 m and extended from the shoreline into the lake. At locations with unstable lake margins or depths exceeding 1 m, observations and measurements were conducted from a boat. At each site, physical, chemical and biological parameters were recorded (@tbl-environmental-biotic-overview).
