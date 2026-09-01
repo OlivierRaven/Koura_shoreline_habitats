@@ -88,6 +88,8 @@ knitr:
 \providecommand{\chaptermark}[1]{}
 \ifcsname c@chapter\endcsname
 \setcounter{chapter}{3}
+\setcounter{figure}{0}
+\setcounter{table}{0}
 \setcounter{section}{0}
 \addcontentsline{toc}{chapter}{\protect\numberline{3}Where do K\={o}ura Live?}
 \chaptermark{Where do K\={o}ura Live?}
@@ -253,7 +255,9 @@ if (knitr::is_latex_output()) {
     ) %>%
     kableExtra::column_spec(1, width = "2.2cm") %>%
     kableExtra::column_spec(2, width = "1.8cm") %>%
-    kableExtra::column_spec(3:14, width = "0.9cm")
+    kableExtra::column_spec(3:8,   width = "0.9cm") %>%
+    kableExtra::column_spec(9:10,  width = "1.5cm") %>%
+    kableExtra::column_spec(11:14, width = "0.9cm")
 
   # Replace placeholders with rotated LaTeX in the generated string
   tbl_str <- as.character(tbl)

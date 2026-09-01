@@ -1,25 +1,4 @@
----
-title: "Analysis Notebook"
-toc: true
-toc-depth: 3
-number-sections: true
-fig-width: 6
-fig-height: 6
-
-execute:
-  freeze: false
-  cache: false
-  warning: false
-  message: false
----
-
-This notebook contains all data processing, model fitting, and figure 
-generation code supporting the manuscript. All analyses can be reproduced 
-from the five CSV files in `data/derived/`. The rendered version of the 
-manuscript is available at the [project page](https://olivierraven.github.io/Koura_shoreline_habitats/).
-
-# Setup
-```{r}
+.chwd <- setwd("C:\\Users\\or81\\OneDrive - The University of Waikato\\Documents\\PhD\\01_thesis_chapters\\03_koura_shoreline_habitats")
 #| label: setup
 #| include: false
 
@@ -106,12 +85,6 @@ format_pval <- function(p) {
 }
 
 
-```
-
-
-# CPUE and BPUE derivation
-## Length–weight model and predicted weights
-```{r}
 #| label: fig-length-weight
 #| include: true
 #| fig-width: 7
@@ -164,10 +137,6 @@ annotate("text", x = Inf, y = Inf, label = formula_text, hjust = 1.1, vjust = 1.
 ggsave(filename = file.path(out_dir, "fig-length-weight-ch3.png"), plot = length_weight_plot, width = 7, height = 5, dpi = 1200, create.dir = TRUE)
 
 length_weight_plot
-```
-
-## CPUE and BPUE calculations
-```{r}
 #| label: cpue-bpue-calculations
 #| include: false
 
@@ -238,10 +207,6 @@ Richness  = rowSums(dplyr::select(., starts_with("Total_Individuals_")) > 0),
 Abundance = rowSums(dplyr::select(., starts_with("Total_Individuals_") & !ends_with(c("_Bullies", "_Common_smelt"))))
 )
 
-```
-
-# Combined dataset and habitat classification
-```{r}
 #| label: combine-dataframes
 #| include: false
 
@@ -385,20 +350,12 @@ write.csv(habitat_classification, file.path(der_data_dir, "habitat_classificatio
 
 #head(Monitoring_CPUE_data)
 
-```
-
-## habitat-correlation
-```{r}
 #| label: habitat-correlation
 #| include: false
 
 cor(habitat_classification$Substrate_index,
 habitat_classification$Substrate_CV,
 use = "complete.obs")
-```
-
-# Lake overview table
-```{r}
 #| label: tbl-an-lake-overview
 #| echo: false
 #| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database. Shoreline composition percentages are calculated from useable shoreline only, excluding geothermal and cliff sections."
@@ -458,11 +415,6 @@ if (knitr::is_latex_output()) {
   knitr::kable(lake_data)
 }
 
-```
-
-
-# Overview of environmental and biotic variables 
-```{r}
 #| label: tbl-an-environmental-biotic-overview
 #| echo: false
 #| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (*Paranephrops planifrons*). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
@@ -495,11 +447,6 @@ if (knitr::is_latex_output()) {
   knitr::kable(biotic_vars)
 }
 
-```
-
-
-# Environmental and fish summaries
-```{r}
 #| include: false
 
 M_C_data <- Monitoring_CPUE_data
@@ -696,9 +643,6 @@ write.csv(
   row.names = FALSE
 )
 
-```
-
-```{r}
 #| label: tbl-an-env-fish-summary-widget
 #| eval: !expr knitr::is_html_output()
 #| include: !expr knitr::is_html_output()
@@ -719,9 +663,6 @@ DT::datatable(
 ) |>
   DT::formatRound(columns = c("Mean","Median","Min","Max","CI_low","CI_high"), digits = 2)
 
-```
-
-```{r}
 #| label: tbl-env-fish-summary-static
 #| echo: false
 #| eval: !expr "!knitr::is_html_output()"
@@ -730,10 +671,6 @@ DT::datatable(
 knitr::kable(EnvBio_summary_table, digits = 2,
              align = c("l","l","l","r","r","r","r","r","r","r"),
              col.names = c("Lake","Variable","Unit","n","Mean","Median","Min","Max","CI low","CI high"))
-```
-
-# Kōura presence, CPUE, and BPUE across lakes
-```{r}
 #| label: fig-koura-by-lake
 #| include: true
 #| fig-width: 3
@@ -800,10 +737,6 @@ ggsave(file.path(out_dir, "fig-koura-by-lake.png"), Koura_plots,
        width = 3, height = 5, dpi = 1200)
 
 Koura_plots
-```
-
-# Lake differences glmm
-```{r}
 #| label: lake-glmm
 #| include: false
 
@@ -843,11 +776,6 @@ pres_lrt
 cpue_lrt
 bpue_lrt
 
-```
-
-# GAM modelling
-### Helpers
-```{r}
 #| label: GAM-helpers
 #| include: false
 
@@ -1242,16 +1170,6 @@ if (!length(plots)) return(ggplot() + theme_void())
 patchwork::wrap_plots(plots, ncol = 1)
 }
 
-```
-
-## Occupancy model (presence/absence)
-
-Binomial GAMM with logit link. Stepwise backward elimination using ML 
-estimation (α = 0.05), refitted with REML. Lake identity (LID) included 
-as a random effect throughout and protected from removal.
-
-### Model fitting
-```{r}
 #| label: occupancy-model
 #| include: false
 
@@ -1347,27 +1265,16 @@ method = "REML",
 select = TRUE
 )
 
-```
-
-### Model diagnostics
-```{r}
 #| label: occ-diagnostics
 #| include: true
 
 # Basis dimension check and residual diagnostics
 gam.check(final_occ)
-```
-
-```{r}
 #| label: occ-concurvity
 #| include: true
 
 # Concurvity — values approaching 1 indicate potential instability
 concurvity(final_occ, full = FALSE)
-```
-
-### Model figure
-```{r}
 #| label: fig-occupancy-model
 #| include: true
 #| fig-width: 7
@@ -1501,9 +1408,6 @@ ggsave(filename = file.path(out_dir, "fig-occupancy-model.png"), plot = final_pl
 
 final_plot_occupancy
 
-```
-
-```{r}
 #| label: fig-occupancy-model-smooth
 
 smooth_4_names_reordered <- c(
@@ -1537,11 +1441,6 @@ ggsave(
   height = 3, 
   dpi = 300
 )
-```
-
-## CPUE hurdle model
-### Model fitting
-```{r}
 #| label: cpue-hurdle
 #| include: false
 
@@ -1648,10 +1547,6 @@ method = "REML",
 select = TRUE
 )
 
-```
-
-### Model diagnostics
-```{r}
 #| label: cpue-pos-diagnostics
 #| include: true
 #| fig-width: 7
@@ -1659,18 +1554,11 @@ select = TRUE
 
 # Basis dimension check and residual diagnostics
 gam.check(final_cpue_pos)
-```
-
-```{r}
 #| label: cpue-pos-concurvity
 #| include: true
 
 # Concurvity — values approaching 1 indicate potential instability
 concurvity(final_cpue_pos, full = FALSE)
-```
-
-### Model figure
-```{r}
 #| label: fig-cpue-hurdle
 #| include: true
 #| fig-width: 5.5
@@ -1717,12 +1605,6 @@ ggsave(filename = file.path(out_dir, "fig-cpue-hurdle.png"),plot = CPUE_panel_po
 CPUE_panel_positives
 
 
-```
-
-
-## BPUE hurdle model
-### Model fitting
-```{r}
 #| label: bpue-hurdle
 #| include: false
 
@@ -1813,10 +1695,6 @@ method = "REML",
 select = TRUE
 )
 
-```
-
-### Model diagnostics
-```{r}
 #| label: bpue-pos-diagnostics
 #| include: true
 #| fig-width: 7
@@ -1824,18 +1702,11 @@ select = TRUE
 
 # Basis dimension check and residual diagnostics
 gam.check(final_bpue_pos)
-```
-
-```{r}
 #| label: bpue-pos-concurvity
 #| include: true
 
 # Concurvity — values approaching 1 indicate potential instability
 concurvity(final_bpue_pos, full = FALSE)
-```
-
-### fig-bpue-hurdle
-```{r}
 #| label: fig-bpue-hurdle
 #| include: true
 #| fig-width: 4
@@ -1880,10 +1751,6 @@ ggsave(filename = file.path(out_dir, "fig-bpue-hurdle.png"),plot = BPUE_panel_po
 
 BPUE_panel_positives
 
-```
-
-## Raw data plots all predictors
-```{r}
 #| label: fig-raw-data-all-predictors
 #| fig-width: 5
 #| fig-height: 10
@@ -1973,11 +1840,6 @@ ggsave(file.path(out_dir, "fig-raw-data-all-predictors.png"),
        fig_raw_all, width = 5, height = 10, dpi = 300)
 
 
-```
-
-
-## Full vs. reduced model comparison
-```{r}
 #| label: tbl-model-comparison
 #| include: true
 #| tbl-cap: "Comparison of full and stepwise-reduced (ML-fitted) models for kōura occupancy, CPUE, and BPUE, including AIC, likelihood ratio test (LRT) results, and the percentage deviance explained by the full, reduced, and final (REML-refitted) models."
@@ -2025,11 +1887,6 @@ model_comparison |>
                    "Adj. R² (full)", "Adj. R² (reduced)", "Adj. R² (final)"),
     align = c("l","r","r","r","r","r","r","r","r","r","r","r")
   )
-```
-
-
-## GAM model summary table
-```{r}
 #| label: tbl-gam-models
 #| include: true
 #| tbl-cap: "GAM model results for kōura occupancy, CPUE, and BPUE models. Significance codes: *** p < 0.001, ** p < 0.01, * p < 0.05, . p < 0.1"
@@ -2146,11 +2003,6 @@ get_pval <- function(model_name, term_name, component = "smooth", label = TRUE) 
 }
 
 gam_models_table
-```
-
-
-# PCA (habitat complexity)
-```{r}
 #| label: pca
 #| include: false
 
@@ -2177,10 +2029,6 @@ biplot(habitat_pca)
 habitat_pca$rotation
 
 
-```
-
-# Koura catfish interaction
-```{r}
 #| label: koura-catfish-interaction
 #| include: false
 
@@ -2210,12 +2058,9 @@ M_C_data %>%
             mean_CPUE_koura = mean(Weighted_CPUE_Kōura, na.rm = TRUE),
             mean_BPUE_koura = mean(Weighted_BPUE_Kōura, na.rm = TRUE))
 
-```
-
-# Session info
-```{r}
 #| label: session-info
 #| include: true
 #| code-fold: true
 sessionInfo()
-```
+setwd(.chwd)
+rm(.chwd)

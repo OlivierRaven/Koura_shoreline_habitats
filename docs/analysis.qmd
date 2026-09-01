@@ -738,7 +738,7 @@ knitr::kable(EnvBio_summary_table, digits = 2,
 #| include: true
 #| fig-width: 3
 #| fig-height: 5
-#| fig-cap: "Fig. 2 Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range)."
+#| fig-cap: "Kōura presence, CPUE, and BPUE across lakes. The upper panel shows the proportion of sampled sites with kōura present in each lake, with error bars indicating 95% binomial confidence intervals. The middle and lower panels show the distribution of kōura CPUE and BPUE, respectively, across lakes using boxplots (median, interquartile range, and range)."
 
 plot_koura_stats <- function(data, y_var, y_label,
 type = c("continuous", "presence"),
@@ -758,9 +758,11 @@ panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.3)
 
 if (type == "continuous") {
 
-
 ggplot(data, aes(lake, .data[[y_var]])) +
   geom_boxplot(fill = NA, colour = "black", linewidth = 0.3, outlier.size = 1.5) +
+  scale_y_continuous(trans = "log1p",
+    breaks = c(0, 1, 2, 5, 10, 25, 50, 100, 250),
+    labels = scales::label_comma()) +
   labs(y = y_label, x = xlab_text) +
   base_theme
 } else {
@@ -789,8 +791,8 @@ ggplot(presence_summary, aes(x = lake, y = Presence_Rate)) +
 }
 
 KPRES_plot <- plot_koura_stats(M_C_data, "Presence_Kōura", "Kōura presence", type = "presence", show_x_title = FALSE)
-KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura", "Kōura CPUE", type = "continuous", show_x_title = FALSE)
-KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura", "Kōura BPUE", type = "continuous", show_x_title = TRUE)
+KCPUE_plot <- plot_koura_stats(M_C_data, "Weighted_CPUE_Kōura", "Kōura CPUE\n(log scale)", type = "continuous", show_x_title = FALSE)
+KBPUE_plot <- plot_koura_stats(M_C_data, "Weighted_BPUE_Kōura", "Kōura BPUE\n(log scale)", type = "continuous", show_x_title = TRUE)
 
 Koura_plots <- KPRES_plot / KCPUE_plot / KBPUE_plot
 
@@ -1384,6 +1386,9 @@ plots_4 <- lapply(smooth_4_names, function(s) {
   p
 })
 
+# Tag first smooth panel to label the whole top group as "a)"
+plots_4[[1]] <- plots_4[[1]] + labs(tag = "a)")
+
 # Combine without forcing wrap_dims assumptions about panel counts
 final_p_occ_smooths <- patchwork::wrap_plots(plots_4, ncol = length(plots_4))
 
@@ -1413,7 +1418,7 @@ p_pres_roc <- ggplot(roc_df, aes(fpr, tpr)) +
   geom_path(colour = "black", linewidth = 0.5) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "black", linewidth = 0.4) +
   annotate("text", x = 0.65, y = 0.1, label = paste0("AUC = ", round(auc_val, 3)), size = 3) +
-  labs(x = "False positive rate", y = "True positive rate") +
+  labs(x = "False positive rate", y = "True positive rate", tag = "b)") +
   base_theme_bw
 
 # ---- CV by LID (fix unseen LID warnings by forcing LID in test to a known training level) ----
@@ -1482,7 +1487,7 @@ Calibration_plot_occ <- ggplot(calib_data_occ, aes(mean_pred, obs_rate)) +
   geom_point(size = 2.2, colour = "black") +
   geom_line(colour = "black", linewidth = 0.5) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "black", linewidth = 0.4) +
-  labs(x = "Mean predicted probability", y = "Observed proportion") +
+  labs(x = "Mean predicted probability", y = "Observed proportion", tag = "c)") +
   base_theme_bw
 
 # Layout (avoid forcing a layout that conflicts with nested patchworks)
@@ -1681,8 +1686,8 @@ labs(title = clean_smooth_title(s), x = NULL, y = "Partial effect") +
 base_theme_bw
 })
 
-p_cpue_pos_smooths <- patchwork::wrap_plots(cpue_smooth_plots, ncol = length(cpue_smooth_plots)) +
-patchwork::plot_annotation(tag_levels = "a")
+cpue_smooth_plots[[1]] <- cpue_smooth_plots[[1]] + labs(tag = "a)")
+p_cpue_pos_smooths <- patchwork::wrap_plots(cpue_smooth_plots, ncol = length(cpue_smooth_plots))
 
 pred_pos <- predict(final_cpue_pos, type = "response")
 obs_pos  <- final_cpue_pos$y
@@ -1701,7 +1706,7 @@ y = max(df_scat$Observed,  na.rm = TRUE) * 0.8,
 label = paste0("R\u00B2 = ", round(R2, 2), "\nRMSE = ", round(RMSE, 2)),
 size = 3
 ) +
-labs(x = "Predicted CPUE", y = "Observed CPUE", tag = "b") +
+labs(x = "Predicted CPUE", y = "Observed CPUE", tag = "b)") +
 base_theme_bw
 
 CPUE_panel_positives <- (p_cpue_pos_smooths / p_cpue_pos_scatter) +
@@ -1845,8 +1850,8 @@ labs(title = clean_smooth_title(s), x = NULL, y = "Partial effect") +
 base_theme_bw
 })
 
-p_BPUE_pos_smooths <- patchwork::wrap_plots(bpue_smooth_plots, ncol = length(bpue_smooth_plots)) +
-patchwork::plot_annotation(tag_levels = "a")
+bpue_smooth_plots[[1]] <- bpue_smooth_plots[[1]] + labs(tag = "a)")
+p_BPUE_pos_smooths <- patchwork::wrap_plots(bpue_smooth_plots, ncol = length(bpue_smooth_plots))
 
 pred_pos_b <- predict(final_bpue_pos, type = "response")
 obs_pos_b  <- final_bpue_pos$y
@@ -1865,7 +1870,7 @@ y = max(df_scat_b$Observed,  na.rm = TRUE) * 0.8,
 label = paste0("R\u00B2 = ", round(R2_b, 2), "\nRMSE = ", round(RMSE_b, 2)),
 size = 3
 ) +
-labs(x = "Predicted BPUE", y = "Observed BPUE", tag = "b") +
+labs(x = "Predicted BPUE", y = "Observed BPUE", tag = "b)") +
 base_theme_bw
 
 BPUE_panel_positives <- (p_BPUE_pos_smooths / p_BPUE_pos_scatter) +
