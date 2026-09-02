@@ -331,10 +331,18 @@ dht_colors <- c(
   "Muddy"               = "#8B6914",
   "Emergent Macrophyte" = "#228B22"
 )
-site_info <- dplyr::mutate(site_info, color = dht_colors[DHT])
+site_info <- dplyr::mutate(site_info,
+  color = dplyr::case_when(
+    grepl("rocky",      DHT, ignore.case = TRUE) ~ "#808080",
+    grepl("sandy",      DHT, ignore.case = TRUE) ~ "#d4a843",
+    grepl("muddy",      DHT, ignore.case = TRUE) ~ "#8B6914",
+    grepl("macrophyte", DHT, ignore.case = TRUE) ~ "#228B22",
+    TRUE ~ "#555555"
+  )
+)
 
 leaflet::leaflet() |>
-  leaflet::addProviderTiles("CartoDB.Positron") |>
+  leaflet::addProviderTiles("Esri.WorldGrayCanvas") |>
   leaflet::addPolygons(
     data        = all_lakes,
     fillColor   = ~ifelse(catfish, "#ffe0b2", "#e3f2fd"),
