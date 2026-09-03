@@ -171,46 +171,7 @@
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
-     <style>html{ scroll-behavior: smooth; }</style>  <link href="site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
-
-<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-
-<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-
-<script src="site_libs/datatables-binding-0.34.0/datatables.js"></script>
-
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-
-<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
-
-<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
-
-<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
-
-<script src="site_libs/jszip-1.13.6/jszip.min.js"></script>
-
-<link href="site_libs/dt-ext-buttons-1.13.6/css/buttons.dataTables.min.css" rel="stylesheet">
-
-<script src="site_libs/dt-ext-buttons-1.13.6/js/dataTables.buttons.min.js"></script>
-
-<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.html5.min.js"></script>
-
-<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.colVis.min.js"></script>
-
-<script src="site_libs/dt-ext-buttons-1.13.6/js/buttons.print.min.js"></script>
-
-<link href="site_libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
-
-<script src="site_libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
-
-<link href="site_libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
-
-<script src="site_libs/selectize-0.12.0/selectize.min.js"></script>
-
-<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
-
-<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
-  <style>#title-block-header .abstract { display: none; }</style>  
+     <style>html{ scroll-behavior: smooth; }</style>  <style>#title-block-header .abstract { display: none; }</style>  
       </head>
 
   <body class="quarto-notebook quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -429,16 +390,25 @@ Raw relationships between all environmental predictors examined and kōura occur
 <details class="code-fold">
 <summary>View Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>col_nms_env <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Lake"</span>,<span class="st">"Variable"</span>,<span class="st">"Unit"</span>,<span class="st">"n"</span>,<span class="st">"Mean"</span>,<span class="st">"Median"</span>,<span class="st">"Min"</span>,<span class="st">"Max"</span>,<span class="st">"CI low"</span>,<span class="st">"CI high"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (knitr<span class="sc">::</span><span class="fu">is_html_output</span>()) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">isTRUE</span>(<span class="fu">getOption</span>(<span class="st">"thesis.is.html"</span>))) {</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>(EnvBio_summary_table, <span class="at">colnames =</span> col_nms_env, <span class="at">filter =</span> <span class="st">"top"</span>, <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">20</span>, <span class="at">dom =</span> <span class="st">'Bfrtip'</span>, <span class="at">buttons =</span> <span class="fu">c</span>(<span class="st">'csv'</span>, <span class="st">'excel'</span>)),</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">extensions =</span> <span class="st">'Buttons'</span>) <span class="sc">|&gt;</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    DT<span class="sc">::</span><span class="fu">formatRound</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Mean"</span>,<span class="st">"Median"</span>,<span class="st">"Min"</span>,<span class="st">"Max"</span>,<span class="st">"CI_low"</span>,<span class="st">"CI_high"</span>), <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(EnvBio_summary_table, <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (knitr<span class="sc">::</span><span class="fu">is_latex_output</span>()) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(EnvBio_summary_table, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">col.names =</span> col_nms_env)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">col.names =</span> col_nms_env) <span class="sc">|&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">latex_options =</span> <span class="fu">c</span>(<span class="st">"scale_down"</span>, <span class="st">"repeat_header"</span>, <span class="st">"striped"</span>),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">font_size     =</span> <span class="dv">8</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">stripe_color  =</span> <span class="st">"gray!8"</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(EnvBio_summary_table, <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">col.names =</span> col_nms_env)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div id="tbl-an-env-fish-summary" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -447,8 +417,1260 @@ Distribution of environmental and biotic variables measured at littoral sampling
 </figcaption>
 <div aria-describedby="tbl-an-env-fish-summary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-b050653e6c7346d4221a" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-b050653e6c7346d4221a">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"12\" data-max=\"60\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"458.890099634169\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"458.2166702563\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"455.441392325435\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"464.72198820556\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"-8.70732539719761\" data-max=\"456.905920860457\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"0\" data-max=\"460.87427840788\" data-scale=\"15\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","extensions":["Buttons"],"data":[["Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes","Rotorua","Rotoiti","Rotoehu","Rotomā","Ōkāreka","All lakes"],["Substrate index","Substrate index","Substrate index","Substrate index","Substrate index","Substrate index","Slope 5m","Slope 5m","Slope 5m","Slope 5m","Slope 5m","Slope 5m","Riparian vegetation","Riparian vegetation","Riparian vegetation","Riparian vegetation","Riparian vegetation","Riparian vegetation","Overhanging trees","Overhanging trees","Overhanging trees","Overhanging trees","Overhanging trees","Overhanging trees","Wood cover","Wood cover","Wood cover","Wood cover","Wood cover","Wood cover","Emergent macrophytes","Emergent macrophytes","Emergent macrophytes","Emergent macrophytes","Emergent macrophytes","Emergent macrophytes","Submerged macrophytes","Submerged macrophytes","Submerged macrophytes","Submerged macrophytes","Submerged macrophytes","Submerged macrophytes","Temperature","Temperature","Temperature","Temperature","Temperature","Temperature","Dissolved oxygen","Dissolved oxygen","Dissolved oxygen","Dissolved oxygen","Dissolved oxygen","Dissolved oxygen","Specific conductivity","Specific conductivity","Specific conductivity","Specific conductivity","Specific conductivity","Specific conductivity","pH","pH","pH","pH","pH","pH","Presence Catfish","Presence Catfish","Presence Catfish","Presence Catfish","Presence Catfish","Presence Catfish","Presence Eel","Presence Eel","Presence Eel","Presence Eel","Presence Eel","Presence Eel","Presence Goldfish","Presence Goldfish","Presence Goldfish","Presence Goldfish","Presence Goldfish","Presence Goldfish","Presence Common smelt","Presence Common smelt","Presence Common smelt","Presence Common smelt","Presence Common smelt","Presence Common smelt","Presence Kōaro","Presence Kōaro","Presence Kōaro","Presence Kōaro","Presence Kōaro","Presence Kōaro","Presence Trout","Presence Trout","Presence Trout","Presence Trout","Presence Trout","Presence Trout"],["","","","","","","","","","","","","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","%","Degree C","Degree C","Degree C","Degree C","Degree C","Degree C","mg/l","mg/l","mg/l","mg/l","mg/l","mg/l","µS/cm","µS/cm","µS/cm","µS/cm","µS/cm","µS/cm","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""],[12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60,12,12,12,12,12,60],[3.65833333333333,3.92083333333333,2.77083333333333,3.5,2.85833333333333,3.34166666666667,0.024303292856202,0.0926524251161651,0.0782040605048988,0.07390058725158111,0.112326519445632,0.0762773770348959,67.5,92.5,67.5,63.3333333333333,75.8333333333333,73.3333333333333,46.6666666666667,54.1666666666667,35.8333333333333,52.5,52.5,48.3333333333333,8.33333333333333,4.25,14.9166666666667,10,11.25,9.75,0,9.5,8.75,10.8333333333333,22.5,10.3166666666667,0.833333333333333,0.833333333333333,51.4166666666667,21.6666666666667,10.8333333333333,17.1166666666667,23.15,21.625,22.1083333333333,17.0166666666667,16.9833333333333,20.1766666666667,8.490833333333329,9.5875,10.3625,9.715833333333331,9.365833333333329,9.5045,205.35971510319,163.112140610573,458.890099634169,162.896587443061,76.3401323902193,213.319735036242,6.94333333333333,8.6675,8.830833333333331,7.8025,8.324999999999999,8.11383333333333,0.0833333333333333,0.416666666666667,0,0,0,0.1,0.333333333333333,0.0833333333333333,0,0.25,0,0.133333333333333,0.0833333333333333,0.666666666666667,1,0.5,0.25,0.5,0.25,0.666666666666667,0.5,0.416666666666667,0.583333333333333,0.483333333333333,0,0,0,0,0.666666666666667,0.133333333333333,0.166666666666667,0.166666666666667,0,0,0.166666666666667,0.1],[3.3,3.2,2.45,3.025,2.7,3,0.00857739122783205,0.06555100175380719,0.0605402963080073,0.0573815869709872,0.12815284712292,0.0619928888255894,100,100,100,90,100,100,30,65,0,55,65,30,3.5,1.5,10,10,7.5,5,0,0,0,0,0,0,0,0,52.5,10,0,0,23.25,21.5,22.05,16.85,16.3,21.25,7.925,9.755000000000001,10.765,9.76,9.375,9.625,188.267177633911,158.698635756461,458.2166702563,161.792941178742,76.15323258456949,162.549723463917,7.04,8.725,8.904999999999999,7.92,8.289999999999999,8.279999999999999,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0.5,0,0.5,0,1,0.5,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],[2.8,2,2,2,1,1,0.00567050386346284,0.0350396122081481,0.0206312103893389,0.00614026846175231,0.0122312616650089,0.00567050386346284,0,20,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21.8,20.6,21.2,16.3,16,16,5.25,6.8,8.85,8.66,8.83,5.25,156.196397941681,155.786026200873,455.441392325435,156.730769230769,75.62213094950469,75.62213094950469,3.78,8.08,8.460000000000001,6.44,7.77,3.78,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[6.3,8,4.9,6.2,6.2,8,0.161796673703308,0.302997666536485,0.272258868530851,0.225877564398719,0.197640255239775,0.302997666536485,100,100,100,100,100,100,100,100,100,100,100,100,30,20,40,30,40,40,0,100,35,80,90,100,10,10,100,85,100,100,25.3,23.8,23,18.1,20.7,25.3,11.05,10.64,11.79,10.31,9.74,11.79,443.009043028918,196.006475984889,464.72198820556,174.96083865526,78.5881195424917,464.72198820556,7.69,9.02,9.210000000000001,8.56,9,9.210000000000001,1,1,0,0,0,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,1,1],[3.00729663035083,2.72835409989405,2.15207649870778,2.636547279652,1.92396144594412,2.97776999502918,-0.00412696395619951,0.044543331349403,0.0323482912549566,0.0333696101400955,0.0728939278192795,0.0584540759510958,40.1214034933829,77.8789651045751,36.9535581430999,35.1348208147456,48.0115093732693,62.64864736192,15.500759505668,23.2223383994442,5.24686991736703,22.4379724575037,21.7142091998181,36.1499885557238,1.97771138897131,0.313457197880832,7.23727485491194,4.13279087621288,2.5630343061177,6.9646307903498,0,-8.707325397197611,-0.744376127069893,-4.77903132129926,-0.348425941419961,3.98405149220135,-1.00082096674303,-1.00082096674303,20.5060090456369,2.20859278354108,-7.43302197354685,8.422443557875081,22.5166551699979,21.0301260208218,21.7218926086201,16.6404515855356,15.9267932989336,19.4420332067956,7.39379619461319,8.921872886387099,9.67293891953566,9.45447439023266,9.19674080095327,9.199072263779559,156.394220762228,156.223303323077,456.905920860457,159.940792648322,75.8170967982755,178.412463515273,6.29066111060775,8.46118710097408,8.676610610155301,7.47370979019375,8.145688976728129,7.88766744218129,0.00210759323186023,0.15165222980843,0,0,0,0.037591269108566,0.0992460911495833,0.00210759323186023,0,0.0548606445279928,0,0.0593644227053572,0.00210759323186023,0.348875506418814,0.735351530602949,0.210944638239297,0.0548606445279928,0.368062031942437,0.0548606445279928,0.348875506418814,0.210944638239297,0.15165222980843,0.276669685682106,0.352312930002126,0,0,0,0,0.348875506418814,0.0593644227053572,0.0208625254600924,0.0208625254600924,0,0,0.0208625254600924,0.037591269108566],[4.30937003631583,5.11331256677261,3.38959016795889,4.363452720348,3.79270522072255,3.70556333830416,0.0527335496686036,0.140761518882927,0.124059829754841,0.114431564363067,0.151759111071985,0.09410067811869589,94.8785965066171,107.121034895425,98.0464418569001,91.53184585192101,103.655157293397,84.0180193047466,77.8325738276653,85.1109949338892,66.41979674929961,82.5620275424963,83.2857908001819,60.5166781109429,14.6889552776954,8.18654280211917,22.5960584784214,15.8672091237871,19.9369656938823,12.5353692096502,0,27.7073253971976,18.2443761270699,26.4456979879659,45.34842594142,16.649281841132,2.6674876334097,2.6674876334097,82.3273242876964,41.1247405497923,29.0996886402135,25.8108897754583,23.7833448300021,22.2198739791782,22.4947740580465,17.3928817477977,18.0398733677331,20.9113001265378,9.58787047205348,10.2531271136129,11.0520610804643,9.97719227643401,9.53492586571339,9.809927736220439,254.325209444151,170.000977898069,460.87427840788,165.8523822378,76.86316798216311,248.227006557212,7.59600555605892,8.87381289902592,8.985056056511359,8.131290209806251,8.504311023271869,8.33999922448538,0.384796165150944,0.723330314317894,0.264648469397051,0.264648469397051,0.264648469397051,0.205057736708064,0.651124493581186,0.384796165150944,0.264648469397051,0.571858461878189,0.264648469397051,0.24592222113042,0.384796165150944,0.900753908850417,1,0.789055361760703,0.571858461878189,0.631937968057563,0.571858461878189,0.900753908850417,0.789055361760703,0.723330314317894,0.84834777019157,0.6160539826684031,0.264648469397051,0.264648469397051,0.264648469397051,0.264648469397051,0.900753908850417,0.24592222113042,0.484137748685967,0.484137748685967,0.264648469397051,0.264648469397051,0.484137748685967,0.205057736708064]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Lake<\/th>\n      <th>Variable<\/th>\n      <th>Unit<\/th>\n      <th>n<\/th>\n      <th>Mean<\/th>\n      <th>Median<\/th>\n      <th>Min<\/th>\n      <th>Max<\/th>\n      <th>CI low<\/th>\n      <th>CI high<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"dom":"Bfrtip","buttons":["csv","excel"],"columnDefs":[{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 3, \",\", \".\", null);\n  }"},{"targets":5,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 3, \",\", \".\", null);\n  }"},{"targets":6,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 3, \",\", \".\", null);\n  }"},{"targets":7,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 3, \",\", \".\", null);\n  }"},{"targets":8,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 3, \",\", \".\", null);\n  }"},{"targets":9,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 2, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[3,4,5,6,7,8,9]},{"name":"lake","targets":0},{"name":"Variable","targets":1},{"name":"unit","targets":2},{"name":"n","targets":3},{"name":"Mean","targets":4},{"name":"Median","targets":5},{"name":"Min","targets":6},{"name":"Max","targets":7},{"name":"CI_low","targets":8},{"name":"CI_high","targets":9}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[10,20,25,50,100]}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render","options.columnDefs.4.render","options.columnDefs.5.render"],"jsHooks":[]}</script>
+<table class="cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 25%">
+<col style="width: 10%">
+<col style="width: 3%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Lake</th>
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Unit</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Median</th>
+<th style="text-align: right;">Min</th>
+<th style="text-align: right;">Max</th>
+<th style="text-align: right;">CI low</th>
+<th style="text-align: right;">CI high</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Substrate index</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3.66</td>
+<td style="text-align: right;">3.30</td>
+<td style="text-align: right;">2.80</td>
+<td style="text-align: right;">6.30</td>
+<td style="text-align: right;">3.01</td>
+<td style="text-align: right;">4.31</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Substrate index</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3.92</td>
+<td style="text-align: right;">3.20</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">8.00</td>
+<td style="text-align: right;">2.73</td>
+<td style="text-align: right;">5.11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Substrate index</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">2.77</td>
+<td style="text-align: right;">2.45</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">4.90</td>
+<td style="text-align: right;">2.15</td>
+<td style="text-align: right;">3.39</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Substrate index</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">3.50</td>
+<td style="text-align: right;">3.02</td>
+<td style="text-align: right;">2.00</td>
+<td style="text-align: right;">6.20</td>
+<td style="text-align: right;">2.64</td>
+<td style="text-align: right;">4.36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Substrate index</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">2.86</td>
+<td style="text-align: right;">2.70</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">6.20</td>
+<td style="text-align: right;">1.92</td>
+<td style="text-align: right;">3.79</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Substrate index</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">3.34</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">8.00</td>
+<td style="text-align: right;">2.98</td>
+<td style="text-align: right;">3.71</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Slope 5m</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.16</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Slope 5m</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Slope 5m</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.27</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">0.12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Slope 5m</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.23</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">0.11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Slope 5m</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.11</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">0.15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Slope 5m</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.09</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Riparian vegetation</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">67.50</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">40.12</td>
+<td style="text-align: right;">94.88</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Riparian vegetation</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">92.50</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">77.88</td>
+<td style="text-align: right;">107.12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Riparian vegetation</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">67.50</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">36.95</td>
+<td style="text-align: right;">98.05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Riparian vegetation</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">63.33</td>
+<td style="text-align: right;">90.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">35.13</td>
+<td style="text-align: right;">91.53</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Riparian vegetation</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">75.83</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">48.01</td>
+<td style="text-align: right;">103.66</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Riparian vegetation</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">73.33</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">62.65</td>
+<td style="text-align: right;">84.02</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Overhanging trees</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">46.67</td>
+<td style="text-align: right;">30.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">15.50</td>
+<td style="text-align: right;">77.83</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Overhanging trees</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">54.17</td>
+<td style="text-align: right;">65.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">23.22</td>
+<td style="text-align: right;">85.11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Overhanging trees</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">35.83</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">5.25</td>
+<td style="text-align: right;">66.42</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Overhanging trees</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">52.50</td>
+<td style="text-align: right;">55.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">22.44</td>
+<td style="text-align: right;">82.56</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Overhanging trees</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">52.50</td>
+<td style="text-align: right;">65.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">21.71</td>
+<td style="text-align: right;">83.29</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Overhanging trees</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">48.33</td>
+<td style="text-align: right;">30.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">36.15</td>
+<td style="text-align: right;">60.52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Wood cover</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8.33</td>
+<td style="text-align: right;">3.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">30.00</td>
+<td style="text-align: right;">1.98</td>
+<td style="text-align: right;">14.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Wood cover</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">4.25</td>
+<td style="text-align: right;">1.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">20.00</td>
+<td style="text-align: right;">0.31</td>
+<td style="text-align: right;">8.19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Wood cover</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">14.92</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">3.00</td>
+<td style="text-align: right;">40.00</td>
+<td style="text-align: right;">7.24</td>
+<td style="text-align: right;">22.60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Wood cover</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">30.00</td>
+<td style="text-align: right;">4.13</td>
+<td style="text-align: right;">15.87</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Wood cover</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">11.25</td>
+<td style="text-align: right;">7.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">40.00</td>
+<td style="text-align: right;">2.56</td>
+<td style="text-align: right;">19.94</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Wood cover</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">9.75</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">40.00</td>
+<td style="text-align: right;">6.96</td>
+<td style="text-align: right;">12.54</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Emergent macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Emergent macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">9.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">-8.71</td>
+<td style="text-align: right;">27.71</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Emergent macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8.75</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">35.00</td>
+<td style="text-align: right;">-0.74</td>
+<td style="text-align: right;">18.24</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Emergent macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">10.83</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">80.00</td>
+<td style="text-align: right;">-4.78</td>
+<td style="text-align: right;">26.45</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Emergent macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">22.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">90.00</td>
+<td style="text-align: right;">-0.35</td>
+<td style="text-align: right;">45.35</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Emergent macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">10.32</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">3.98</td>
+<td style="text-align: right;">16.65</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Submerged macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.83</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">-1.00</td>
+<td style="text-align: right;">2.67</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Submerged macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.83</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">-1.00</td>
+<td style="text-align: right;">2.67</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Submerged macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">51.42</td>
+<td style="text-align: right;">52.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">20.51</td>
+<td style="text-align: right;">82.33</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Submerged macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">21.67</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">85.00</td>
+<td style="text-align: right;">2.21</td>
+<td style="text-align: right;">41.12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Submerged macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">10.83</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">-7.43</td>
+<td style="text-align: right;">29.10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Submerged macrophytes</td>
+<td style="text-align: left;">%</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">17.12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">100.00</td>
+<td style="text-align: right;">8.42</td>
+<td style="text-align: right;">25.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: left;">Degree C</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">23.15</td>
+<td style="text-align: right;">23.25</td>
+<td style="text-align: right;">21.80</td>
+<td style="text-align: right;">25.30</td>
+<td style="text-align: right;">22.52</td>
+<td style="text-align: right;">23.78</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: left;">Degree C</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">21.62</td>
+<td style="text-align: right;">21.50</td>
+<td style="text-align: right;">20.60</td>
+<td style="text-align: right;">23.80</td>
+<td style="text-align: right;">21.03</td>
+<td style="text-align: right;">22.22</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: left;">Degree C</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">22.11</td>
+<td style="text-align: right;">22.05</td>
+<td style="text-align: right;">21.20</td>
+<td style="text-align: right;">23.00</td>
+<td style="text-align: right;">21.72</td>
+<td style="text-align: right;">22.49</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: left;">Degree C</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">17.02</td>
+<td style="text-align: right;">16.85</td>
+<td style="text-align: right;">16.30</td>
+<td style="text-align: right;">18.10</td>
+<td style="text-align: right;">16.64</td>
+<td style="text-align: right;">17.39</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: left;">Degree C</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">16.98</td>
+<td style="text-align: right;">16.30</td>
+<td style="text-align: right;">16.00</td>
+<td style="text-align: right;">20.70</td>
+<td style="text-align: right;">15.93</td>
+<td style="text-align: right;">18.04</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Temperature</td>
+<td style="text-align: left;">Degree C</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">20.18</td>
+<td style="text-align: right;">21.25</td>
+<td style="text-align: right;">16.00</td>
+<td style="text-align: right;">25.30</td>
+<td style="text-align: right;">19.44</td>
+<td style="text-align: right;">20.91</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Dissolved oxygen</td>
+<td style="text-align: left;">mg/l</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8.49</td>
+<td style="text-align: right;">7.92</td>
+<td style="text-align: right;">5.25</td>
+<td style="text-align: right;">11.05</td>
+<td style="text-align: right;">7.39</td>
+<td style="text-align: right;">9.59</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Dissolved oxygen</td>
+<td style="text-align: left;">mg/l</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">9.59</td>
+<td style="text-align: right;">9.76</td>
+<td style="text-align: right;">6.80</td>
+<td style="text-align: right;">10.64</td>
+<td style="text-align: right;">8.92</td>
+<td style="text-align: right;">10.25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Dissolved oxygen</td>
+<td style="text-align: left;">mg/l</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">10.36</td>
+<td style="text-align: right;">10.77</td>
+<td style="text-align: right;">8.85</td>
+<td style="text-align: right;">11.79</td>
+<td style="text-align: right;">9.67</td>
+<td style="text-align: right;">11.05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Dissolved oxygen</td>
+<td style="text-align: left;">mg/l</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">9.72</td>
+<td style="text-align: right;">9.76</td>
+<td style="text-align: right;">8.66</td>
+<td style="text-align: right;">10.31</td>
+<td style="text-align: right;">9.45</td>
+<td style="text-align: right;">9.98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Dissolved oxygen</td>
+<td style="text-align: left;">mg/l</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">9.37</td>
+<td style="text-align: right;">9.38</td>
+<td style="text-align: right;">8.83</td>
+<td style="text-align: right;">9.74</td>
+<td style="text-align: right;">9.20</td>
+<td style="text-align: right;">9.53</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Dissolved oxygen</td>
+<td style="text-align: left;">mg/l</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">9.50</td>
+<td style="text-align: right;">9.62</td>
+<td style="text-align: right;">5.25</td>
+<td style="text-align: right;">11.79</td>
+<td style="text-align: right;">9.20</td>
+<td style="text-align: right;">9.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Specific conductivity</td>
+<td style="text-align: left;">µS/cm</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">205.36</td>
+<td style="text-align: right;">188.27</td>
+<td style="text-align: right;">156.20</td>
+<td style="text-align: right;">443.01</td>
+<td style="text-align: right;">156.39</td>
+<td style="text-align: right;">254.33</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Specific conductivity</td>
+<td style="text-align: left;">µS/cm</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">163.11</td>
+<td style="text-align: right;">158.70</td>
+<td style="text-align: right;">155.79</td>
+<td style="text-align: right;">196.01</td>
+<td style="text-align: right;">156.22</td>
+<td style="text-align: right;">170.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Specific conductivity</td>
+<td style="text-align: left;">µS/cm</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">458.89</td>
+<td style="text-align: right;">458.22</td>
+<td style="text-align: right;">455.44</td>
+<td style="text-align: right;">464.72</td>
+<td style="text-align: right;">456.91</td>
+<td style="text-align: right;">460.87</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Specific conductivity</td>
+<td style="text-align: left;">µS/cm</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">162.90</td>
+<td style="text-align: right;">161.79</td>
+<td style="text-align: right;">156.73</td>
+<td style="text-align: right;">174.96</td>
+<td style="text-align: right;">159.94</td>
+<td style="text-align: right;">165.85</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Specific conductivity</td>
+<td style="text-align: left;">µS/cm</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">76.34</td>
+<td style="text-align: right;">76.15</td>
+<td style="text-align: right;">75.62</td>
+<td style="text-align: right;">78.59</td>
+<td style="text-align: right;">75.82</td>
+<td style="text-align: right;">76.86</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Specific conductivity</td>
+<td style="text-align: left;">µS/cm</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">213.32</td>
+<td style="text-align: right;">162.55</td>
+<td style="text-align: right;">75.62</td>
+<td style="text-align: right;">464.72</td>
+<td style="text-align: right;">178.41</td>
+<td style="text-align: right;">248.23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">pH</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">6.94</td>
+<td style="text-align: right;">7.04</td>
+<td style="text-align: right;">3.78</td>
+<td style="text-align: right;">7.69</td>
+<td style="text-align: right;">6.29</td>
+<td style="text-align: right;">7.60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">pH</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8.67</td>
+<td style="text-align: right;">8.72</td>
+<td style="text-align: right;">8.08</td>
+<td style="text-align: right;">9.02</td>
+<td style="text-align: right;">8.46</td>
+<td style="text-align: right;">8.87</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">pH</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8.83</td>
+<td style="text-align: right;">8.90</td>
+<td style="text-align: right;">8.46</td>
+<td style="text-align: right;">9.21</td>
+<td style="text-align: right;">8.68</td>
+<td style="text-align: right;">8.99</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">pH</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">7.80</td>
+<td style="text-align: right;">7.92</td>
+<td style="text-align: right;">6.44</td>
+<td style="text-align: right;">8.56</td>
+<td style="text-align: right;">7.47</td>
+<td style="text-align: right;">8.13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">pH</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">8.32</td>
+<td style="text-align: right;">8.29</td>
+<td style="text-align: right;">7.77</td>
+<td style="text-align: right;">9.00</td>
+<td style="text-align: right;">8.15</td>
+<td style="text-align: right;">8.50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">pH</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">8.11</td>
+<td style="text-align: right;">8.28</td>
+<td style="text-align: right;">3.78</td>
+<td style="text-align: right;">9.21</td>
+<td style="text-align: right;">7.89</td>
+<td style="text-align: right;">8.34</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Presence Catfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.38</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Presence Catfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">0.72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Presence Catfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Presence Catfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Presence Catfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Presence Catfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Presence Eel</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.33</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.65</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Presence Eel</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Presence Eel</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Presence Eel</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.57</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Presence Eel</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Presence Eel</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Presence Goldfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.38</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Presence Goldfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.67</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.90</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Presence Goldfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.74</td>
+<td style="text-align: right;">1.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Presence Goldfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.21</td>
+<td style="text-align: right;">0.79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Presence Goldfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.57</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Presence Goldfish</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.37</td>
+<td style="text-align: right;">0.63</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Presence Common smelt</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.57</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Presence Common smelt</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.67</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.90</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Presence Common smelt</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.21</td>
+<td style="text-align: right;">0.79</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Presence Common smelt</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.15</td>
+<td style="text-align: right;">0.72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Presence Common smelt</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.58</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.28</td>
+<td style="text-align: right;">0.85</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Presence Common smelt</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.62</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Presence Kōaro</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Presence Kōaro</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Presence Kōaro</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Presence Kōaro</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Presence Kōaro</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.67</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.35</td>
+<td style="text-align: right;">0.90</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Presence Kōaro</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.13</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotorua</td>
+<td style="text-align: left;">Presence Trout</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.48</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotoiti</td>
+<td style="text-align: left;">Presence Trout</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rotoehu</td>
+<td style="text-align: left;">Presence Trout</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rotomā</td>
+<td style="text-align: left;">Presence Trout</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ōkāreka</td>
+<td style="text-align: left;">Presence Trout</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">0.48</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All lakes</td>
+<td style="text-align: left;">Presence Trout</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.21</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </figure>
@@ -940,17 +2162,26 @@ Distribution of environmental and biotic variables measured at littoral sampling
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-an-env-fish-summary</span></span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>col_nms_env <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Lake"</span>,<span class="st">"Variable"</span>,<span class="st">"Unit"</span>,<span class="st">"n"</span>,<span class="st">"Mean"</span>,<span class="st">"Median"</span>,<span class="st">"Min"</span>,<span class="st">"Max"</span>,<span class="st">"CI low"</span>,<span class="st">"CI high"</span>)</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (knitr<span class="sc">::</span><span class="fu">is_html_output</span>()) {</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">isTRUE</span>(<span class="fu">getOption</span>(<span class="st">"thesis.is.html"</span>))) {</span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  DT<span class="sc">::</span><span class="fu">datatable</span>(EnvBio_summary_table, <span class="at">colnames =</span> col_nms_env, <span class="at">filter =</span> <span class="st">"top"</span>, <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">20</span>, <span class="at">dom =</span> <span class="st">'Bfrtip'</span>, <span class="at">buttons =</span> <span class="fu">c</span>(<span class="st">'csv'</span>, <span class="st">'excel'</span>)),</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                <span class="at">extensions =</span> <span class="st">'Buttons'</span>) <span class="sc">|&gt;</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    DT<span class="sc">::</span><span class="fu">formatRound</span>(<span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"Mean"</span>,<span class="st">"Median"</span>,<span class="st">"Min"</span>,<span class="st">"Max"</span>,<span class="st">"CI_low"</span>,<span class="st">"CI_high"</span>), <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(EnvBio_summary_table, <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (knitr<span class="sc">::</span><span class="fu">is_latex_output</span>()) {</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(EnvBio_summary_table, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>),</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>               <span class="at">col.names =</span> col_nms_env)</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>               <span class="at">col.names =</span> col_nms_env) <span class="sc">|&gt;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">latex_options =</span> <span class="fu">c</span>(<span class="st">"scale_down"</span>, <span class="st">"repeat_header"</span>, <span class="st">"striped"</span>),</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">font_size     =</span> <span class="dv">8</span>,</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">stripe_color  =</span> <span class="st">"gray!8"</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(EnvBio_summary_table, <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>               <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"l"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>,<span class="st">"r"</span>),</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>               <span class="at">col.names =</span> col_nms_env)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
 (function() {

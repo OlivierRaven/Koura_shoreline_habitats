@@ -147,6 +147,15 @@ Olivier V. Raven, Francis J. Burdon, Ian A. K. Kusabs, Robin Holmes & Deniz Özk
 :::
 
 ::: {.content-visible when-format="html"}
+```{r}
+#| label: ch3-hero
+#| echo: false
+#| output: asis
+#| eval: !expr knitr::is_html_output()
+.i <- file.path(dirname(knitr::current_input(dir = TRUE)), "03_koura_shoreline_habitats", "images", "ch3_cover.jpg")
+if (file.exists(.i)) cat(sprintf('<div class="ch-hero-wrap"><img class="ch-hero-img" src="%s" alt=""><div class="ch-hero-fade"></div><div class="ch-hero-text"><span class="ch-eyebrow">Chapter 3</span><p class="ch-hero-title">Where do Kōura Live?</p></div></div>', knitr::image_uri(.i)))
+```
+
 # Chapter 3 Where do Kōura Live? {.unnumbered}
 :::
 
@@ -245,9 +254,10 @@ if (knitr::is_latex_output()) {
                linesep = "",
                col.names = placeholder_nms) %>%
     kableExtra::kable_styling(
-      latex_options = "hold_position",
+      latex_options = c("hold_position", "striped"),
       full_width = FALSE,
-      font_size = 8
+      font_size = 8,
+      stripe_color = "gray!8"
     ) %>%
     kableExtra::add_header_above(
       c(" " = 10, "Shoreline composition (%)" = 4),
@@ -384,14 +394,18 @@ In total, 60 sampling sites were sampled once in the Austral spring/summer from 
 #| echo: false
 #| label: tbl-environmental-biotic-overview
 #| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (*Paranephrops planifrons*). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
-if (knitr::is_latex_output()) {
+if (isTRUE(getOption("thesis.is.html"))) {
+  DT::datatable(biotic_vars, rownames = FALSE, filter = "top",
+                options = list(pageLength = 20, dom = 'frtip', scrollX = TRUE))
+} else if (knitr::is_latex_output()) {
   tbl <- knitr::kable(biotic_vars,
                booktabs = TRUE,
                linesep = "") %>%
     kableExtra::kable_styling(
-      latex_options = "hold_position",
+      latex_options = c("hold_position", "striped"),
       font_size = 7,
-      full_width = FALSE
+      full_width = FALSE,
+      stripe_color = "gray!8"
     ) %>%
     kableExtra::column_spec(1, width = "2.5cm") %>%
     kableExtra::column_spec(2, width = "3.5cm") %>%
