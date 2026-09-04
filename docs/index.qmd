@@ -153,7 +153,7 @@ Olivier V. Raven, Francis J. Burdon, Ian A. K. Kusabs, Robin Holmes & Deniz Özk
 #| output: asis
 #| eval: !expr knitr::is_html_output()
 .i <- file.path(dirname(knitr::current_input(dir = TRUE)), "03_koura_shoreline_habitats", "images", "ch3_cover.jpg")
-if (file.exists(.i)) cat(sprintf('<div class="ch-hero-wrap"><img class="ch-hero-img" src="%s" alt=""><div class="ch-hero-fade"></div><div class="ch-hero-text"><span class="ch-eyebrow">Chapter 3</span><p class="ch-hero-title">Where do Kōura Live?</p></div></div>', knitr::image_uri(.i)))
+if (file.exists(.i)) cat(sprintf('<div class="ch-hero-wrap"><img class="ch-hero-img" src="%s" alt=""><div class="ch-hero-fade"></div><div class="ch-hero-text"><span class="ch-eyebrow">Chapter 3</span><span class="ch-hero-title">Where do Kōura Live?</span></div></div>', knitr::image_uri(.i)))
 ```
 
 # Chapter 3 Where do Kōura Live? {.unnumbered}
@@ -236,7 +236,11 @@ For each lake, the total shoreline length of each habitat type within this sampl
 #| echo: false
 #| label: tbl-lake-overview
 #| tbl-cap: "Physical, morphometric, and trophic characteristics of the five Rotorua Te Arawa Lakes surveyed, including sampling dates and number of littoral sites sampled per lake. Lake surface area, perimeter length, catchment area, depth, elevation, mixing regime, and trophic state for 2024 are derived from the @LAWA2025 database. Shoreline composition percentages are calculated from useable shoreline only, excluding geothermal and cliff sections."
-if (knitr::is_latex_output()) {
+if (isTRUE(getOption("thesis.is.html"))) {
+  ch3_dir <- if (dir.exists("03_koura_shoreline_habitats")) "03_koura_shoreline_habitats" else "."
+  .rds <- file.path(ch3_dir, "data/derived/widget_lake_overview.rds")
+  if (file.exists(.rds)) readRDS(.rds) else htmltools::tags$p(htmltools::tags$em("Table not yet built — render analysis.qmd first."), style = "color:#888;padding:1em")
+} else if (knitr::is_latex_output()) {
   col_nms <- colnames(lake_data)
 
   # Build rotated LaTeX for cols 3-14 (injected AFTER kableExtra pipeline
@@ -296,93 +300,9 @@ if (knitr::is_latex_output()) {
 #| echo: false
 #| eval: !expr knitr::is_html_output()
 #| fig-cap: "Map of the 5 study lakes with sampling locations coloured by dominant littoral habitat type. Lakes with invasive catfish (Rotorua, Rotoiti) are shown with a warm fill; catfish-free lakes with a cool fill. Click a marker to see the site details."
-
-if (!requireNamespace("sf", quietly = TRUE) || !requireNamespace("leaflet", quietly = TRUE)) {
-  img <- if (file.exists("images/Natural_habitat_map.png"))
-    "images/Natural_habitat_map.png"
-  else
-    "03_koura_shoreline_habitats/images/Natural_habitat_map.png"
-  knitr::include_graphics(img)
-} else {
-
-ch3_dir      <- if (dir.exists("03_koura_shoreline_habitats")) "03_koura_shoreline_habitats" else "."
-study_lakes  <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
-catfish_lakes <- c("Rotorua", "Rotoiti")
-
-all_lakes <- sf::st_read(
-  file.path(ch3_dir, "data/raw/12_lakes.gpkg"), quiet = TRUE
-) |>
-  sf::st_make_valid() |>
-  sf::st_transform(4326)
-
-non_geom  <- names(all_lakes)[!sapply(all_lakes, inherits, what = "sfc")]
-name_col  <- if ("name" %in% non_geom && any(!is.na(all_lakes[["name"]]))) "name" else "name_ascii"
-all_lakes <- dplyr::rename(all_lakes, lake_name = dplyr::all_of(name_col))
-all_lakes <- dplyr::mutate(all_lakes,
-  lake_name = sub("^Lake\\s+", "", lake_name),
-  lake_name = trimws(sub("\\s*[/(\\&].*$", "", lake_name)),
-  lake_name = dplyr::case_when(
-    grepl("kareka", lake_name, ignore.case = TRUE) ~ "Ōkāreka",
-    grepl("^Rotoma$", lake_name, ignore.case = TRUE) ~ "Rotomā",
-    TRUE ~ lake_name
-  )
-) |>
-  dplyr::filter(lake_name %in% study_lakes) |>
-  dplyr::mutate(catfish = lake_name %in% catfish_lakes)
-
-site_info <- readr::read_csv(
-  file.path(ch3_dir, "data/derived/Site_info.csv"), show_col_types = FALSE
-) |>
-  dplyr::distinct(site_id, lake, lat, lon, DHT)
-
-dht_colors <- c(
-  "Rocky"               = "#808080",
-  "Sandy"               = "#d4a843",
-  "Muddy"               = "#8B6914",
-  "Emergent Macrophyte" = "#228B22"
-)
-site_info <- dplyr::mutate(site_info,
-  color = dplyr::case_when(
-    grepl("rocky",      DHT, ignore.case = TRUE) ~ "#808080",
-    grepl("sandy",      DHT, ignore.case = TRUE) ~ "#d4a843",
-    grepl("muddy",      DHT, ignore.case = TRUE) ~ "#8B6914",
-    grepl("macrophyte", DHT, ignore.case = TRUE) ~ "#228B22",
-    TRUE ~ "#555555"
-  )
-)
-
-leaflet::leaflet() |>
-  leaflet::addProviderTiles("Esri.WorldGrayCanvas") |>
-  leaflet::addPolygons(
-    data        = all_lakes,
-    fillColor   = ~ifelse(catfish, "#ffe0b2", "#e3f2fd"),
-    fillOpacity = 0.5,
-    color       = "#2a2a2a",
-    weight      = 1.5,
-    label       = ~paste0(lake_name, ifelse(catfish, " (catfish present)", "")),
-    popup       = ~paste0("<b>", lake_name, "</b>",
-                          ifelse(catfish, "<br><i>Catfish present</i>", ""))
-  ) |>
-  leaflet::addCircleMarkers(
-    data        = site_info,
-    lat         = ~lat,
-    lng         = ~lon,
-    radius      = 6,
-    color       = ~color,
-    fillColor   = ~color,
-    fillOpacity = 0.9,
-    weight      = 1.5,
-    popup       = ~paste0("Site ", site_id, "<br>Lake: ", lake, "<br>Habitat: ", DHT)
-  ) |>
-  leaflet::addLegend(
-    position = "bottomright",
-    colors   = unname(dht_colors),
-    labels   = names(dht_colors),
-    title    = "Dominant habitat type",
-    opacity  = 0.9
-  )
-
-} # end requireNamespace guard
+ch3_dir <- if (dir.exists("03_koura_shoreline_habitats")) "03_koura_shoreline_habitats" else "."
+.rds <- file.path(ch3_dir, "data/derived/widget_site_map.rds")
+if (file.exists(.rds)) readRDS(.rds) else htmltools::tags$p(htmltools::tags$em("Interactive map not yet built — render analysis.qmd first."), style = "color:#888;padding:1em")
 ```
 :::
 
@@ -395,8 +315,9 @@ In total, 60 sampling sites were sampled once in the Austral spring/summer from 
 #| label: tbl-environmental-biotic-overview
 #| tbl-cap: "Overview of environmental and biotic variables measured at littoral sampling sites, including variable descriptions, units, and hypothesised relevance for kōura (*Paranephrops planifrons*). Variables were selected a priori based on known habitat requirements, physiological constraints, and potential biotic interactions influencing kōura occurrence, abundance, and biomass in lake littoral zones."
 if (isTRUE(getOption("thesis.is.html"))) {
-  DT::datatable(biotic_vars, rownames = FALSE, filter = "top",
-                options = list(pageLength = 20, dom = 'frtip', scrollX = TRUE))
+  ch3_dir <- if (dir.exists("03_koura_shoreline_habitats")) "03_koura_shoreline_habitats" else "."
+  .rds <- file.path(ch3_dir, "data/derived/widget_biotic_table.rds")
+  if (file.exists(.rds)) readRDS(.rds) else htmltools::tags$p(htmltools::tags$em("Table not yet built — render analysis.qmd first."), style = "color:#888;padding:1em")
 } else if (knitr::is_latex_output()) {
   tbl <- knitr::kable(biotic_vars,
                booktabs = TRUE,

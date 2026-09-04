@@ -2212,6 +2212,89 @@ M_C_data %>%
 
 ```
 
+# Interactive widgets (saved as RDS for HTML thesis)
+
+```{r}
+#| label: widget-lake-overview-ch3
+#| include: false
+widget_lake_ov_rds <- file.path(der_data_dir, "widget_lake_overview.rds")
+if (!file.exists(widget_lake_ov_rds)) {
+  dt_w <- DT::datatable(
+    lake_data, rownames = FALSE,
+    options = list(pageLength = 12, dom = 'ft', scrollX = TRUE, autoWidth = TRUE)
+  )
+  saveRDS(dt_w, widget_lake_ov_rds)
+}
+```
+
+
+```{r}
+#| label: widget-site-map-ch3
+#| include: false
+widget_site_map_rds <- file.path(der_data_dir, "widget_site_map.rds")
+if (!file.exists(widget_site_map_rds)) {
+  study_lakes_w   <- c("Rotorua", "Rotoiti", "Rotoehu", "Rotomā", "Ōkāreka")
+  catfish_lakes_w <- c("Rotorua", "Rotoiti")
+  lakes_w <- sf::st_read("data/raw/12_lakes.gpkg", quiet = TRUE) |>
+    sf::st_make_valid() |>
+    sf::st_transform(4326)
+  non_geom_w <- names(lakes_w)[!sapply(lakes_w, inherits, what = "sfc")]
+  name_col_w <- if ("name" %in% non_geom_w && any(!is.na(lakes_w[["name"]]))) "name" else "name_ascii"
+  lakes_w <- dplyr::rename(lakes_w, lake_name = dplyr::all_of(name_col_w))
+  lakes_w <- dplyr::mutate(lakes_w,
+    lake_name = sub("^Lake\\s+", "", lake_name),
+    lake_name = trimws(sub("\\s*[/(\\&].*$", "", lake_name)),
+    lake_name = dplyr::case_when(
+      grepl("kareka", lake_name, ignore.case = TRUE) ~ "Ōkāreka",
+      grepl("^Rotoma$", lake_name, ignore.case = TRUE) ~ "Rotomā",
+      TRUE ~ lake_name
+    )
+  ) |>
+    dplyr::filter(lake_name %in% study_lakes_w) |>
+    dplyr::mutate(catfish = lake_name %in% catfish_lakes_w)
+  sites_w <- readr::read_csv(file.path(der_data_dir, "Site_info.csv"), show_col_types = FALSE) |>
+    dplyr::distinct(site_id, lake, lat, lon, DHT)
+  dht_colors_w <- c("Rocky" = "#808080", "Sandy" = "#d4a843",
+                     "Muddy" = "#8B6914", "Emergent Macrophyte" = "#228B22")
+  sites_w <- dplyr::mutate(sites_w,
+    color = dplyr::case_when(
+      grepl("rocky",      DHT, ignore.case = TRUE) ~ "#808080",
+      grepl("sandy",      DHT, ignore.case = TRUE) ~ "#d4a843",
+      grepl("muddy",      DHT, ignore.case = TRUE) ~ "#8B6914",
+      grepl("macrophyte", DHT, ignore.case = TRUE) ~ "#228B22",
+      TRUE ~ "#555555"
+    )
+  )
+  site_map_w <- leaflet::leaflet() |>
+    leaflet::addProviderTiles("Esri.WorldGrayCanvas") |>
+    leaflet::addPolygons(
+      data = lakes_w, fillColor = ~ifelse(catfish, "#ffe0b2", "#e3f2fd"),
+      fillOpacity = 0.5, color = "#2a2a2a", weight = 1.5,
+      label = ~paste0(lake_name, ifelse(catfish, " (catfish present)", "")),
+      popup = ~paste0("<b>", lake_name, "</b>", ifelse(catfish, "<br><i>Catfish present</i>", ""))
+    ) |>
+    leaflet::addCircleMarkers(
+      data = sites_w, lat = ~lat, lng = ~lon, radius = 6,
+      color = ~color, fillColor = ~color, fillOpacity = 0.9, weight = 1.5,
+      popup = ~paste0("Site ", site_id, "<br>Lake: ", lake, "<br>Habitat: ", DHT)
+    ) |>
+    leaflet::addLegend(position = "bottomright", colors = unname(dht_colors_w),
+                       labels = names(dht_colors_w), title = "Dominant habitat type", opacity = 0.9)
+  saveRDS(site_map_w, widget_site_map_rds)
+}
+```
+
+```{r}
+#| label: widget-biotic-table-ch3
+#| include: false
+widget_biotic_rds <- file.path(der_data_dir, "widget_biotic_table.rds")
+if (!file.exists(widget_biotic_rds)) {
+  dt_w <- DT::datatable(biotic_vars, rownames = FALSE, filter = "top",
+                        options = list(pageLength = 20, dom = 'frtip', scrollX = TRUE))
+  saveRDS(dt_w, widget_biotic_rds)
+}
+```
+
 # Session info
 ```{r}
 #| label: session-info
