@@ -16,7 +16,7 @@ EnvBio_summary_table <- read.csv(file.path(.ch3_out, "tbl-env-fish-summary.csv")
 #| label: tbl-an-env-fish-summary
 #| tbl-cap: "Distribution of environmental and biotic variables measured at littoral sampling sites across five Te Arawa lakes in the Rotorua region of Aotearoa New Zealand."
 col_nms_env <- c("Lake","Variable","Unit","n","Mean","Median","Min","Max","CI low","CI high")
-if (isTRUE(getOption("thesis.is.html"))) {
+if (isTRUE(getOption("thesis.is.html")) && knitr::is_html_output()) {
   DT::datatable(EnvBio_summary_table, colnames = col_nms_env, filter = "top", rownames = FALSE,
                 options = list(pageLength = 20, dom = 'Bfrtip', buttons = c('csv', 'excel')),
                 extensions = 'Buttons') |>
