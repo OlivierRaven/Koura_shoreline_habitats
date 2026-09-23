@@ -1372,7 +1372,7 @@ concurvity(final_occ, full = FALSE)
 #| include: true
 #| fig-width: 7
 #| fig-height: 5
-#| fig-cap: "Kōura occupancy GAMM results and model performance. a) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. c) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration."
+#| fig-cap: "Kōura occupancy GAMM results and model performance. (A) Estimated smooth terms for riparian vegetation, substrate index, surface water temperature, and specific conductivity, shown as partial effects with 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. (B) Receiver operating characteristic (ROC) curve illustrating model discrimination, with the area under the curve (AUC) reported. (C) Calibration plot based on five equal-frequency bins, comparing mean predicted occupancy probabilities with observed proportions of occupied sites; the dashed 1:1 line indicates perfect calibration."
 
 # Smooth plots: keep draw() outputs as-is (they may be ggplot OR patchwork)
 sm <- gratia::smooth_estimates(final_occ)
@@ -1387,7 +1387,7 @@ plots_4 <- lapply(smooth_4_names, function(s) {
 })
 
 # Tag first smooth panel to label the whole top group as "a)"
-plots_4[[1]] <- plots_4[[1]] + labs(tag = "a)")
+plots_4[[1]] <- plots_4[[1]] + labs(tag = "(A)")
 
 # Combine without forcing wrap_dims assumptions about panel counts
 final_p_occ_smooths <- patchwork::wrap_plots(plots_4, ncol = length(plots_4))
@@ -1418,7 +1418,7 @@ p_pres_roc <- ggplot(roc_df, aes(fpr, tpr)) +
   geom_path(colour = "black", linewidth = 0.5) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "black", linewidth = 0.4) +
   annotate("text", x = 0.65, y = 0.1, label = paste0("AUC = ", round(auc_val, 3)), size = 3) +
-  labs(x = "False positive rate", y = "True positive rate", tag = "b)") +
+  labs(x = "False positive rate", y = "True positive rate", tag = "(B)") +
   base_theme_bw
 
 # ---- CV by LID (fix unseen LID warnings by forcing LID in test to a known training level) ----
@@ -1487,7 +1487,7 @@ Calibration_plot_occ <- ggplot(calib_data_occ, aes(mean_pred, obs_rate)) +
   geom_point(size = 2.2, colour = "black") +
   geom_line(colour = "black", linewidth = 0.5) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "black", linewidth = 0.4) +
-  labs(x = "Mean predicted probability", y = "Observed proportion", tag = "c)") +
+  labs(x = "Mean predicted probability", y = "Observed proportion", tag = "(C)") +
   base_theme_bw
 
 # Layout (avoid forcing a layout that conflicts with nested patchworks)
@@ -1675,7 +1675,7 @@ concurvity(final_cpue_pos, full = FALSE)
 #| include: true
 #| fig-width: 5.5
 #| fig-height: 5
-#| fig-cap: "Kōura CPUE GAMM results and model performance. a) Estimated smooth terms for surface water temperature, pH, and emergent native macrophytes, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
+#| fig-cap: "Kōura CPUE GAMM results and model performance. (A) Estimated smooth terms for surface water temperature, pH, and emergent native macrophytes, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. (B) Predicted versus observed CPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 # make plot
 sm_cpue <- smooth_estimates(final_cpue_pos)
@@ -1686,7 +1686,7 @@ labs(title = clean_smooth_title(s), x = NULL, y = "Partial effect") +
 base_theme_bw
 })
 
-cpue_smooth_plots[[1]] <- cpue_smooth_plots[[1]] + labs(tag = "a)")
+cpue_smooth_plots[[1]] <- cpue_smooth_plots[[1]] + labs(tag = "(A)")
 p_cpue_pos_smooths <- patchwork::wrap_plots(cpue_smooth_plots, ncol = length(cpue_smooth_plots))
 
 pred_pos <- predict(final_cpue_pos, type = "response")
@@ -1706,7 +1706,7 @@ y = max(df_scat$Observed,  na.rm = TRUE) * 0.8,
 label = paste0("R\u00B2 = ", round(R2, 2), "\nRMSE = ", round(RMSE, 2)),
 size = 3
 ) +
-labs(x = "Predicted CPUE", y = "Observed CPUE", tag = "b)") +
+labs(x = "Predicted CPUE", y = "Observed CPUE", tag = "(B)") +
 base_theme_bw
 
 CPUE_panel_positives <- (p_cpue_pos_smooths / p_cpue_pos_scatter) +
@@ -1840,7 +1840,7 @@ concurvity(final_bpue_pos, full = FALSE)
 #| include: true
 #| fig-width: 4
 #| fig-height: 5
-#| fig-cap: "Kōura BPUE GAMM results and model performance. a) Estimated smooth terms for pH and emergent native macrophytes, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. b) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
+#| fig-cap: "Kōura BPUE GAMM results and model performance. (A) Estimated smooth terms for pH and emergent native macrophytes, shown with partial effects and 95% confidence intervals. See Fig. S2 for raw data underlying modelled relationships. (B) Predicted versus observed BPUE from the positive (Gamma) component of the hurdle model, with predictions excluding the random lake effect. The dashed 1:1 line indicates perfect agreement; annotated values report R² and RMSE to summarise model fit."
 
 sm_bpue <- smooth_estimates(final_bpue_pos)
 bpue_smooth_names <- setdiff(unique(sm_bpue$.smooth), "s(LID)")
@@ -1850,7 +1850,7 @@ labs(title = clean_smooth_title(s), x = NULL, y = "Partial effect") +
 base_theme_bw
 })
 
-bpue_smooth_plots[[1]] <- bpue_smooth_plots[[1]] + labs(tag = "a)")
+bpue_smooth_plots[[1]] <- bpue_smooth_plots[[1]] + labs(tag = "(A)")
 p_BPUE_pos_smooths <- patchwork::wrap_plots(bpue_smooth_plots, ncol = length(bpue_smooth_plots))
 
 pred_pos_b <- predict(final_bpue_pos, type = "response")
@@ -1870,7 +1870,7 @@ y = max(df_scat_b$Observed,  na.rm = TRUE) * 0.8,
 label = paste0("R\u00B2 = ", round(R2_b, 2), "\nRMSE = ", round(RMSE_b, 2)),
 size = 3
 ) +
-labs(x = "Predicted BPUE", y = "Observed BPUE", tag = "b)") +
+labs(x = "Predicted BPUE", y = "Observed BPUE", tag = "(B)") +
 base_theme_bw
 
 BPUE_panel_positives <- (p_BPUE_pos_smooths / p_BPUE_pos_scatter) +
