@@ -236,6 +236,22 @@ To survey these lakes, a stratified-random survey design was developed. The enti
 
 For each lake, the total shoreline length of each habitat type within this sample frame was calculated in a projected coordinate system (New Zealand Transverse Mercator 2000; EPSG:2193). To ensure balanced representation of littoral habitat types across systems and to avoid confounding lake identity with sampling effort, an equal number of sites (*n* = 12) was surveyed in each lake, with sites allocated proportionally among the dominant shoreline habitat types. All selected sites were fully accessible for fieldwork, and therefore an oversample was not required. Within each habitat type, site locations were generated using the Generalized Random Tessellation Stratified (GRTS) design [@Stevens2004] executed using the spsurvey package in R [@Dumelle2023; @RCoreTeam2025], producing unbiased random coordinates without enforcing fixed spacing between sites. The final coordinates of the 12 random survey sites per lake were extracted directly from the GRTS output (@fig-site-map).
 
+::: {.content-visible unless-format="html"}
+![Map of the sampling locations with different dominant littoral habitat types classified. a) Overview map of the 5 lakes. Lakes where invasive catfish were detected are indicated. b) Zoom in of Lake Ōkāreka. c) Guidance map to show the lakes location (white square) on the North Island of Aotearoa New Zealand.](images/Natural_habitat_map.png){#fig-site-map width=80%}
+:::
+
+::: {.content-visible when-format="html"}
+```{r}
+#| label: fig-site-map
+#| echo: false
+#| eval: !expr knitr::is_html_output()
+#| fig-cap: "Map of the 5 study lakes with sampling locations coloured by dominant littoral habitat type. Lakes with invasive catfish (Rotorua, Rotoiti) are shown with a warm fill; catfish-free lakes with a cool fill. Click a marker to see the site details."
+ch3_dir <- if (dir.exists("03_koura_shoreline_habitats")) "03_koura_shoreline_habitats" else "."
+.rds <- file.path(ch3_dir, "data/derived/widget_site_map.rds")
+if (file.exists(.rds)) readRDS(.rds) else htmltools::tags$p(htmltools::tags$em("Interactive map not yet built — render analysis.qmd first."), style = "color:#888;padding:1em")
+```
+:::
+
 ```{r}
 #| echo: false
 #| label: tbl-lake-overview
@@ -293,23 +309,6 @@ if (isTRUE(getOption("thesis.is.html")) && knitr::is_html_output()) {
   knitr::kable(lake_data)
 }
 ```
-
-::: {.content-visible unless-format="html"}
-![Map of the sampling locations with different dominant littoral habitat types classified. a) Overview map of the 5 lakes. Lakes where invasive catfish were detected are indicated. b) Zoom in of Lake Ōkāreka. c) Guidance map to show the lakes location (white square) on the North Island of Aotearoa New Zealand.](images/Natural_habitat_map.png){#fig-site-map width=80%}
-:::
-
-::: {.content-visible when-format="html"}
-```{r}
-#| label: fig-site-map
-#| echo: false
-#| eval: !expr knitr::is_html_output()
-#| fig-cap: "Map of the 5 study lakes with sampling locations coloured by dominant littoral habitat type. Lakes with invasive catfish (Rotorua, Rotoiti) are shown with a warm fill; catfish-free lakes with a cool fill. Click a marker to see the site details."
-ch3_dir <- if (dir.exists("03_koura_shoreline_habitats")) "03_koura_shoreline_habitats" else "."
-.rds <- file.path(ch3_dir, "data/derived/widget_site_map.rds")
-if (file.exists(.rds)) readRDS(.rds) else htmltools::tags$p(htmltools::tags$em("Interactive map not yet built — render analysis.qmd first."), style = "color:#888;padding:1em")
-```
-:::
-
 
 ### Data collection
 In total, 60 sampling sites were sampled once in the Austral spring/summer from October 2024 to February 2025. Each sampling site measured 15 × 10 m and extended from the shoreline into the lake. At locations with unstable lake margins or depths exceeding 1 m, observations and measurements were conducted from a boat. At each site, physical, chemical and biological parameters were recorded (@tbl-environmental-biotic-overview).
